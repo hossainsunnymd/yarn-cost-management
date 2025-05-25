@@ -13,11 +13,29 @@ class FabricController extends Controller
 {
     //create fabric
     public function createFabric(Request $request) {
-        $yarnCost=YarnPurchase::find($request->yarn_purchase_id)->total_amount;
+        $totalYarnCost=YarnPurchase::find($request->yarn_purchase_id)->total_amount;
         $knittingCost=Knitting::find($request->knitting_id)->total_amount;
         $dyeingCost=Drying::find($request->dyeing_id)->total_amount;
 
+        $yarnPurchaseUnit=YarnPurchase::find($request->yarn_purchase_id)->unit;
+        $knittingUnit=Knitting::find($request->knitting_id)->unit;
+        $dyeingUnit=Drying::find($request->dyeing_id)->unit;
+
+
+        if($knittingUnit==0){
+            $knittingUnit=$dyeingUnit;
+        }else{
+            $knittingUnit=$knittingUnit-$dyeingUnit;
+        }
+
+        $yarnPurchaseUnit=$yarnPurchaseUnit+$knittingUnit;
+
+        $perUnitYarnCost=$totalYarnCost/$yarnPurchaseUnit;
+
+        $yarnCost=$perUnitYarnCost*$knittingUnit;
+
         $total_cost=$yarnCost+$knittingCost+$dyeingCost;
+
         $data=[
             'drying_id'=>$request->dyeing_id,
             'unit'=>$request->unit,
