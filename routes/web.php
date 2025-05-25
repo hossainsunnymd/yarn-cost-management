@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DyeingController;
+use App\Http\Controllers\FabricController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YarnController;
@@ -39,3 +41,23 @@ Route::get('/knitting-party-delete',[KnittingController::class,'knittingPartyDel
 Route::get('/knitting-list',[KnittingController::class,'knittingList'])->name('knitting-list');
 Route::get('/knitting-save-page',[KnittingController::class,'knittingSavePage'])->name('knitting-save-page');
 Route::post('/create-knitting',[KnittingController::class,'createKnitting'])->name('create-knitting');
+
+
+//dyeing party
+Route::get('/dyeing-party-list',[DyeingController::class,'dyeingPartyList'])->name('dyeing-party-list');
+Route::get('/dyeing-party-save-page',[DyeingController::class,'dyeingPartySavePage'])->name('dyeing-party-save-page');
+Route::post('/create-dyeing-party',[DyeingController::class,'createDyeingParty'])->name('create-dyeing-party');
+Route::post('/update-dyeing-party',[DyeingController::class,'updateDyeingParty'])->name('update-dyeing-party');
+Route::get('/dyeing-party-delete',[DyeingController::class,'dyeingPartyDelete'])->name('dyeing-party-delete');
+
+
+
+//dyeing
+Route::get('/dyeing-list',[DyeingController::class,'dyeingList'])->name('dyeing-list');
+Route::get('/dyeing-save-page',[DyeingController::class,'dyeingSavePage'])->name('dyeing-save-page');
+Route::post('/create-dyeing',[DyeingController::class,'createDyeing'])->name('create-dyeing');
+
+
+//fabric
+Route::get('/fabric-list',[FabricController::class,'fabricList'])->name('fabric-list');
+Route::post('/create-fabric',[FabricController::class,'createFabric'])->name('create-fabric');

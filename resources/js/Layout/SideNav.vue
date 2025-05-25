@@ -88,45 +88,36 @@
 
             <li>
               <Link
-                :href="`/list-requisition`"
+                :href="`/dyeing-party-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
-                <span class="material-icons">shopping_cart</span>
-                <span>Requisitions</span>
+                <span class="material-icons">inventory</span>
+                <span>Dyeing Party List</span>
               </Link>
             </li>
 
-            <li>
+               <li>
               <Link
-                :href="`/requisition-product-list`"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                <span class="material-icons">receipt</span>
-                <span>Requisition Products</span>
-              </Link>
-            </li>
-
-              <li>
-              <Link
-                :href="`/issue-product-list`"
+                :href="`/dyeing-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <span class="material-icons">remove_shopping_cart</span>
-                <span>Issue</span>
+                <span>Dyeing</span>
               </Link>
             </li>
+
 
               <li>
               <Link
-                :href="`/list-purchase`"
+                :href="`/fabric-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
               >
                <span class="material-icons">shopping_bag</span>
-                <span>Purchases</span>
+                <span>Fabric List</span>
               </Link>
             </li>
 
-                <li>
+                <!-- <li>
               <Link
                 :href="`/minimum-product-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -134,9 +125,9 @@
                <i class="material-icons">warning</i>
                 <span>Minimum Stock</span>
               </Link>
-            </li>
+            </li> -->
 
-             <li>
+             <!-- <li>
               <Link
                 :href="`/requisition-received-request-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -144,9 +135,9 @@
                 <span class="material-icons text-green-600">check_circle</span>
                 <span>Received Requisition Request</span>
               </Link>
-            </li>
+            </li> -->
 
-             <li>
+             <!-- <li>
               <Link
                 :href="`/damage-product-list`"
                 class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
@@ -154,7 +145,7 @@
                  <span class="material-icons">dangerous</span>
                 <span class="text-sm font-medium">Damaged item reported</span>
               </Link>
-            </li>
+            </li> -->
           </ul>
         </nav>
         <div class="p-4 border-t ">

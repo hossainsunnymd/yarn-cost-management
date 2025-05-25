@@ -8,14 +8,13 @@ const page=usePage()
 
 const headers = [
   { text: 'ID', value: 'id' },
-  { text: 'knitting Party Name', value: 'knitting_party.name' },
-  { text: 'Yarns Name', value: 'yarn_purchase.name' },
+  { text: 'Yarns Name', value: 'drying.knitting.yarn_purchase.name' },
   { text: 'unit', value: 'unit' },
-  { text: 'Knitting Cost', value: 'total_amount' },
+  { text: 'Total Cost', value: 'total_cost' },
   { text: 'Action', value: 'action' },
 ];
 
-const items=ref(page.props.knittingList);
+const items=ref(page.props.fabrics);
 
 const searchField = ref("name");
 const searchItem=ref();
@@ -32,7 +31,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
-    <p class="text-2xl font-bold">Knitting List</p>
+    <p class="text-2xl font-bold">Dyeing List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
         <input
@@ -46,7 +45,7 @@ if(page.props.flash.status==true){
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
-        <Link :href="`/dyeing-save-page?knitting_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Dyeing</Link>
+        <!-- <Link :href="`/drying-save-page?id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Dyeing</Link> -->
     </template>
 </EasyDataTable>
 </template>
