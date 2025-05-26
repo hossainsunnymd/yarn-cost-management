@@ -73,10 +73,13 @@ class YarnController extends Controller
     //create yarn purchase
     public function createYarnPurchase(Request $request) {
 
+
+
         $data=[
             'yarn_party_id'=>$request->yarn_party_id,
             'lot_no'=>$request->lot_no,
             'unit'=>$request->unit,
+            'available_unit'=>$request->unit,
             'name'=>$request->name,
             'description'=>$request->description,
             'weight'=>$request->weight,
@@ -84,7 +87,8 @@ class YarnController extends Controller
             'yarn_rate'=>$request->yarn_rate,
             'bill_amount'=>$request->bill_amount,
             'labour_cost'=>$request->labour_cost,
-            'total_amount'=>$request->total_amount
+            'total_amount'=>$request->total_amount,
+            'current_total_amount'=>$request->total_amount
         ];
 
         YarnPurchase::create($data);
@@ -97,6 +101,7 @@ class YarnController extends Controller
             'yarn_party_id'=>$request->yarn_party_id,
             'lot_no'=>$request->lot_no,
             'unit'=>$request->unit,
+            'available_unit'=>$request->unit,
             'name'=>$request->name,
             'description'=>$request->description,
             'weight'=>$request->weight,
@@ -104,7 +109,8 @@ class YarnController extends Controller
             'yarn_rate'=>$request->yarn_rate,
             'bill_amount'=>$request->bill_amount,
             'labour_cost'=>$request->labour_cost,
-            'total_amount'=>$request->total_amount
+            'total_amount'=>$request->total_amount,
+            'current_total_amount'=>$request->total_amountt
         ];
         YarnPurchase::find($request->id)->update($data);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully','error' => '']);

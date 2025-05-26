@@ -14,10 +14,12 @@ const headers = [
   { text: 'Weight', value: 'weight' },
   { text: 'Bag', value: 'bags' },
   { text: 'Unit', value: 'unit' },
+  { text: 'Available Unit', value: 'available_unit' },
   { text: 'Yarn Rate', value: 'yarn_rate' },
   { text: 'Bill Amount', value: 'bill_amount' },
   { text: 'Labour Cost', value: 'labour_cost' },
   { text: 'Total Amount', value: 'total_amount' },
+  { text: 'Current Total Amount', value: 'current_total_amount' },
   { text: 'Action', value: 'action' },
 ];
 

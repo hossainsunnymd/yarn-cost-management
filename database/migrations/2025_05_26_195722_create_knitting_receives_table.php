@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dryings', function (Blueprint $table) {
+        Schema::create('knitting_receives', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('drying_party_id');
-            $table->foreign('drying_party_id')->references('id')->on('drying_parties')
-            ->restrictOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('knitting_id');
             $table->foreign('knitting_id')->references('id')->on('knittings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->decimal('total_amount', 8, 2);
+            $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dryings');
+        Schema::dropIfExists('knitting_receives');
     }
 };

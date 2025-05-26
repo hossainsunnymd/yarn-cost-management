@@ -41,6 +41,10 @@ Route::get('/knitting-party-delete',[KnittingController::class,'knittingPartyDel
 Route::get('/knitting-list',[KnittingController::class,'knittingList'])->name('knitting-list');
 Route::get('/knitting-save-page',[KnittingController::class,'knittingSavePage'])->name('knitting-save-page');
 Route::post('/create-knitting',[KnittingController::class,'createKnitting'])->name('create-knitting');
+Route::get('/knitting-receive-page',[KnittingController::class,'knittingReceivePage'])->name('knitting-receive-page');
+Route::post('/create-knitting-receive',[KnittingController::class,'createKnittingReceive'])->name('create-knitting-receive');
+Route::get('/knitting-receive-list',[KnittingController::class,'knittingReceiveList'])->name('knitting-receive-list');
+
 
 
 //dyeing party

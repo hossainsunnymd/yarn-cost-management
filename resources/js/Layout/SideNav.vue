@@ -86,6 +86,16 @@
               </Link>
             </li>
 
+             <li>
+              <Link
+                :href="`/knitting-receive-list`"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <span class="material-icons">inventory</span>
+                <span>Knitting Receive</span>
+              </Link>
+            </li>
+
             <li>
               <Link
                 :href="`/dyeing-party-list`"

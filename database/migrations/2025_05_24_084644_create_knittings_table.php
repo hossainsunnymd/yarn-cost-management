@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreign('yarn_purchase_id')->references('id')->on('yarn_purchases')->
             restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
-            $table->decimal('total_amount', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
