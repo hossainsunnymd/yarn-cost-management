@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('yarn_purchase_id')->references('id')->on('yarn_purchases')->
             restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
+            $table->decimal('available_unit', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('knittins');
+        Schema::dropIfExists('knittings');
     }
 };

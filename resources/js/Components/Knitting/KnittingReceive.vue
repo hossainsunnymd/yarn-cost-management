@@ -12,7 +12,8 @@ const knittingId = new URLSearchParams(window.location.search).get(
 const form = useForm({
     knitting_id:knittingId,
     unit: "",
-    total_amount: "",
+    wastage: "",
+    knitting_cost: "",
 });
 let URL = "/create-knitting-receive";
 
@@ -58,7 +59,7 @@ function submitForm() {
                     >Knitting Cost</label
                 >
                 <input
-                    v-model="form.total_amount"
+                    v-model="form.knitting_cost"
                     type="number"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />

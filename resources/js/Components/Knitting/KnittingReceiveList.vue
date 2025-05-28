@@ -8,16 +8,20 @@ const page=usePage()
 
 const headers = [
   { text: 'ID', value: 'id' },
-  { text: 'Name', value: 'name' },
-  { text: 'Phone', value: 'phone' },
-  { text: 'Address', value: 'address' },
+  { text: 'Unit', value: 'unit' },
+  { text: 'Knitting Cost', value: 'knitting_cost' },
+  { text: 'Per Unit Cost', value: 'per_unit_cost' },
+  { text: 'Total Cost', value: 'total_amount' },
   { text: 'Action', value: 'action' },
 ];
 
 
+
 const items=ref(page.props.knittingReceiveList);
+
 const searchField = ref("name");
 const searchItem=ref();
+
 
 function deleteYarnParty(id){
     if(confirm("Are you sure you want to delete this knitting party?")){

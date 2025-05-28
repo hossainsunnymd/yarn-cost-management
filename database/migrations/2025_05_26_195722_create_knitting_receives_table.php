@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreign('knitting_id')->references('id')->on('knittings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
+            $table->decimal('wastage', 8, 2)->nullable();
+            $table->decimal('knitting_cost', 8, 2);
+            $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('total_amount', 8, 2);
             $table->timestamps();
         });

@@ -110,7 +110,7 @@ class YarnController extends Controller
             'bill_amount'=>$request->bill_amount,
             'labour_cost'=>$request->labour_cost,
             'total_amount'=>$request->total_amount,
-            'current_total_amount'=>$request->total_amountt
+            'current_total_amount'=>$request->total_amount
         ];
         YarnPurchase::find($request->id)->update($data);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully','error' => '']);

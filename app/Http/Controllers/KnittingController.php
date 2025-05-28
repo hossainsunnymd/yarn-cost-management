@@ -75,6 +75,7 @@ class KnittingController extends Controller
             'knitting_party_id'=>$request->knitting_party_id,
             'yarn_purchase_id'=>$request->yarn_purchase_id,
             'unit'=>$request->unit,
+            'available_unit'=>$request->unit,
         ];
         YarnPurchase::where('id',$request->yarn_purchase_id)->decrement('weight', $request->unit);
         Knitting::create($data);
@@ -96,14 +97,27 @@ class KnittingController extends Controller
 
     //create knitting receive
     public function createKnittingReceive(Request $request)  {
+
+        $yarnPurchaseId=Knitting::find($request->knitting_id)->yarn_purchase_id;
+
+        $totalYarnCost=YarnPurchase::find($yarnPurchaseId)->total_amount;
+        $totalUnit=YarnPurchase::find($yarnPurchaseId)->unit;
+        $perUnitYarnCost=$totalYarnCost/$totalUnit;
+        $knittingReceiveCost=($perUnitYarnCost*$request->unit)+$request->knitting_cost;
+        $perunitKnittingCost=$knittingReceiveCost/$request->unit;
+
          $data=[
             'knitting_id'=>$request->knitting_id,
-            'total_amount'=>$request->total_amount,
+            'total_amount'=>$knittingReceiveCost,
             'unit'=>$request->unit,
+            'knitting_cost'=>$request->knitting_cost,
+            'per_unit_cost'=>$perunitKnittingCost,
+            'wastage'=>0
+
          ];
 
          KnittingReceive::create($data);
-         Knitting::where('id',$request->knitting_id)->decrement('unit', $request->unit);
+         Knitting::where('id',$request->knitting_id)->decrement('available_unit', $request->unit);
          return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully','error' => '']);
     }
 
