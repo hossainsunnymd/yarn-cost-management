@@ -15,7 +15,6 @@ let URL = "/create-yarn-purchase";
 
 const form = useForm({
   yarn_party_id: "",
-  lot_no: "",
   unit: 0,
   name: "",
   description: "",
@@ -35,7 +34,6 @@ const form = useForm({
 
 if (yarnPurchaseId != 0 && yarnPurchase != null) {
   form.yarn_party_id = yarnPurchase.yarn_party_id;
-  form.lot_no = yarnPurchase.lot_no;
   form.unit = yarnPurchase.unit;
   form.name = yarnPurchase.name;
   form.description = yarnPurchase.description;
@@ -90,16 +88,6 @@ function submitForm() {
 
 
       <div>
-        <label for="lot_no" class="block text-sm font-medium text-gray-700 mb-1">Lot No</label>
-        <input
-          v-model="form.lot_no"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-
-      <div>
         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
        <input
           v-model="form.name"
@@ -108,14 +96,6 @@ function submitForm() {
         />
       </div>
 
-      <div>
-        <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-       <input
-          v-model="form.unit"
-          type="number"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
 
        <div>
         <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -130,7 +110,7 @@ function submitForm() {
         <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
         <input
           v-model="form.weight"
-          type="text"
+          type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
@@ -148,37 +128,21 @@ function submitForm() {
         <label for="yarn_rate" class="block text-sm font-medium text-gray-700 mb-1">Yarn Rate</label>
         <input
           v-model="form.yarn_rate"
-          type="text"
+          type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
 
-       <div>
-        <label for="bill_amount" class="block text-sm font-medium text-gray-700 mb-1">Bill Amount</label>
-        <input
-          v-model="form.bill_amount"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
 
        <div>
         <label for="labour_cost" class="block text-sm font-medium text-gray-700 mb-1"> Labour Cost</label>
         <input
           v-model="form.labour_cost"
-          type="text"
+          type="number"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
 
-       <div>
-        <label for="total_amount" class="block text-sm font-medium text-gray-700 mb-1">Total Amount</label>
-        <input
-          v-model="form.total_amount"
-          type="text"
-          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
 
       <!-- Submit Button -->
       <div class="pt-3">

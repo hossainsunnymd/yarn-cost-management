@@ -14,6 +14,7 @@ const form = useForm({
     unit: "",
     wastage: "",
     knitting_cost: "",
+
 });
 let URL = "/create-knitting-receive";
 
@@ -64,6 +65,20 @@ function submitForm() {
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>
+
+            <div>
+                <label
+                    for="knitting_cost"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Wastage</label
+                >
+                <input
+                    v-model="form.wastage"
+                    type="number"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
 
             <div class="pt-3">
                 <button

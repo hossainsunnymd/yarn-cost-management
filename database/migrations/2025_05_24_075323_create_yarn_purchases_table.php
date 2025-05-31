@@ -16,16 +16,15 @@ return new class extends Migration
             $table->unsignedBigInteger('yarn_party_id');
             $table->foreign('yarn_party_id')->references('id')->on('yarn_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->string('lot_no');
             $table->string('name');
             $table->string('description');
             $table->string('weight');
             $table->string('bags');
             $table->decimal('unit', 8, 2);
-            $table->decimal('available_unit', 8, 2);
             $table->decimal('yarn_rate', 8, 2);
             $table->decimal('bill_amount', 8, 2);
             $table->decimal('labour_cost', 8, 2);
+            $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('total_amount', 8, 2);
             $table->decimal('current_total_amount', 8, 2);
             $table->timestamp('created_at')->useCurrent();

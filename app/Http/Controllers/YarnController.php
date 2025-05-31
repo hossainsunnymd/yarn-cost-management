@@ -73,22 +73,22 @@ class YarnController extends Controller
     //create yarn purchase
     public function createYarnPurchase(Request $request) {
 
-
-
+        $bill_amount=$request->weight*$request->yarn_rate;
+        $total_amount=$bill_amount+$request->labour_cost;
+        $per_unit_cost=$total_amount/$request->weight;
         $data=[
             'yarn_party_id'=>$request->yarn_party_id,
-            'lot_no'=>$request->lot_no,
-            'unit'=>$request->unit,
-            'available_unit'=>$request->unit,
+            'unit'=>$request->weight,
+            'per_unit_cost'=> $per_unit_cost,
             'name'=>$request->name,
             'description'=>$request->description,
             'weight'=>$request->weight,
             'bags'=>$request->bags,
             'yarn_rate'=>$request->yarn_rate,
-            'bill_amount'=>$request->bill_amount,
+            'bill_amount'=>$bill_amount,
             'labour_cost'=>$request->labour_cost,
-            'total_amount'=>$request->total_amount,
-            'current_total_amount'=>$request->total_amount
+            'total_amount'=>$total_amount,
+            'current_total_amount'=>$total_amount
         ];
 
         YarnPurchase::create($data);
@@ -97,20 +97,23 @@ class YarnController extends Controller
 
     //update yarn purchase
     public function updateYarnPurchase(Request $request) {
-         $data=[
+
+        $bill_amount=$request->weight*$request->yarn_rate;
+        $total_amount=$bill_amount+$request->labour_cost;
+        $per_unit_cost=$total_amount/$request->weight;
+        $data=[
             'yarn_party_id'=>$request->yarn_party_id,
-            'lot_no'=>$request->lot_no,
-            'unit'=>$request->unit,
-            'available_unit'=>$request->unit,
+            'unit'=>$request->weight,
+            'per_unit_cost'=> $per_unit_cost,
             'name'=>$request->name,
             'description'=>$request->description,
             'weight'=>$request->weight,
             'bags'=>$request->bags,
             'yarn_rate'=>$request->yarn_rate,
-            'bill_amount'=>$request->bill_amount,
+            'bill_amount'=>$bill_amount,
             'labour_cost'=>$request->labour_cost,
-            'total_amount'=>$request->total_amount,
-            'current_total_amount'=>$request->total_amount
+            'total_amount'=>$total_amount,
+            'current_total_amount'=>$total_amount
         ];
         YarnPurchase::find($request->id)->update($data);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully','error' => '']);

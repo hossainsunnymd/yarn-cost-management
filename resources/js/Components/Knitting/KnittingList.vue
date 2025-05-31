@@ -10,7 +10,8 @@ const headers = [
   { text: 'ID', value: 'id' },
   { text: 'knitting Party Name', value: 'knitting_party.name' },
   { text: 'Yarns Name', value: 'yarn_purchase.name' },
-  { text: 'unit', value: 'unit' },
+  { text: 'Weight', value: 'unit' },
+  { text: 'Available Weight', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
 

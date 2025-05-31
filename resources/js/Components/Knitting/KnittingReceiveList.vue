@@ -40,7 +40,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
-    <p class="text-2xl font-bold">Knitting Party List</p>
+    <p class="text-2xl font-bold">Knitting Receive List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
         <input
