@@ -7,14 +7,15 @@ const toaster = createToaster({ });
 const page=usePage()
 
 const headers = [
-  { text: 'ID', value: 'id' },
-  { text: 'Yarns Name', value: 'drying.knitting.yarn_purchase.name' },
+  { text: 'No', value: 'id' },
   { text: 'unit', value: 'unit' },
-  { text: 'Total Cost', value: 'total_cost' },
+  { text: 'Per Unit Cost', value: 'per_unit_cost' },
+  { text: 'Total Cost', value: 'total_amount' },
   { text: 'Action', value: 'action' },
 ];
 
 const items=ref(page.props.fabrics);
+console.log(items.value);
 
 const searchField = ref("name");
 const searchItem=ref();

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('drying_party_id');
             $table->foreign('drying_party_id')->references('id')->on('drying_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('knitting_id');
-            $table->foreign('knitting_id')->references('id')->on('knittings')
+            $table->unsignedBigInteger('knitting_receive_id');
+            $table->foreign('knitting_receive_id')->references('id')->on('knitting_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->timestamp('created_at')->useCurrent();

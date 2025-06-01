@@ -50,20 +50,11 @@ if(page.props.flash.status==true){
             placeholder="Search by name"
         >
     </div>
-    <div class="w-full md:w-auto">
-        <Link
-            :href="`/knitting-party-save-page?knitting_party_id=${0}`"
-            class="bg-green-500 text-white py-2 px-4 rounded block text-center md:inline-block w-full md:w-auto"
-        >
-            Add Knitting Party
-        </Link>
-    </div>
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
-        <Link :href="`/knitting-party-save-page?knitting_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
-        <button @click="deleteYarnParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
+        <Link :href="`/dyeing-save-page?knitting_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Dyeing</Link>
     </template>
 
 </EasyDataTable>

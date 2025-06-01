@@ -60,6 +60,8 @@ Route::get('/dyeing-party-delete',[DyeingController::class,'dyeingPartyDelete'])
 Route::get('/dyeing-list',[DyeingController::class,'dyeingList'])->name('dyeing-list');
 Route::get('/dyeing-save-page',[DyeingController::class,'dyeingSavePage'])->name('dyeing-save-page');
 Route::post('/create-dyeing',[DyeingController::class,'createDyeing'])->name('create-dyeing');
+Route::get('/dyeing-receive-page',[DyeingController::class,'dyeingReceivePage'])->name('dyeing-receive-page');
+Route::post('/create-dyeing-receive',[DyeingController::class,'createDyeingReceive'])->name('create-dyeing-receive');
 
 
 //fabric

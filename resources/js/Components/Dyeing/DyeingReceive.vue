@@ -5,16 +5,18 @@ import { router } from "@inertiajs/vue3";
 
 const toaster = createToaster({});
 const page = usePage();
-const knittingReceiveId = new URLSearchParams(window.location.search).get(
-    "knitting_receive_id"
+const dyeingId = new URLSearchParams(window.location.search).get(
+    "dyeing_id"
 );
 
 const form = useForm({
-    dyeing_party_id: "",
-    knitting_receive_id: knittingReceiveId,
+    dyeing_id: dyeingId,
     unit: "",
+    wastage: "",
+    total_amount: "",
+
 });
-let URL = "/create-dyeing";
+let URL = "/create-dyeing-receive";
 
 function submitForm() {
     form.post(URL, {
@@ -24,7 +26,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
-                router.visit("/knitting-list");
+                router.visit("/dyeing-list");
             }
         },
     });
@@ -34,31 +36,10 @@ function submitForm() {
 <template>
     <div class="p-6 max-w-2xl w-full mx-auto">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            Add Knitting
+            Dyeing Receive
         </h2>
 
         <form @submit.prevent="submitForm" class="space-y-5">
-            <div>
-                <label
-                    for="yarn_party"
-                    class="block text-sm font-medium text-gray-700 mb-1"
-                >
-                    Select Knitting Party</label
-                >
-                <select
-                    v-model="form.dyeing_party_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="" disabled>Select Dyeing Party</option>
-                    <option
-                        v-for="party in page.props.dyeingPartyList"
-                        :key="party.id"
-                        :value="party.id"
-                    >
-                        {{ party.name }}
-                    </option>
-                </select>
-            </div>
 
             <div>
                 <label
@@ -68,6 +49,31 @@ function submitForm() {
                 >
                 <input
                     v-model="form.unit"
+                    type="number"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
+              <div>
+                <label
+                    for="t"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Dyeing Cost</label
+                >
+                <input
+                    v-model="form.total_amount"
+                    type="number"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+              <div>
+                <label
+                    for="t"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Wastage</label
+                >
+                <input
+                    v-model="form.wastage"
                     type="number"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
