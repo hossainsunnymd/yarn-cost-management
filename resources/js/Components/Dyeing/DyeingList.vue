@@ -10,6 +10,7 @@ const headers = [
   { text: 'ID', value: 'id' },
   { text: 'Dyeing Party Name', value: 'drying_party.name' },
   { text: 'unit', value: 'unit' },
+  { text: 'Available Unit', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
 

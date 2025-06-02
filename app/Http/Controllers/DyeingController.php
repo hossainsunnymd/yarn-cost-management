@@ -34,7 +34,8 @@ class DyeingController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'total_amount' => 0,
-            'due_amount' => 0
+            'due_amount' => 0,
+            'last_payment'=>0
         ];
         DryingParty::create($data);
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Party Created Successfully', 'error' => '']);
@@ -84,6 +85,7 @@ class DyeingController extends Controller
             'drying_party_id' => $request->dyeing_party_id,
             'knitting_receive_id' => $request->knitting_receive_id,
             'unit' => $request->unit,
+            'available_unit' => $request->unit
         ];
         Drying::create($data);
         Knitting::where('id', $request->knitting_id)->decrement('unit', $request->unit);
@@ -101,6 +103,7 @@ class DyeingController extends Controller
     public function createDyeingReceive(Request $request)
     {
         $dyeing = Drying::find($request->dyeing_id);
+        $dyeingPartyId = $dyeing->drying_party_id;
         $perUnitknittingReceiveCost = KnittingReceive::find($dyeing->knitting_receive_id)->per_unit_cost;
 
         $totalDyeingUnitCost = $dyeing->unit * $perUnitknittingReceiveCost;
@@ -122,7 +125,8 @@ class DyeingController extends Controller
         ];
 
         DryingReceive::create($data);
-        Drying::where('id', $request->dyeing_id)->decrement('unit', $request->unit);
+        Drying::where('id', $request->dyeing_id)->decrement('available_unit', $request->unit);
+        DryingParty::find($dyeingPartyId)->increment( 'due_amount', $request->total_amount);
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
     }
 }

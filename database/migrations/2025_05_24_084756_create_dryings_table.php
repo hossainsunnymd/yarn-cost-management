@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('knitting_receive_id')->references('id')->on('knitting_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
+            $table->decimal('available_unit', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

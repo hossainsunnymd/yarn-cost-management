@@ -32,6 +32,9 @@ Route::get('/yarn-sale-list',[YarnController::class,'yarnSaleList'])->name('yarn
 Route::get('/yarn-sale-page',[YarnController::class,'yarnSalePage'])->name('yarn-sale-page');
 Route::post('/create-yarn-sale',[YarnController::class,'createYarnSale'])->name('create-yarn-sale');
 
+//yarn payment
+Route::post('/save-yarn-payment',[YarnController::class,'saveYarnPayment'])->name('save-yarn-payment');
+
 
 
 //knitting party

@@ -31,7 +31,8 @@ class YarnController extends Controller
             'phone'=>$request->phone,
             'address'=>$request->address,
             'total_amount'=>0,
-            'due_amount'=>0
+            'due_amount'=>0,
+            'last_payment'=>0
 
         ];
 
@@ -93,6 +94,7 @@ class YarnController extends Controller
         ];
 
         YarnPurchase::create($data);
+        YarnParty::find($request->yarn_party_id)->increment('due_amount',$bill_amount);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Created Successfully','error' => '']);
     }
 
@@ -149,6 +151,18 @@ class YarnController extends Controller
     public function yarnSaleList() {
         $yarnSaleList = YarnSale::all();
         return Inertia::render('Yarn/YarnSaleListPage',['yarnSaleList' => $yarnSaleList]);
+    }
+
+    //yarn payment
+    public function saveYarnPayment(Request $request) {
+         $yarnParty = YarnParty::find($request->yarn_party_id);
+         $yarnParty->increment('total_amount', $request->amount);
+         $yarnParty->decrement('due_amount', $request->amount);
+         $yarnParty->update([
+            'last_payment'=>$request->amount,
+            'last_payment_date'=>date('Y-m-d', strtotime($request->payment_date))
+         ]);
+        return redirect('/yarn-party-list')->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully','error' => '']);
     }
 
 }

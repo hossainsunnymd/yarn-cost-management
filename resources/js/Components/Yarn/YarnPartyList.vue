@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import {router, usePage,Link} from '@inertiajs/vue3'
 import { createToaster } from "@meforma/vue-toaster";
 import YarnPartyDetails from "./YarnPartyDetails.vue";
+import YarnPayment from "./YarnPayment.vue";
 
 const toaster = createToaster({ });
 const page=usePage()
@@ -33,11 +34,19 @@ if(page.props.flash.status==true){
 
 }
 const modal=ref(false);
+const paymentModal=ref(false);
+const paymentId=ref(0);
+
 
 function yarnPartyDetails(id){
   items.value.find((item)=>item.id==id)
   modal.value=!modal.value
-  console.log(items.value)
+
+}
+
+function openPaymentModal(id){
+    paymentId.value=id
+    paymentModal.value=!paymentModal.value
 }
 
 
@@ -45,6 +54,7 @@ function yarnPartyDetails(id){
 
 <template>
     <YarnPartyDetails :items="items" v-model:modal="modal"/>
+    <YarnPayment :items="items" v-model:paymentModal="paymentModal" :paymentId="paymentId"/>
     <p class="text-2xl font-bold">Yarn Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
@@ -70,6 +80,7 @@ function yarnPartyDetails(id){
         <Link :href="`/yarn-party-save-page?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
         <button @click="deleteYarnParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Delete</button>
         <button @click="yarnPartyDetails(id)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Details</button>
+        <button @click="openPaymentModal(id)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Payment</button>
     </template>
 
 </EasyDataTable>

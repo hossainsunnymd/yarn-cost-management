@@ -39,7 +39,8 @@ class KnittingController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'total_amount' => 0,
-            'due_amount' => 0
+            'due_amount' => 0,
+            'last_payment' => 0
         ];
 
         KnittingParty::create($data);
@@ -115,6 +116,7 @@ class KnittingController extends Controller
     {
 
         $knitting = Knitting::find($request->knitting_id);
+        $knittingPartyId = $knitting->knitting_party_id;
         $yarnPurchaseId = $knitting->yarn_purchase_id;
         $knittingUnit = $knitting->unit;
 
@@ -149,6 +151,7 @@ class KnittingController extends Controller
 
         KnittingReceive::create($data);
         Knitting::where('id', $request->knitting_id)->decrement('available_unit', $request->unit + $request->wastage ?? 0);
+        KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_cost);
         return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully', 'error' => '']);
     }
 

@@ -71,12 +71,25 @@ const printModal = () => {
           </tbody>
 
         </table>
-         <p class="font-bold mt-[20px]">
+         <p class="font-bold mt-[20px]"> Total Amount:
            {{ props.items[0].total_amount }}
          </p>
          <p class="font-bold">
+           Due Amount:
            {{ props.items[0].due_amount }}
          </p>
+
+         <p class="font-bold">
+           Last Paid Amount:
+           {{ props.items[0].last_payment }}
+         </p>
+
+         <p class="font-bold">
+           Last Paid Date:
+           {{ props.items[0].last_payment_date }}
+         </p>
+
+
       </div>
 
       <!-- Footer -->
