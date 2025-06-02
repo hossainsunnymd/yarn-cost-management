@@ -12,6 +12,8 @@ class YarnParty extends Model
         'phone',
         'total_amount',
         'due_amount',
+        'last_payment',
+        'last_payment_date'
     ];
 
     public function yarnPurchase(){
