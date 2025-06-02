@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import {router, usePage,Link} from '@inertiajs/vue3'
 import { createToaster } from "@meforma/vue-toaster";
+import DyeingPartyDetails from "./DyeingPartyDetails.vue";
 
 const toaster = createToaster({ });
 const page=usePage()
@@ -18,11 +19,20 @@ const headers = [
 const items=ref(page.props.dyeingPartyList);
 const searchField = ref("name");
 const searchItem=ref();
+const modal=ref(false);
+
+console.log(items.value)
 
 function deleteDyeingParty(id){
     if(confirm("Are you sure you want to delete this dyeing party?")){
         router.visit(`/dyeing-party-delete?id=${id}`);
     }
+}
+
+function dyeingPartyDetails(id){
+    items.value.find((item)=>item.id==id);
+    modal.value=!modal.value;
+
 }
 
 if(page.props.flash.status==true){
@@ -36,6 +46,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
+    <DyeingPartyDetails :items="items" v-model:modal="modal"/>
     <p class="text-2xl font-bold">Dyeing Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
@@ -59,7 +70,8 @@ if(page.props.flash.status==true){
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
         <Link :href="`/dyeing-party-save-page?dyeing_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
-        <button @click="deleteDyeingParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
+        <button @click="deleteDyeingParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Delete</button>
+        <button @click="dyeingPartyDetails(id)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Details</button>
     </template>
 
 </EasyDataTable>

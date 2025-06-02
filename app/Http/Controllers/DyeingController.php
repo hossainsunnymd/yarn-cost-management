@@ -15,7 +15,7 @@ class DyeingController extends Controller
     //dyeing party list
     public function dyeingPartyList()
     {
-        $dyeingPartyList = DryingParty::all();
+        $dyeingPartyList = DryingParty::with('dryings')->get();
         return Inertia::render('Dyeing/DyeingPartyListPage', ['dyeingPartyList' => $dyeingPartyList]);
     }
 

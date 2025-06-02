@@ -8,31 +8,20 @@ const page=usePage()
 
 const headers = [
   { text: 'No', value: 'id' },
-  { text: 'unit', value: 'unit' },
-  { text: 'Per Unit Cost', value: 'per_unit_cost' },
-  { text: 'Total Cost', value: 'total_amount' },
-  { text: 'Action', value: 'action' },
+  { text: 'Unit', value: 'unit' },
+  { text: 'Price', value: 'total_amount' },
 ];
 
-const items=ref(page.props.fabrics);
 
-
+const items=ref(page.props.fabricSaleList);
 const searchField = ref("name");
 const searchItem=ref();
-
-
-if(page.props.flash.status==true){
-    toaster.success(page.props.flash.message);
-}else if(page.props.flash.status==false){
-    toaster.error(page.props.flash.message);
-
-}
 
 
 </script>
 
 <template>
-    <p class="text-2xl font-bold">Dyeing List</p>
+    <p class="text-2xl font-bold">Fabric Sale List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
         <input
@@ -42,12 +31,11 @@ if(page.props.flash.status==true){
             placeholder="Search by name"
         >
     </div>
+    <div>
+    </div>
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
-    <template #item-action="{ id }">
-        <Link :href="`/fabric-sale-page?dyeing_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Sale</Link>
-    </template>
 </EasyDataTable>
 </template>
 

@@ -13,4 +13,8 @@ class YarnParty extends Model
         'total_amount',
         'due_amount',
     ];
+
+    public function yarnPurchase(){
+        return $this->hasMany(YarnPurchase::class);
+    }
 }

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drying_sales', function (Blueprint $table) {
+        Schema::create('fabric_sales', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('drying_receive_id');
             $table->foreign('drying_receive_id')->references('id')->on('drying_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('unit', 8, 2);
-            $table->decimal('total_amount', 8, 2);
+            $table->decimal('unit',15,2);
+            $table->decimal('total_amount',15,2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('drying_sales');
+        Schema::dropIfExists('fabric_sales');
     }
 };

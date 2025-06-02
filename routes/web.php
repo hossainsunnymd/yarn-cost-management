@@ -79,4 +79,6 @@ Route::post('/create-dyeing-receive',[DyeingController::class,'createDyeingRecei
 
 //fabric
 Route::get('/fabric-list',[FabricController::class,'fabricList'])->name('fabric-list');
-Route::post('/create-fabric',[FabricController::class,'createFabric'])->name('create-fabric');
+Route::get('/fabric-sale-page',[FabricController::class,'fabricSalePage'])->name('fabric-sale-page');
+Route::post('/create-fabric-sale',[FabricController::class,'createFabricSale'])->name('create-fabric-sale');
+Route::get('/fabric-sale-list',[FabricController::class,'fabricSaleList'])->name('fabric-sale-list');

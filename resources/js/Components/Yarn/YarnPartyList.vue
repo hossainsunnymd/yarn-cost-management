@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import {router, usePage,Link} from '@inertiajs/vue3'
 import { createToaster } from "@meforma/vue-toaster";
+import YarnPartyDetails from "./YarnPartyDetails.vue";
 
 const toaster = createToaster({ });
 const page=usePage()
@@ -31,11 +32,19 @@ if(page.props.flash.status==true){
     toaster.error(page.props.flash.message);
 
 }
+const modal=ref(false);
+
+function yarnPartyDetails(id){
+  items.value.find((item)=>item.id==id)
+  modal.value=!modal.value
+  console.log(items.value)
+}
 
 
 </script>
 
 <template>
+    <YarnPartyDetails :items="items" v-model:modal="modal"/>
     <p class="text-2xl font-bold">Yarn Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
@@ -59,7 +68,8 @@ if(page.props.flash.status==true){
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
         <Link :href="`/yarn-party-save-page?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
-        <button @click="deleteYarnParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
+        <button @click="deleteYarnParty(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Delete</button>
+        <button @click="yarnPartyDetails(id)" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1 cursor-pointer">Details</button>
     </template>
 
 </EasyDataTable>

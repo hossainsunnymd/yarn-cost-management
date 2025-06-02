@@ -19,7 +19,7 @@ class KnittingController extends Controller
     //knitting party list
     public function knittingPartyList()
     {
-        $knittingPartyList = KnittingParty::all();
+        $knittingPartyList = KnittingParty::with('knittings')->get();
         return Inertia::render('Knittings/KnittingPartyListPage', ['knittingPartyList' => $knittingPartyList]);
     }
 

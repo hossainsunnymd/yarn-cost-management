@@ -12,7 +12,7 @@ class YarnController extends Controller
 {
     //yarn party list
     public function yarnPartyList() {
-        $yarnPartyList = YarnParty::all();
+        $yarnPartyList = YarnParty::with('yarnPurchase')->get();
         return Inertia::render('Yarn/YarnPartyListPage',['yarnPartyList' => $yarnPartyList]);
     }
 
@@ -141,6 +141,7 @@ class YarnController extends Controller
 
         ];
         YarnSale::create($data);
+        YarnPurchase::find($request->yarn_purchase_id)->decrement('weight', $request->unit);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Sale Created Successfully','error' => '']);
     }
 
