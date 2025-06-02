@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales', function (Blueprint $table) {
+        Schema::create('knitting_sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sale_party_id');
-            $table->foreign('sale_party_id')->references('id')->on('sale_parties')
-            ->restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('knitting_id');
-            $table->foreign('knitting_id')->references('id')->on('knittings')
+            $table->unsignedBigInteger('knitting_receive_id');
+            $table->foreign('knitting_receive_id')->references('id')->on('knitting_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->decimal('total_amount', 8, 2);
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales');
+        Schema::dropIfExists('knitting_sales');
     }
 };

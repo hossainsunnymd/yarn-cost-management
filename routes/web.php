@@ -27,6 +27,12 @@ Route::post('/update-yarn-purchase',[YarnController::class,'updateYarnPurchase']
 Route::get('/yarn-purchase-delete',[YarnController::class,'yarnPurchaseDelete'])->name('yarn-purchase-delete');
 
 
+//yarn sale
+Route::get('/yarn-sale-list',[YarnController::class,'yarnSaleList'])->name('yarn-sale-list');
+Route::get('/yarn-sale-page',[YarnController::class,'yarnSalePage'])->name('yarn-sale-page');
+Route::post('/create-yarn-sale',[YarnController::class,'createYarnSale'])->name('create-yarn-sale');
+
+
 
 //knitting party
 Route::get('/knitting-party-list',[KnittingController::class,'knittingPartyList'])->name('knitting-party-list');
@@ -41,9 +47,16 @@ Route::get('/knitting-party-delete',[KnittingController::class,'knittingPartyDel
 Route::get('/knitting-list',[KnittingController::class,'knittingList'])->name('knitting-list');
 Route::get('/knitting-save-page',[KnittingController::class,'knittingSavePage'])->name('knitting-save-page');
 Route::post('/create-knitting',[KnittingController::class,'createKnitting'])->name('create-knitting');
+
+//knitting receive
 Route::get('/knitting-receive-page',[KnittingController::class,'knittingReceivePage'])->name('knitting-receive-page');
 Route::post('/create-knitting-receive',[KnittingController::class,'createKnittingReceive'])->name('create-knitting-receive');
 Route::get('/knitting-receive-list',[KnittingController::class,'knittingReceiveList'])->name('knitting-receive-list');
+
+//knitting sale
+Route::get('/knitting-sale-page',[KnittingController::class,'knittingSalePage'])->name('knitting-sale-page');
+Route::post('/create-knitting-sale',[KnittingController::class,'createKnittingSale'])->name('create-knitting-sale');
+Route::get('/knitting-sale-list',[KnittingController::class,'knittingSaleList'])->name('knitting-sale-list');
 
 
 

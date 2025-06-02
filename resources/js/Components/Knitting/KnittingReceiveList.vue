@@ -55,6 +55,7 @@ if(page.props.flash.status==true){
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
         <Link :href="`/dyeing-save-page?knitting_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Dyeing</Link>
+        <Link :href="`/knitting-sale-page?knitting_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Knitting Sale</Link>
     </template>
 
 </EasyDataTable>

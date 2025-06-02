@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fabric_sales', function (Blueprint $table) {
+        Schema::create('drying_sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('fabric_id');
-            $table->foreign('fabric_id')->references('id')->on('fabrics')
+            $table->unsignedBigInteger('drying_receive_id');
+            $table->foreign('drying_receive_id')->references('id')->on('drying_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->decimal('total_amount', 8, 2);
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fabric_sales');
+        Schema::dropIfExists('drying_sales');
     }
 };

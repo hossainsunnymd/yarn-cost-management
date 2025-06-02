@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KnittingSale;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Knitting;
@@ -149,5 +150,31 @@ class KnittingController extends Controller
         KnittingReceive::create($data);
         Knitting::where('id', $request->knitting_id)->decrement('available_unit', $request->unit + $request->wastage ?? 0);
         return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully', 'error' => '']);
+    }
+
+    //knitting sale page
+    public function knittingSalePage(Request $request)
+    {
+        return Inertia::render('Knittings/KnittingSalePage');
+    }
+
+    //create knitting sale
+    public function createKnittingSale(Request $request)
+    {
+        $data = [
+            'knitting_receive_id' => $request->knitting_receive_id,
+            'unit' => $request->unit,
+            'total_amount' => $request->total_amount,
+        ];
+        KnittingSale::create($data);
+        // KnittingReceive::where('id', $request->knitting_receive_id)->decrement('unit', $request->unit);
+        return redirect()->back()->with(['status' => true, 'message' => 'Knitting Sale Created Successfully', 'error' => '']);
+    }
+
+    //knitting sale list
+    public function knittingSaleList()
+    {
+        $knittingSaleList = KnittingSale::get();
+        return Inertia::render('Knittings/KnittingSaleListPage', ['knittingSaleList' => $knittingSaleList]);
     }
 }

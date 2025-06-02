@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\YarnParty;
 use App\Models\YarnPurchase;
+use App\Models\YarnSale;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -123,6 +124,30 @@ class YarnController extends Controller
     public function yarnPurchaseDelete(Request $request) {
         YarnPurchase::find($request->id)->delete();
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Deleted Successfully','error' => '']);
+    }
+
+    //yarn sale page
+    public function yarnSalePage() {
+        $yarnSale = YarnSale::all();
+        return Inertia::render('Yarn/YarnSalePage',['yarnSale' => $yarnSale]);
+    }
+
+    //create yarn sale
+    public function createYarnSale(Request $request) {
+        $data=[
+            'yarn_purchase_id'=>$request->yarn_purchase_id,
+            'unit'=>$request->unit,
+            'total_amount'=>$request->total_amount,
+
+        ];
+        YarnSale::create($data);
+        return redirect()->back()->with(['status' => true, 'message' => 'Yarn Sale Created Successfully','error' => '']);
+    }
+
+    //yarn sale list
+    public function yarnSaleList() {
+        $yarnSaleList = YarnSale::all();
+        return Inertia::render('Yarn/YarnSaleListPage',['yarnSaleList' => $yarnSaleList]);
     }
 
 }
