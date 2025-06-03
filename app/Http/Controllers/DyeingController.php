@@ -80,7 +80,6 @@ class DyeingController extends Controller
     //create dyeing
     public function createDyeing(Request $request)
     {
-
         $data = [
             'drying_party_id' => $request->dyeing_party_id,
             'knitting_receive_id' => $request->knitting_receive_id,
@@ -88,7 +87,7 @@ class DyeingController extends Controller
             'available_unit' => $request->unit
         ];
         Drying::create($data);
-        Knitting::where('id', $request->knitting_id)->decrement('unit', $request->unit);
+        KnittingReceive::where('id', $request->knitting_receive_id)->decrement('available_unit', $request->unit);
 
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Created Successfully', 'error' => '']);
     }
@@ -121,6 +120,7 @@ class DyeingController extends Controller
             'total_amount' => $totalCost,
             'per_unit_cost' => $perUnitDyeingCost,
             'unit' => $request->unit,
+            'available_unit' => $request->unit,
             'wastage' => $request->wastage,
         ];
 
@@ -128,5 +128,17 @@ class DyeingController extends Controller
         Drying::where('id', $request->dyeing_id)->decrement('available_unit', $request->unit);
         DryingParty::find($dyeingPartyId)->increment( 'due_amount', $request->total_amount);
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
+    }
+
+    //save dyeing payment
+    public function saveDyeingPayment(Request $request){
+        $dyeingParty=DryingParty::find($request->dyeing_party_id);
+        $dyeingParty->increment('total_amount', $request->amount);
+        $dyeingParty->decrement('due_amount', $request->amount);
+        $dyeingParty->update([
+            'last_payment'=>$request->amount,
+            'last_payment_date'=>date('Y-m-d', strtotime($request->payment_date))
+         ]);
+        return redirect('/dyeing-party-list')->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully','error' => '']);
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DryingReceive extends Model
 {
-    protected $fillable=['drying_id','unit','total_amount','per_unit_cost','wastage'];
+    protected $fillable=['drying_id','unit','total_amount','per_unit_cost','wastage','available_unit'];
 
     public function drying()
     {

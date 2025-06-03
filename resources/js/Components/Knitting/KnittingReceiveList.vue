@@ -12,6 +12,7 @@ const headers = [
   { text: 'Knitting Cost', value: 'knitting_cost' },
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
   { text: 'Total Cost', value: 'total_amount' },
+  { text: 'Available Unit', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
 

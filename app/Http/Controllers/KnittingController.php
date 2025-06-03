@@ -143,6 +143,7 @@ class KnittingController extends Controller
             'knitting_id' => $request->knitting_id,
             'total_amount' => $receivedKnittingUnitCost,
             'unit' => $request->unit,
+            'available_unit' => $request->unit,
             'knitting_cost' => $request->knitting_cost,
             'per_unit_cost' => $receivePerUnitCost,
             'wastage' => 0
@@ -164,13 +165,14 @@ class KnittingController extends Controller
     //create knitting sale
     public function createKnittingSale(Request $request)
     {
+
         $data = [
             'knitting_receive_id' => $request->knitting_receive_id,
             'unit' => $request->unit,
             'total_amount' => $request->total_amount,
         ];
         KnittingSale::create($data);
-        // KnittingReceive::where('id', $request->knitting_receive_id)->decrement('unit', $request->unit);
+        KnittingReceive::where('id', $request->knitting_receive_id)->decrement('available_unit', $request->unit);
         return redirect()->back()->with(['status' => true, 'message' => 'Knitting Sale Created Successfully', 'error' => '']);
     }
 
@@ -179,5 +181,16 @@ class KnittingController extends Controller
     {
         $knittingSaleList = KnittingSale::get();
         return Inertia::render('Knittings/KnittingSaleListPage', ['knittingSaleList' => $knittingSaleList]);
+    }
+
+    public function saveKnittingPayment(Request $request){
+        $knittingParty=KnittingParty::find($request->knitting_party_id);
+        $knittingParty->increment('total_amount', $request->amount);
+        $knittingParty->decrement('due_amount', $request->amount);
+        $knittingParty->update([
+            'last_payment'=>$request->amount,
+            'last_payment_date'=>date('Y-m-d', strtotime($request->payment_date))
+         ]);
+        return redirect('/knitting-party-list')->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully','error' => '']);
     }
 }

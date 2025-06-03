@@ -24,7 +24,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
-                router.visit("/knitting-list");
+                router.visit("/knitting-receive-list");
             }
         },
     });
@@ -34,7 +34,7 @@ function submitForm() {
 <template>
     <div class="p-6 max-w-2xl w-full mx-auto">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            Add Knitting
+            Add Dyeing
         </h2>
 
         <form @submit.prevent="submitForm" class="space-y-5">

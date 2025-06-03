@@ -61,6 +61,9 @@ Route::get('/knitting-sale-page',[KnittingController::class,'knittingSalePage'])
 Route::post('/create-knitting-sale',[KnittingController::class,'createKnittingSale'])->name('create-knitting-sale');
 Route::get('/knitting-sale-list',[KnittingController::class,'knittingSaleList'])->name('knitting-sale-list');
 
+//knitting payment
+Route::post('/save-knitting-payment',[KnittingController::class,'saveKnittingPayment'])->name('save-knitting-payment');
+
 
 
 //dyeing party
@@ -78,6 +81,9 @@ Route::get('/dyeing-save-page',[DyeingController::class,'dyeingSavePage'])->name
 Route::post('/create-dyeing',[DyeingController::class,'createDyeing'])->name('create-dyeing');
 Route::get('/dyeing-receive-page',[DyeingController::class,'dyeingReceivePage'])->name('dyeing-receive-page');
 Route::post('/create-dyeing-receive',[DyeingController::class,'createDyeingReceive'])->name('create-dyeing-receive');
+
+//dyeing payment
+Route::post('/save-dyeing-payment',[DyeingController::class,'saveDyeingPayment'])->name('save-dyeing-payment');
 
 
 //fabric

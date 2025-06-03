@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreign('drying_id')->references('id')->on('dryings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
+            $table->decimal('available_unit', 8, 2);
             $table->decimal('wastage', 8, 2)->nullable();
             $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('total_amount', 8, 2);

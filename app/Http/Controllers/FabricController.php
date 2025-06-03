@@ -37,7 +37,7 @@ class FabricController extends Controller
             'total_amount'=>$request->total_amount,
         ];
         FabricSale::create($data);
-        DryingReceive::find($request->dyeing_receive_id)->decrement('unit', $request->unit);
+        DryingReceive::find($request->dyeing_receive_id)->decrement('available_unit', $request->unit);
         return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully','error' => '']);
     }
 }
