@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KnittingSale;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Knitting;
+use App\Models\KnittingSale;
 use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use App\Models\KnittingParty;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 
 class KnittingController extends Controller
@@ -34,6 +35,17 @@ class KnittingController extends Controller
     public function createKnittingParty(Request $request)
     {
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with(['errors' => $validator->errors()]);
+
+        }
+
         $data = [
             'name' => $request->name,
             'phone' => $request->phone,
@@ -50,6 +62,16 @@ class KnittingController extends Controller
     //update knitting party
     public function updateKnittingParty(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with(['errors' => $validator->errors()]);
+
+        }
 
         $data = [
             'name' => $request->name,
@@ -78,7 +100,15 @@ class KnittingController extends Controller
     //create knitting
     public function createKnitting(Request $request)
     {
+            $validator = Validator::make($request->all(), [
+                'knitting_party_id' => 'required',
+                'unit' => 'required|numeric',
+            ]);
 
+            if($validator->fails()){
+                return redirect()->back()->with(['errors' => $validator->errors()]);
+
+            }
 
         $data = [
             'knitting_party_id' => $request->knitting_party_id,
@@ -165,6 +195,15 @@ class KnittingController extends Controller
     //create knitting sale
     public function createKnittingSale(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'unit' => 'required|numeric',
+            'total_amount' => 'required|numeric',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->back()->with(['errors' => $validator->errors()]);
+
+        }
 
         $data = [
             'knitting_receive_id' => $request->knitting_receive_id,

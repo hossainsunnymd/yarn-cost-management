@@ -7,6 +7,7 @@ use App\Models\YarnPurchase;
 use App\Models\YarnSale;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class YarnController extends Controller
 {
@@ -26,6 +27,16 @@ class YarnController extends Controller
     //create yarn party
     public function createYarnParty(Request $request) {
 
+        $validation=Validator::make($request->all(),[
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
         $data=[
             'name'=>$request->name,
             'phone'=>$request->phone,
@@ -42,6 +53,17 @@ class YarnController extends Controller
 
     //update yarn party
     public function updateYarnParty(Request $request) {
+
+           $validation=Validator::make($request->all(),[
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
          $data=[
             'name'=>$request->name,
             'phone'=>$request->phone,
@@ -75,6 +97,20 @@ class YarnController extends Controller
     //create yarn purchase
     public function createYarnPurchase(Request $request) {
 
+        $validation=Validator::make($request->all(),[
+            'yarn_party_id' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'weight' => 'required|numeric',
+            'bags' => 'required|numeric',
+            'yarn_rate' => 'required|numeric',
+            'labour_cost' => 'required|numeric',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
         $bill_amount=$request->weight*$request->yarn_rate;
         $total_amount=$bill_amount+$request->labour_cost;
         $per_unit_cost=$total_amount/$request->weight;
@@ -101,6 +137,20 @@ class YarnController extends Controller
     //update yarn purchase
     public function updateYarnPurchase(Request $request) {
 
+          $validation=Validator::make($request->all(),[
+            'yarn_party_id' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'weight' => 'required|numeric',
+            'bags' => 'required|numeric',
+            'yarn_rate' => 'required|numeric',
+            'labour_cost' => 'required|numeric',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
         $bill_amount=$request->weight*$request->yarn_rate;
         $total_amount=$bill_amount+$request->labour_cost;
         $per_unit_cost=$total_amount/$request->weight;
@@ -119,6 +169,7 @@ class YarnController extends Controller
             'current_total_amount'=>$total_amount
         ];
         YarnPurchase::find($request->id)->update($data);
+        YarnParty::find($request->yarn_party_id)->increment('due_amount',$bill_amount);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully','error' => '']);
     }
 
@@ -136,6 +187,16 @@ class YarnController extends Controller
 
     //create yarn sale
     public function createYarnSale(Request $request) {
+
+        $validation=Validator::make($request->all(),[
+            'unit' => 'required|numeric',
+            'total_amount' => 'required|numeric',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
         $data=[
             'yarn_purchase_id'=>$request->yarn_purchase_id,
             'unit'=>$request->unit,
@@ -143,7 +204,11 @@ class YarnController extends Controller
 
         ];
         YarnSale::create($data);
-        YarnPurchase::find($request->yarn_purchase_id)->decrement('weight', $request->unit);
+        $yarnPurchase=YarnPurchase::find($request->yarn_purchase_id);
+        $yarnPurchase->decrement('weight', $request->unit);
+        $perUnitCost=$yarnPurchase->per_unit_cost;
+        $currentTotalAmount=$yarnPurchase->weight*$perUnitCost;
+        $yarnPurchase->update(['current_total_amount'=>$currentTotalAmount]);
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Sale Created Successfully','error' => '']);
     }
 

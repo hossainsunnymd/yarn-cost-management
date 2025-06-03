@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Drying;
-use App\Models\DryingParty;
-use App\Models\DryingReceive;
 use App\Models\Knitting;
-use App\Models\KnittingReceive;
+use App\Models\DryingParty;
 use Illuminate\Http\Request;
+use App\Models\DryingReceive;
+use App\Models\KnittingReceive;
+use Illuminate\Support\Facades\Validator;
 
 class DyeingController extends Controller
 {
@@ -29,6 +30,16 @@ class DyeingController extends Controller
     //create dyeing party
     public function createDyeingParty(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([ 'errors' => $validator->errors()]);
+        }
+
         $data = [
             'name' => $request->name,
             'phone' => $request->phone,
@@ -44,6 +55,17 @@ class DyeingController extends Controller
     //update dyeing party
     public function updateDyeingParty(Request $request)
     {
+         $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([ 'errors' => $validator->errors()]);
+        }
+
+
         $data = [
             'name' => $request->name,
             'phone' => $request->phone,
@@ -80,6 +102,15 @@ class DyeingController extends Controller
     //create dyeing
     public function createDyeing(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'dyeing_party_id' => 'required',
+            'unit' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with([ 'errors' => $validator->errors()]);
+        }
+
         $data = [
             'drying_party_id' => $request->dyeing_party_id,
             'knitting_receive_id' => $request->knitting_receive_id,

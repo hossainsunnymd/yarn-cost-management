@@ -84,6 +84,7 @@ function submitForm() {
             {{ party.name }}
           </option>
         </select>
+         <p v-if="errors.yarn_party_id" class="text-red-500 text-md mt-1">{{ errors.yarn_party_id[0] }}</p>
       </div>
 
 
@@ -94,6 +95,7 @@ function submitForm() {
           type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <p v-if="errors.name" class="text-red-500 text-md mt-1">{{ errors.name[0] }}</p>
       </div>
 
 
@@ -104,33 +106,37 @@ function submitForm() {
           type="description"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <p v-if="errors.description" class="text-red-500 text-md mt-1">{{ errors.description[0] }}</p>
       </div>
 
       <div>
         <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Weight</label>
         <input
           v-model="form.weight"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <p v-if="errors.weight" class="text-red-500 text-md mt-1">{{ errors.weight[0] }}</p>
       </div>
 
        <div>
         <label for="bags" class="block text-sm font-medium text-gray-700 mb-1">Bags</label>
         <input
           v-model="form.bags"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <p v-if="errors.bags" class="text-red-500 text-md mt-1">{{ errors.bags[0] }}</p>
       </div>
 
        <div>
         <label for="yarn_rate" class="block text-sm font-medium text-gray-700 mb-1">Yarn Rate</label>
         <input
           v-model="form.yarn_rate"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+        <p v-if="errors.yarn_rate" class="text-red-500 text-md mt-1">{{ errors.yarn_rate[0] }}</p>
       </div>
 
 
@@ -138,9 +144,10 @@ function submitForm() {
         <label for="labour_cost" class="block text-sm font-medium text-gray-700 mb-1"> Labour Cost</label>
         <input
           v-model="form.labour_cost"
-          type="number"
+          type="text"
           class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
+         <p v-if="errors.labour_cost" class="text-red-500 text-md mt-1">{{ errors.labour_cost[0] }}</p>
       </div>
 
 
@@ -148,7 +155,7 @@ function submitForm() {
       <div class="pt-3">
         <button @click="submitForm"
           type="button"
-          class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300"
+          class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer"
         >
           {{ yarnPurchaseId == 0 ? 'Add Purchase' : 'Update Purchase' }}
         </button>

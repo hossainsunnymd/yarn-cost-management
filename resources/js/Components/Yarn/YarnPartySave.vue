@@ -2,7 +2,9 @@
 import { usePage, useForm } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
+import {computed} from "vue";
 
+const errors = computed(() => page.props.flash.errors || {});
 const toaster = createToaster({});
 const page = usePage();
 const yarnPartyId = new URLSearchParams(window.location.search).get(
@@ -57,6 +59,9 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.name" class="text-red-500 text-md mt-1">
+                    {{ errors.name[0] }}
+                </p>
             </div>
 
                <div>
@@ -70,6 +75,9 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.phone" class="text-red-500 text-md mt-1">
+                    {{ errors.phone[0] }}
+                </p>
             </div>
 
                <div>
@@ -83,6 +91,9 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.address" class="text-red-500 text-md mt-1">
+                    {{ errors.address[0] }}
+                </p>
             </div>
 
             <div class="pt-3">

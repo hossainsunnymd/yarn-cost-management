@@ -2,7 +2,9 @@
 import { usePage, useForm } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
+import { computed } from "vue";
 
+const errors = computed(() => page.props.flash.errors || {});
 const toaster = createToaster({});
 const page = usePage();
 const yarnPurchaseId = new URLSearchParams(window.location.search).get(
@@ -58,6 +60,9 @@ function submitForm() {
                         {{ party.name }}
                     </option>
                 </select>
+                <p v-if="errors.knitting_party_id" class="text-red-500 text-md mt-1">
+                    {{ errors.knitting_party_id[0] }}
+                </p>
             </div>
 
             <div>
@@ -68,9 +73,12 @@ function submitForm() {
                 >
                 <input
                     v-model="form.unit"
-                    type="number"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.unit" class="text-red-500 text-md mt-1">
+                    {{ errors.unit[0] }}
+                </p>
             </div>
 
             <div class="pt-3">
