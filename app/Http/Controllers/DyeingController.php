@@ -156,7 +156,7 @@ class DyeingController extends Controller
         ];
 
         DryingReceive::create($data);
-        Drying::where('id', $request->dyeing_id)->decrement('available_unit', $request->unit);
+        Drying::where('id', $request->dyeing_id)->decrement('available_unit', $request->unit+$request->wastage??0);
         DryingParty::find($dyeingPartyId)->increment( 'due_amount', $request->total_amount);
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
     }
