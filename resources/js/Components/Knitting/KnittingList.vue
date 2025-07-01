@@ -9,13 +9,15 @@ const page=usePage()
 const headers = [
   { text: 'ID', value: 'id' },
   { text: 'knitting Party Name', value: 'knitting_party.name' },
-  { text: 'Yarns Name', value: 'yarn_purchase.name' },
-  { text: 'Weight', value: 'unit' },
+  { text: 'Weight', value: 'total_unit' },
   { text: 'Available Weight', value: 'available_unit' },
+  { text: 'Per Unit Cost', value: 'per_unit_cost' },
+  { text: 'Total Cost', value: 'total_cost' },
   { text: 'Action', value: 'action' },
 ];
 
 const items=ref(page.props.knittingList);
+
 
 const searchField = ref("name");
 const searchItem=ref();
@@ -42,6 +44,7 @@ if(page.props.flash.status==true){
             placeholder="Search by name"
         >
     </div>
+    <Link :href="`/knitting-save-page`" class="bg-blue-500 text-white font-bold py-1 px-4 rounded">Add Knitting</Link>
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">

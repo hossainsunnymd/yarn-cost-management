@@ -13,7 +13,8 @@ const form = useForm({
     knitting_id:knittingId,
     unit: "",
     wastage: "",
-    knitting_cost: "",
+    role: "",
+    knitting_receive_cost: "",
 
 });
 let URL = "/create-knitting-receive";
@@ -60,7 +61,7 @@ function submitForm() {
                     >Knitting Cost</label
                 >
                 <input
-                    v-model="form.knitting_cost"
+                    v-model="form.knitting_receive_cost"
                     type="number"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
@@ -74,7 +75,7 @@ function submitForm() {
                 >
                 <input
                     v-model="form.wastage"
-                    type="number"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>

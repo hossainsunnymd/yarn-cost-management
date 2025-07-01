@@ -10,13 +10,14 @@ class YarnParty extends Model
         'name',
         'address',
         'phone',
-        'total_amount',
         'due_amount',
-        'last_payment',
-        'last_payment_date'
     ];
 
     public function yarnPurchase(){
         return $this->hasMany(YarnPurchase::class);
+    }
+
+    public function yarnPayments(){
+        return $this->hasMany(YarnPayment::class);
     }
 }

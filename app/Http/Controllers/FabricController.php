@@ -7,13 +7,14 @@ use Inertia\Inertia;
 use App\Models\FabricSale;
 use Illuminate\Http\Request;
 use App\Models\DryingReceive;
+use App\Models\DyeingReceive;
 
 class FabricController extends Controller
 {
 
     //fabric list
     public function fabricList() {
-        $fabrics=DryingReceive::with('drying.knitting.yarnPurchase','drying.dryingParty')->get();
+        $fabrics=DyeingReceive::with('dyeing.knitting.yarnPurchase')->get();
         return Inertia::render('Fabric/FabricListPage',['fabrics' => $fabrics]);
     }
 
@@ -28,16 +29,5 @@ class FabricController extends Controller
         return Inertia::render('Fabric/FabricSalePage');
     }
 
-    //create fabric sale
-    public function createFabricSale(Request $request) {
 
-        $data=[
-            'drying_receive_id'=>$request->dyeing_receive_id,
-            'unit'=>$request->unit,
-            'total_amount'=>$request->total_amount,
-        ];
-        FabricSale::create($data);
-        DryingReceive::find($request->dyeing_receive_id)->decrement('available_unit', $request->unit);
-        return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully','error' => '']);
-    }
 }

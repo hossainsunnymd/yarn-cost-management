@@ -18,6 +18,7 @@ const headers = [
 
 
 const items=ref(page.props.yarnPartyList);
+const yarnPayment=ref(page.props.yarnPayments || {});
 const searchField = ref("name");
 const searchItem=ref();
 
@@ -53,7 +54,7 @@ function openPaymentModal(id){
 </script>
 
 <template>
-    <YarnPartyDetails :items="items" v-model:modal="modal"/>
+    <YarnPartyDetails :items="items" v-model:modal="modal" :yarnPayment="yarnPayment"/>
     <YarnPayment :items="items" v-model:paymentModal="paymentModal" :paymentId="paymentId"/>
     <p class="text-2xl font-bold">Yarn Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">

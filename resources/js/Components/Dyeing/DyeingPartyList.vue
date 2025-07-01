@@ -18,6 +18,7 @@ const headers = [
 
 
 const items=ref(page.props.dyeingPartyList);
+const dyeingPayment=ref(page.props.dyeingPayment || {});
 const searchField = ref("name");
 const searchItem=ref();
 const modal=ref(false);
@@ -53,7 +54,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
-    <DyeingPartyDetails :items="items" v-model:modal="modal"/>
+    <DyeingPartyDetails :items="items" v-model:modal="modal" :dyeingPayment="dyeingPayment"/>
     <DyeingPayment v-model:paymentModal="paymentModal" :paymentId="paymentId"/>
     <p class="text-2xl font-bold">Dyeing Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">

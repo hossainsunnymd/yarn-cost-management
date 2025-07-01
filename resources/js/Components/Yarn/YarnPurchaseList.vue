@@ -11,7 +11,7 @@ const headers = [
   { text: 'Name', value: 'name' },
   { text: 'Description', value: 'description' },
   { text: 'Weight', value: 'unit' },
-  { text: 'Available Weight', value: 'weight' },
+  { text: 'Available Weight', value: 'available_unit' },
   { text: 'Bag', value: 'bags' },
   { text: 'Yarn Rate', value: 'yarn_rate' },
   { text: 'Bill Amount', value: 'bill_amount' },
@@ -69,7 +69,6 @@ if(page.props.flash.status==true){
     <template #item-action="{ id }">
         <Link :href="`/yarn-purchase-save-page?id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Edit</Link>
         <button @click="deleteYarnPurchase(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded m-1">Delete</button>
-        <Link :href="`/knitting-save-page?yarn_purchase_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Knitting</Link>
         <Link :href="`/yarn-sale-page?yarn_purchase_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Yarn Sale</Link>
     </template>
 

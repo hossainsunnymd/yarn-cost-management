@@ -15,6 +15,7 @@ const form = useForm({
     dyeing_party_id: "",
     knitting_receive_id: knittingReceiveId,
     unit: "",
+    color: "",
 });
 let URL = "/create-dyeing";
 
@@ -77,6 +78,20 @@ function submitForm() {
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <p v-if="errors.unit" class="text-red-500 text-md mt-1">{{ errors.unit[0] }}</p>
+            </div>
+
+                  <div>
+                <label
+                    for="color"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Color</label
+                >
+                <input
+                    v-model="form.color"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <p v-if="errors.color" class="text-red-500 text-md mt-1">{{ errors.color[0] }}</p>
             </div>
             <div class="pt-3">
                 <button

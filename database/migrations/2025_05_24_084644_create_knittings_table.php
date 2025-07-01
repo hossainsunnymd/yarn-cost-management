@@ -16,11 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('knitting_party_id');
             $table->foreign('knitting_party_id')->references('id')->on('knitting_parties')->
             restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('yarn_purchase_id');
-            $table->foreign('yarn_purchase_id')->references('id')->on('yarn_purchases')->
-            restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('unit', 8, 2);
+            $table->decimal('role', 8, 2);
+            $table->decimal('total_unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
+            $table->decimal('total_cost', 8, 2);
+            $table->decimal('per_unit_cost', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

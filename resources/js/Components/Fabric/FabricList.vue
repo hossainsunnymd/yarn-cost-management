@@ -10,7 +10,7 @@ const headers = [
   { text: 'No', value: 'id' },
   { text: 'unit', value: 'unit' },
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
-  { text: 'Total Cost', value: 'total_amount' },
+  { text: 'Total Cost', value: 'total_cost' },
   { text: 'Available Unit', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
@@ -33,7 +33,7 @@ if(page.props.flash.status==true){
 </script>
 
 <template>
-    <p class="text-2xl font-bold">Dyeing List</p>
+    <p class="text-2xl font-bold">Fabric List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
     <div class="w-full md:w-auto">
         <input
@@ -46,8 +46,8 @@ if(page.props.flash.status==true){
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
-    <template #item-action="{ id }">
-        <Link :href="`/fabric-sale-page?dyeing_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Sale</Link>
+        <template #item-action="{ id }">
+       <Link :href="`/cutting-save-page?dyeing_receive_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Add Cutting</Link>
     </template>
 </EasyDataTable>
 </template>

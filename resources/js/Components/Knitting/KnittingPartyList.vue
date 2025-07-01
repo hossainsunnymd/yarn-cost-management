@@ -18,6 +18,7 @@ const headers = [
 
 
 const items=ref(page.props.knittingPartyList);
+const knittingPayment=ref(page.props.knittingPayment || {});
 const searchField = ref("name");
 const searchItem=ref();
 const modal=ref(false);
@@ -52,7 +53,7 @@ function openPaymentModal(id){
 </script>
 
 <template>
-    <KnittingPartyDetails :items="items" v-model:modal="modal"/>
+    <KnittingPartyDetails :items="items" v-model:modal="modal" :knittingPayment="knittingPayment"/>
     <KnittingPayment :paymentId="paymentId" v-model:paymentModal="paymentModal"/>
     <p class="text-2xl font-bold">Knitting Party List</p>
 <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">

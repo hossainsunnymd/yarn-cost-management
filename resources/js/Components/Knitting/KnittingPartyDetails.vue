@@ -2,6 +2,7 @@
 const props = defineProps({
     items: Array,
     modal: Boolean,
+    knittingPayment:Object
 });
 
 
@@ -67,17 +68,14 @@ const printModal = () => {
           </tbody>
 
         </table>
-         <p class="font-bold mt-[20px]"> Totam Payment:
-           {{ props.items[0].total_amount }}
-         </p>
          <p class="font-bold"> Totam Due:
            {{ props.items[0].due_amount }}
          </p>
          <p class="font-bold"> Last Pain Amount:
-           {{ props.items[0].last_payment }}
+           {{ props.knittingPayment.amount || 0 }}
          </p>
          <p class="font-bold"> Last Pain Date:
-           {{ props.items[0].last_payment_date }}
+           {{ props.knittingPayment.created_at|| '-' }}
          </p>
       </div>
 

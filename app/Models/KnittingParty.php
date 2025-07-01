@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class KnittingParty extends Model
 {
-    protected $fillable=['name','phone','address','total_amount','due_amount','last_payment','last_payment_date'];
+    protected $fillable=['name','phone','address','due_amount'];
 
     public function knittings(){
         return $this->hasMany(Knitting::class);
+    }
+
+    public function knittingPayments(){
+        return $this->hasMany(KnittingPayment::class);
     }
 }

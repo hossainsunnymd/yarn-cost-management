@@ -12,7 +12,6 @@ const props = defineProps({
 
 const form = useForm({
     amount: "",
-    payment_date: "",
 });
 
 const emit = defineEmits(["update:paymentModal"]);
@@ -54,13 +53,6 @@ function confirmPayment() {
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 type="text"
             />
-            <label for="date">Payment Date</label>
-            <input
-                v-model="form.payment_date"
-                class="border border-gray-300 rounded-md px-4 py-2 w-full"
-                type="date"
-            />
-
             <!-- Action buttons -->
             <div class="flex justify-end mt-6 space-x-2">
                 <button

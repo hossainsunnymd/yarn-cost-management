@@ -13,7 +13,7 @@ const form = useForm({
     dyeing_id: dyeingId,
     unit: "",
     wastage: "",
-    total_amount: "",
+    dyeing_cost: "",
 
 });
 let URL = "/create-dyeing-receive";
@@ -61,7 +61,7 @@ function submitForm() {
                     >Dyeing Cost</label
                 >
                 <input
-                    v-model="form.total_amount"
+                    v-model="form.dyeing_cost"
                     type="number"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
