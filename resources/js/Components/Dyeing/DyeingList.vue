@@ -9,12 +9,16 @@ const page=usePage()
 const headers = [
   { text: 'ID', value: 'id' },
   { text: 'Dyeing Party Name', value: 'dyeing_party.name' },
+  { text: 'Color', value: 'color' },
+  { text: 'Design Name', value: 'design_name' },
   { text: 'unit', value: 'unit' },
   { text: 'Available Unit', value: 'available_unit' },
+  { text: 'Roll', value: 'roll' },
   { text: 'Action', value: 'action' },
 ];
 
 const items=ref(page.props.dyeingList);
+console.log(items.value);
 
 const searchField = ref("name");
 const searchItem=ref();

@@ -283,7 +283,6 @@ const form = useForm({
   knitting_party_id: "",
   yarns: [],
   total: "",
-  role: "",
   total_weight: "",
 });
 
@@ -301,7 +300,6 @@ function createInvoice() {
   form.knitting_party_id = yarnParty.id;
   form.yarns = yarnList.value;
   form.total = calculate.total;
-  form.role = form.role;
   form.total_weight = calculate.weight;
 
 

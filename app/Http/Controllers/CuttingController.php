@@ -33,25 +33,16 @@ class CuttingController extends Controller
     {
 
         try {
-            DB::beginTransaction();
 
             $data = [
                 'dyeing_receive_id' => $request->dyeing_receive_id,
                 'category_id' => $request->category_id,
-                'unit' => $request->unit,
-                'available_unit' => $request->unit,
+                'roll' => $request->roll,
             ];
 
             Cutting::create($data);
-
-            $cutting = DyeingReceive::findOrFail($request->dyeing_receive_id);
-            $cutting->decrement('available_unit', $request->unit);
-
-            DB::commit();
-
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Created Successfully', 'error' => '']);
         } catch (Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => $e->getMessage()]);
         }
     }
@@ -72,39 +63,18 @@ class CuttingController extends Controller
     //create cutting receive
     public function createCuttingReceive(Request $request)
     {
-        DB::beginTransaction();
+
         try {
-            $cutting = Cutting::findOrFail($request->cutting_id);
-            $perUnitCost = DyeingReceive::find($cutting->dyeing_receive_id)->per_unit_cost;
-
-            //calulate received cutting unit cost
-            $receivedCuttingUnitCost = ($request->unit * $perUnitCost) + $request->cutting_cost ?? 0;
-            $receiveCuttingPerUnitCost = $receivedCuttingUnitCost / $request->unit;
-
-            if ($request->wastage > 0) {
-                $receivedCuttingUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $request->cutting_cost ?? 0;
-                $receiveCuttingPerUnitCost = $receivedCuttingUnitCost / $request->unit;
-            }
-
             $data = [
                 'cutting_id' => $request->cutting_id,
-                'total_cost' => $receivedCuttingUnitCost,
-                'per_unit_cost' => $receiveCuttingPerUnitCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
                 'wastage' => $request->wastage,
-                'cutting_cost' => $request->cutting_cost
             ];
 
             CuttingReceive::create($data);
-            $receive = Cutting::findOrFail($request->cutting_id);
-            $receive->decrement('available_unit', $request->unit);
-
-            DB::commit();
-
-             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Created Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
     }

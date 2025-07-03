@@ -7,23 +7,23 @@ import { computed } from "vue";
 const errors = computed(() => page.props.flash.errors || {});
 const toaster = createToaster({});
 const page = usePage();
-const cuttingPartyId = new URLSearchParams(window.location.search).get(
-    "cutting_party_id"
+const sewingPartyId = new URLSearchParams(window.location.search).get(
+    "sewing_party_id"
 );
-const cuttingParty = page.props.cuttingParty;
+const sewingParty = page.props.sewingParty;
 
 const form = useForm({
-    cutting_party_id: cuttingPartyId,
+    sewing_party_id: sewingPartyId,
     name: "",
     phone: "",
     address: "",
 });
-let URL = "/create-cutting-party";
-if (cuttingPartyId != 0 && cuttingParty != null) {
-    form.name = cuttingParty.name;
-    form.phone = cuttingParty.phone;
-    form.address = cuttingParty.address;
-    URL = "/update-cutting-party";
+let URL = "/create-sewing-party";
+if (sewingPartyId != 0 && sewingParty != null) {
+    form.name = sewingParty.name;
+    form.phone = sewingParty.phone;
+    form.address = sewingParty.address;
+    URL = "/update-sewing-party";
 }
 
 function submitForm() {
@@ -34,7 +34,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
-                router.visit("/cutting-party-list");
+                router.visit("/sewing-party-list");
             }
         },
     });
@@ -44,7 +44,7 @@ function submitForm() {
 <template>
     <div class="p-6 max-w-2xl w-full mx-auto">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            {{ cuttingPartyId == 0 ? "Add Cutting Party" : "Update Cutting Party" }}
+            {{ sewingPartyId == 0 ? "Add Sewing Party" : "Update Sewing Party" }}
         </h2>
 
         <form @submit.prevent="submitForm" class="space-y-5">
@@ -99,9 +99,9 @@ function submitForm() {
             <div class="pt-3">
                 <button
                     type="submit"
-                    class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300"
+                    class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer"
                 >
-                    {{ cuttingPartyId == 0 ? "Add Cutting Party" : "Update Cutting Party" }}
+                    {{ sewingPartyId == 0 ? "Add Sewing Party" : "Update Sewing Party" }}
                 </button>
             </div>
         </form>

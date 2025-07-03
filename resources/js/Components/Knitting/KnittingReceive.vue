@@ -13,7 +13,7 @@ const form = useForm({
     knitting_id:knittingId,
     unit: "",
     wastage: "",
-    role: "",
+    roll: "",
     knitting_receive_cost: "",
 
 });
@@ -62,7 +62,20 @@ function submitForm() {
                 >
                 <input
                     v-model="form.knitting_receive_cost"
-                    type="number"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
+            <div>
+                <label
+                    for="roll"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Roll</label
+                >
+                <input
+                    v-model="form.roll"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>

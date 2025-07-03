@@ -9,7 +9,6 @@ class Cutting extends Model
     protected $fillable=[
         'dyeing_receive_id',
         'category_id',
-        'unit',
-        'available_unit',
+        'roll'
     ];
 }

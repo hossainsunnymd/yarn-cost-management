@@ -13,6 +13,7 @@ const headers = [
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
   { text: 'Total Cost', value: 'total_cost' },
   { text: 'Available Unit', value: 'available_unit' },
+  { text: 'Roll', value: 'roll' },
   { text: 'Action', value: 'action' },
 ];
 

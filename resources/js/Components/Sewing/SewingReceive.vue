@@ -13,7 +13,6 @@ const form = useForm({
     sewing_id: sewingId,
     unit: "",
     wastage: "",
-    sewing_cost: "",
 
 });
 let URL = "/create-sewing-receive";
@@ -54,18 +53,6 @@ function submitForm() {
                 />
             </div>
 
-              <div>
-                <label
-                    for="t"
-                    class="block text-sm font-medium text-gray-700 mb-1"
-                    >Sewing Cost</label
-                >
-                <input
-                    v-model="form.sewing_cost"
-                    type="text"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-            </div>
               <div>
                 <label
                     for="t"

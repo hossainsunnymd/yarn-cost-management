@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KnittingController;
+use App\Http\Controllers\SewingPartyController;
 use App\Http\Controllers\CuttingPartyController;
 
 
@@ -119,17 +120,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
 
 
-    //cutting party
-    Route::get('/cutting-party-list', [CuttingPartyController::class, 'cuttingPartyList'])->name('cutting-party-list');
-    Route::get('/cutting-party-save-page', [CuttingPartyController::class, 'cuttingPartySavePage'])->name('cutting-party-save-page');
-    Route::post('/create-cutting-party', [CuttingPartyController::class, 'createCuttingParty'])->name('create-cutting-party');
-    Route::post('/update-cutting-party', [CuttingPartyController::class, 'updateCuttingParty'])->name('update-cutting-party');
-    Route::get('/cutting-party-delete', [CuttingPartyController::class, 'cuttingPartyDelete'])->name('cutting-party-delete');
-
-    //cutting payment
-    Route::post('/save-cutting-payment', [CuttingPartyController::class, 'cuttingPayment'])->name('save-cutting-payment');
-
-
     //cuttings
     Route::get('/cutting-list', [CuttingController::class, 'cuttingList'])->name('cuttings.list');
     Route::get('/cutting-save-page', [CuttingController::class, 'cuttingSavePage'])->name('cuttings.save.page');
@@ -140,11 +130,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     //sewing party
-    Route::get('/sewing-party-list', [SewingController::class, 'sewingPartyList'])->name('sewing-party-list');
-    Route::get('/sewing-party-save-page', [SewingController::class, 'sewingPartySavePage'])->name('sewing-party-save-page');
-    Route::post('/create-sewing-party', [SewingController::class, 'createSewingParty'])->name('create-sewing-party');
-    Route::post('/update-sewing-party', [SewingController::class, 'updateSewingParty'])->name('update-sewing-party');
-    Route::get('/sewing-party-delete', [SewingController::class, 'sewingPartyDelete'])->name('sewing-party-delete');
+    Route::get('/sewing-party-list', [SewingPartyController::class, 'sewingPartyList'])->name('sewing-party-list');
+    Route::get('/sewing-party-save-page', [SewingPartyController::class, 'sewingPartySavePage'])->name('sewing-party-save-page');
+    Route::post('/create-sewing-party', [SewingPartyController::class, 'createSewingParty'])->name('create-sewing-party');
+    Route::post('/update-sewing-party', [SewingPartyController::class, 'updateSewingParty'])->name('update-sewing-party');
+    Route::get('/sewing-party-delete', [SewingPartyController::class, 'sewingPartyDelete'])->name('sewing-party-delete');
 
     //sewing
     Route::get('/sewing-list', [SewingController::class, 'sewingList'])->name('sewing.list');
@@ -153,6 +143,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sewing-receive-list', [SewingController::class, 'sewingReceiveList'])->name('sewing.receive.list');
     Route::get('/sewing-receive-page', [SewingController::class, 'sewingReceivePage'])->name('sewing.receive.page');
     Route::post('/create-sewing-receive', [SewingController::class, 'createSewingReceive'])->name('sewing.receive.create');
+
+    //sewing payment
+    Route::post('/save-sewing-payment', [SewingPartyController::class, 'saveSewingPayment'])->name('save-sewing-payment');
 
     //products
     Route::get('/product-list', [ProductController::class, 'productList'])->name('product.list');

@@ -24,14 +24,14 @@ function confirmPayment() {
         toaster.error("Please enter payment date");
         return;
     } else {
-        form.post(`/save-cutting-payment?cutting_party_id=${props.paymentId}`, {
+        form.post(`/save-sewing-payment?sewing_party_id=${props.paymentId}`, {
             preserveScroll: true,
             onSuccess: () => {
                 if (page.props.flash.status == false) {
                     toaster.error(page.props.flash.message);
                 } else if (page.props.flash.status == true) {
                     toaster.success(page.props.flash.message);
-                    router.visit("/cutting-party-list");
+                    router.visit("/sewing-party-list");
                 }
             },
         });
@@ -53,6 +53,7 @@ function confirmPayment() {
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 type="text"
             />
+
             <!-- Action buttons -->
             <div class="flex justify-end mt-6 space-x-2">
                 <button

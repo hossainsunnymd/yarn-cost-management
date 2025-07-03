@@ -20,8 +20,8 @@ class DyeingController extends Controller
     public function dyeingPartyList()
     {
         $dyeingPartyList = DyeingParty::with('dyeings')->get();
-        $dyeingPayment=DyeingPayment::latest()->first();
-        return Inertia::render('Dyeing/DyeingPartyListPage', ['dyeingPartyList' => $dyeingPartyList,'dyeingPayment'=>$dyeingPayment]);
+        $dyeingPayment = DyeingPayment::latest()->first();
+        return Inertia::render('Dyeing/DyeingPartyListPage', ['dyeingPartyList' => $dyeingPartyList, 'dyeingPayment' => $dyeingPayment]);
     }
 
     //dyeing save page
@@ -107,31 +107,35 @@ class DyeingController extends Controller
     public function createDyeing(Request $request)
     {
         DB::beginTransaction();
-      try{
-          $validator = Validator::make($request->all(), [
-            'dyeing_party_id' => 'required',
-            'unit' => 'required|numeric',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'dyeing_party_id' => 'required',
+                'unit' => 'required|numeric',
+            ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
+            if ($validator->fails()) {
+                return redirect()->back()->with(['errors' => $validator->errors()]);
+            }
+
+            $data = [
+                'dyeing_party_id' => $request->dyeing_party_id,
+                'knitting_receive_id' => $request->knitting_receive_id,
+                'unit' => $request->unit,
+                'available_unit' => $request->unit,
+                'color' => $request->color,
+                'roll' => $request->roll,
+                'design_name' => $request->design_name
+            ];
+            Dyeing::create($data);
+            $knittingReceive = KnittingReceive::findOrFail($request->knitting_receive_id);
+            $knittingReceive->decrement('available_unit', $request->unit);
+            $knittingReceive->decrement('roll', $request->roll);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Created Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
-
-        $data = [
-            'dyeing_party_id' => $request->dyeing_party_id,
-            'knitting_receive_id' => $request->knitting_receive_id,
-            'unit' => $request->unit,
-            'available_unit' => $request->unit,
-            'color' => $request->color
-        ];
-        Dyeing::create($data);
-        KnittingReceive::where('id', $request->knitting_receive_id)->decrement('available_unit', $request->unit);
-        DB::commit();
-        return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Created Successfully', 'error' => '']);
-      }catch(Exception $e){
-        DB::rollBack();
-        return redirect()->back()->with(['status' => false, 'message' => 'Dyeing Created Failed', 'error' => $e->getMessage()]);
-      }
     }
 
     //dyeing receive page
@@ -144,42 +148,45 @@ class DyeingController extends Controller
     public function createDyeingReceive(Request $request)
     {
         DB::beginTransaction();
-      try{
-        $dyeing = Dyeing::find($request->dyeing_id);
-        $dyeingPartyId = $dyeing->dyeing_party_id;
-        $perUnitknittingReceiveCost = KnittingReceive::find($dyeing->knitting_receive_id)->per_unit_cost;
+        try {
+            $dyeing = Dyeing::find($request->dyeing_id);
+            $dyeingPartyId = $dyeing->dyeing_party_id;
+            $perUnitknittingReceiveCost = KnittingReceive::find($dyeing->knitting_receive_id)->per_unit_cost;
 
 
-        //calculate received dyeing unit cost
-        $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
-        $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit;
-
-        if ($request->wastage > 0) {
-            $receivedDyeingUnitCost = (($request->unit + $request->wastage) * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
+            //calculate received dyeing unit cost
+            $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
             $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit;
+
+            if ($request->wastage > 0) {
+                $receivedDyeingUnitCost = (($request->unit + $request->wastage) * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
+                $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit;
+            }
+
+            $data = [
+                'dyeing_id' => $request->dyeing_id,
+                'total_cost' => $receivedDyeingUnitCost,
+                'per_unit_cost' => $receiveDyeingPerUnitCost,
+                'unit' => $request->unit,
+                'available_unit' => $request->unit,
+                'wastage' => $request->wastage,
+                'dyeing_cost' => $request->dyeing_cost,
+                'roll' => $request->roll
+
+            ];
+
+            DyeingReceive::create($data);
+            $dyeing = Dyeing::findOrFail($request->dyeing_id);
+            $dyeing->decrement('available_unit', $request->unit);
+            $dyeing->decrement('roll', $request->roll);
+            DyeingParty::find($dyeingPartyId)->increment('due_amount', $request->dyeing_cost);
+
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
-
-        $data = [
-            'dyeing_id' => $request->dyeing_id,
-            'total_cost' => $receivedDyeingUnitCost,
-            'per_unit_cost' => $receiveDyeingPerUnitCost,
-            'unit' => $request->unit,
-            'available_unit' => $request->unit,
-            'wastage' => $request->wastage,
-            'dyeing_cost' => $request->dyeing_cost
-
-        ];
-
-        DyeingReceive::create($data);
-        Dyeing::where('id', $request->dyeing_id)->decrement('available_unit', $request->unit + $request->wastage ?? 0);
-        DyeingParty::find($dyeingPartyId)->increment('due_amount', $request->dyeing_cost);
-
-        DB::commit();
-        return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
-      }catch(Exception $e){
-        DB::rollBack();
-        return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
-      }
     }
 
     //save dyeing payment

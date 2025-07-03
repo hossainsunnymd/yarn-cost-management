@@ -19,8 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('unit', 8, 2);
-            $table->decimal('available_unit', 8, 2);
+            $table->decimal('roll', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

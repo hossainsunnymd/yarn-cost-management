@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dyeing extends Model
 {
-    protected $fillable=['knitting_receive_id','dyeing_party_id','unit','available_unit','color'];
+    protected $fillable=['knitting_receive_id','dyeing_party_id','unit','available_unit','color','roll','design_name'];
 
     public function knitting()
     {

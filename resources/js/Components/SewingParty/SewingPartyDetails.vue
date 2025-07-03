@@ -2,7 +2,7 @@
 const props = defineProps({
     items: Array,
     modal: Boolean,
-    lastCuttingPayment:Object
+    sewingPayment:Object
 });
 
 
@@ -53,7 +53,7 @@ const printModal = () => {
 
       <!-- Table -->
       <div class=" overflow-x-auto overflow-y-auto">
-        <table v-for="(knitting, i) in props.items[0].knittings" :key="i" class="w-full border border-gray-300 text-sm mt-4">
+        <table v-for="(knitting, i) in props.items[0].sewings" :key="i" class="w-full border border-gray-300 text-sm mt-4">
           <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-2 border text-center ">Weight</th>
@@ -68,14 +68,14 @@ const printModal = () => {
           </tbody>
 
         </table>
-         <p class="font-bold"> Totam Due:
+         <p class="font-bold"> Total Due:
            {{ props.items[0].due_amount }}
          </p>
-         <p class="font-bold"> Last Pain Amount:
-           {{ props.lastCuttingPayment.amount || 0 }}
+          <p class="font-bold"> Last Paid Amount:
+           {{ props.sewingPayment.amount || 0 }}
          </p>
-         <p class="font-bold"> Last Pain Date:
-           {{ props.lastCuttingPayment.created_at|| '-' }}
+          <p class="font-bold"> Last Paid Date:
+           {{ props.sewingPayment.created_at || "-" }}
          </p>
       </div>
 
@@ -120,4 +120,3 @@ const printModal = () => {
 }
 
 </style>
-

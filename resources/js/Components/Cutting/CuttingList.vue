@@ -8,8 +8,7 @@ const page=usePage()
 
 const headers = [
   { text: 'ID', value: 'id' },
-  { text: 'unit', value: 'unit' },
-  { text: 'Available Unit', value: 'available_unit' },
+  { text: 'Available Roll', value: 'roll' },
   { text: 'Action', value: 'action' },
 ];
 

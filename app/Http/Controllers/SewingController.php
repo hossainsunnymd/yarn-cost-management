@@ -59,41 +59,17 @@ class SewingController extends Controller
     public function createSewingReceive(Request $request)
     {
 
-
-        DB::beginTransaction();
         try {
-            $sewing = Sewing::findOrFail($request->sewing_id);
-            $perUnitCost = CuttingReceive::find($sewing->cutting_receive_id)->per_unit_cost;
-
-            //calulate received sewing unit cost
-            $receivedSewingUnitCost = ($request->unit * $perUnitCost) + $request->sewing_cost ?? 0;
-            $receiveSewingPerUnitCost = $receivedSewingUnitCost / $request->unit;
-
-
-            if ($request->wastage > 0) {
-
-                $receivedSewingUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $request->sewing_cost ?? 0;
-                $receiveSewingPerUnitCost = $receivedSewingUnitCost / $request->unit;
-            }
-
             $data = [
                 'sewing_id' => $request->sewing_id,
-                'total_cost' => $receivedSewingUnitCost,
-                'per_unit_cost' => $receiveSewingPerUnitCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
                 'wastage' => $request->wastage,
-                'sewing_cost' => $request->sewing_cost
             ];
 
             SewingReceive::create($data);
-            $receive = Sewing::findOrFail($request->sewing_id);
-            $receive->decrement('available_unit', $request->unit);
-
-            DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
-            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
     }

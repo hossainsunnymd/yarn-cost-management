@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DyeingReceive extends Model
 {
-    protected $fillable=['dyeing_id','unit','total_cost','per_unit_cost','wastage','available_unit','dyeing_cost'];
+    protected $fillable=['dyeing_id','unit','total_cost','per_unit_cost','wastage','available_unit','dyeing_cost','roll'];
 
     public function dyeing()
     {

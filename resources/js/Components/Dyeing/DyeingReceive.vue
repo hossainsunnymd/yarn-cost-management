@@ -14,6 +14,7 @@ const form = useForm({
     unit: "",
     wastage: "",
     dyeing_cost: "",
+    roll:""
 
 });
 let URL = "/create-dyeing-receive";
@@ -56,28 +57,44 @@ function submitForm() {
 
               <div>
                 <label
-                    for="t"
+                    for="dyeing_cost"
                     class="block text-sm font-medium text-gray-700 mb-1"
                     >Dyeing Cost</label
                 >
                 <input
                     v-model="form.dyeing_cost"
-                    type="number"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>
+
               <div>
                 <label
-                    for="t"
+                    for="wastage"
                     class="block text-sm font-medium text-gray-700 mb-1"
                     >Wastage</label
                 >
                 <input
                     v-model="form.wastage"
-                    type="number"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>
+
+
+              <div>
+                <label
+                    for="roll"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Roll</label
+                >
+                <input
+                    v-model="form.roll"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
             <div class="pt-3">
                 <button
                     type="submit"

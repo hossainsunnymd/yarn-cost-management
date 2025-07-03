@@ -11,15 +11,14 @@ const headers = [
     { text: "ID", value: "id" },
     { text: "Image", value: "image" },
     { text: "Product Name", value: "name" },
+    { text: "Unit", value: "unit" },
     { text: "Category", value: "category.name" },
-    { text: "Per Unit Cost", value: "per_unit_cost" },
-    { text: "Total ", value: "parts_no" },
     { text: "Action", value: "action" },
 ];
 const items = ref(page.props.products);
-console.log(items.value);
 
-const searchField = ref(["id", "name", "category.name", "parts_no"]);
+
+const searchField = ref(["id", "name", "category.name"]);
 const searchItem = ref();
 
 function deleteProduct(porduct_id) {
@@ -58,7 +57,7 @@ if (page.props.flash.status == true) {
             >
                 <template #item-image="{ image }">
                     <div class="py-2">
-                        <img
+                        <img v-if="image"
                             :src="`/uploads/${image}`"
                             :alt="image"
                             class="object-cover h-[50px] w-[50px]"

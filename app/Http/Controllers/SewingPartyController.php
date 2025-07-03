@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Inertia\Inertia;
 use App\Models\SewingParty;
 use Illuminate\Http\Request;
+use App\Models\SewingPayment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SewingPartyController extends Controller
@@ -14,7 +17,8 @@ class SewingPartyController extends Controller
     {
 
         $sewingParties = SewingParty::all();
-        return Inertia::render('SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
+        $sewingPayment=SewingPayment::latest()->first();
+        return Inertia::render('SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties,'sewingPayment'=>$sewingPayment]);
     }
 
     //sewing party save page
@@ -70,6 +74,25 @@ class SewingPartyController extends Controller
             ];
             SewingParty::where('id', $request->sewing_party_id)->update($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Updated Successfully', 'error' => '']);
+        }
+    }
+
+    //sewing party payment
+    public function saveSewingPayment(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            SewingPayment::create([
+                'sewing_party_id' => $request->sewing_party_id,
+                'amount' => $request->amount,
+            ]);
+            $sewingParty = SewingParty::findOrFail($request->sewing_party_id);
+            $sewingParty->decrement('due_amount', $request->amount);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
+        }catch(Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => $e->getMessage()]);
         }
     }
 

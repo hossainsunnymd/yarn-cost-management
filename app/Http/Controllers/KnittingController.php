@@ -109,7 +109,6 @@ class KnittingController extends Controller
                 'knitting_party_id' => 'required',
                 'yarns' => 'required',
                 'total' => 'required',
-                'role' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -120,7 +119,6 @@ class KnittingController extends Controller
 
             $data = Knitting::create([
                 'knitting_party_id' => $request->knitting_party_id,
-                'role' => $request->role,
                 'total_unit' => $request->total_weight,
                 'available_unit' => $request->total_weight,
                 'total_cost' => $request->total,
@@ -173,7 +171,7 @@ class KnittingController extends Controller
     //create knitting receive
     public function createKnittingReceive(Request $request)
     {
-
+        // return $request->all();
         DB::beginTransaction();
         try {
             $knitting = Knitting::find($request->knitting_id);
@@ -198,6 +196,7 @@ class KnittingController extends Controller
                 'available_unit' => $request->unit,
                 'knitting_cost' => $request->knitting_receive_cost,
                 'per_unit_cost' => $receivePerUnitCost,
+                'roll'=>$request->roll,
                 'wastage' => 0
 
             ];
@@ -205,7 +204,6 @@ class KnittingController extends Controller
             KnittingReceive::create($data);
             $knitting = Knitting::where('id', $request->knitting_id);
             $knitting->decrement('available_unit', $request->unit);
-            $knitting->decrement('role', 1);
             KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_receive_cost);
 
             DB::commit();
