@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CuttingReceive extends Model
 {
-    protected $fillable=['cutting_id','total_cost','per_unit_cost','unit','available_unit','wastage','cutting_cost'];
+    protected $fillable=['cutting_id','total_cost','per_unit_cost','unit','available_unit','cutting_cost'];
 
-    public function cuttingReceive(){
-        $this->belongsTo(Cutting::class);
+    public function cutting(){
+       return $this->belongsTo(Cutting::class);
     }
 }

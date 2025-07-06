@@ -1,11 +1,9 @@
 <script setup>
 import { usePage, Link, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 const toaster = createToaster({});
 const page = usePage();
-
 
 const headers = [
     { text: "ID", value: "id" },
@@ -17,7 +15,6 @@ const headers = [
     { text: "Action", value: "action" },
 ];
 const items = ref(page.props.products);
-console.log(items.value);
 
 const searchField = ref(["id", "name", "category.name", "parts_no"]);
 const searchItem = ref();
@@ -36,7 +33,6 @@ if (page.props.flash.status == true) {
 </script>
 
 <template>
-
     <div class="container mx-auto p-4 bg-white">
         <h1 class="flex text-2xl font-bold mb-4">Product List</h1>
 
@@ -59,6 +55,7 @@ if (page.props.flash.status == true) {
                 <template #item-image="{ image }">
                     <div class="py-2">
                         <img
+                            v-if="image"
                             :src="`/uploads/${image}`"
                             :alt="image"
                             class="object-cover h-[50px] w-[50px]"
@@ -69,21 +66,17 @@ if (page.props.flash.status == true) {
                 <template #item-action="{ id }">
                     <div class="flex gap-1">
                         <Link
-
                             :href="`/product-save-page?product_id=${id}`"
                             class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >
                             <span class="material-icons text-sm">edit</span>
                         </Link>
                         <button
-
                             @click="deleteProduct(id)"
                             class="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         >
                             <span class="material-icons text-sm">delete</span>
                         </button>
-
-
                     </div>
                 </template>
             </EasyDataTable>

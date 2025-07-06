@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('dyeing_party_id');
             $table->foreign('dyeing_party_id')->references('id')->on('dyeing_parties')
-            ->restrictOnDelete()->cascadeOnUpdate();
+                ->restrictOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('knitting_receive_id');
             $table->foreign('knitting_receive_id')->references('id')->on('knitting_receives')
-            ->restrictOnDelete()->cascadeOnUpdate();
+                ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('design_name')->nullable();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
+            $table->decimal('roll', 8, 2);
             $table->string('color');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

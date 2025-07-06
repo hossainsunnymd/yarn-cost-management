@@ -5,34 +5,49 @@ namespace App\Http\Controllers;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Sewing;
+use App\Models\SewingParty;
 use Illuminate\Http\Request;
 use App\Models\SewingReceive;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class SewingController extends Controller
 {
     //Sewing list
     public function sewingList()
     {
-        $sewings = Sewing::all();
-        return Inertia::render('Sewing/SewingListPage', ['sewings' => $sewings]);
+        $sewings = Sewing::with('cuttingReceive.cutting.category', 'sewingParty')->get();
+        return Inertia::render('Sewings/Sewing/SewingListPage', ['sewings' => $sewings]);
     }
 
     //Sewing Save page
     public function sewingSavePage()
     {
-        return Inertia::render('Sewing/SewingSavePage');
+        $sewingParty=SewingParty::all();
+        return Inertia::render('Sewings/Sewing/SewingSavePage',['sewingParty'=>$sewingParty]);
     }
 
     //Sewing create
     public function createSewing(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'sewing_party_id' => 'required',
+            'unit' => 'required',
+        ],[
+            'unit.required'=>'Pcs is required',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with([ 'error' => $validation->errors()]);
+        }
+
 
         DB::beginTransaction();
         try {
             $data = [
                 'cutting_receive_id' => $request->cutting_receive_id,
+                'sewing_party_id' => $request->sewing_party_id,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
             ];
@@ -52,13 +67,23 @@ class SewingController extends Controller
     //sewing receive page
     public function sewingReceivePage()
     {
-        return Inertia::render('Sewing/SewingReceivePage');
+        return Inertia::render('Sewings/Sewing/SewingReceivePage');
     }
 
     //create sewing receive
     public function createSewingReceive(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'sewing_cost' => 'required',
+            'unit' => 'required',
+        ],[
+            'unit.required'=>'Pcs is required',
+        ]);
 
+        if($validation->fails()){
+            return redirect()->back()->with([ 'error' => $validation->errors()]);
+
+        }
 
         DB::beginTransaction();
         try {

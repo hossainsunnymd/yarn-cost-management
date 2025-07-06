@@ -10,6 +10,7 @@ const headers = [
   { text: 'ID', value: 'id' },
   { text: 'Unit', value: 'unit' },
   { text: 'cutting Cost', value: 'cutting_cost' },
+  { text: 'Category', value: 'cutting.category.name' },
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
   { text: 'Total Cost', value: 'total_cost' },
   { text: 'Available Unit', value: 'available_unit' },
@@ -17,6 +18,7 @@ const headers = [
 ];
 
 const items=ref(page.props.cuttingReceives);
+
 
 const searchField = ref("name");
 const searchItem=ref();

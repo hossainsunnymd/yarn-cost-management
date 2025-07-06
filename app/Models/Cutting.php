@@ -11,5 +11,10 @@ class Cutting extends Model
         'category_id',
         'unit',
         'available_unit',
+        'roll'
     ];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }

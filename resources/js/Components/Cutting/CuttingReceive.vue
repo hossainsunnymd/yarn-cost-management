@@ -1,8 +1,9 @@
 <script setup>
-import { usePage, useForm } from "@inertiajs/vue3";
+import { usePage, useForm,router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import { router } from "@inertiajs/vue3";
+import { computed } from "vue";
 
+const errors = computed(() => page.props.flash.error || {});
 const toaster = createToaster({});
 const page = usePage();
 const cuttingId = new URLSearchParams(window.location.search).get(
@@ -45,13 +46,14 @@ function submitForm() {
                 <label
                     for="unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
-                    >Unit</label
+                    >Pcs</label
                 >
                 <input
                     v-model="form.unit"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.unit" class="text-red-500 text-md mt-1">{{ errors.unit[0] }}</p>
             </div>
 
               <div>
@@ -65,18 +67,7 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-            </div>
-              <div>
-                <label
-                    for="t"
-                    class="block text-sm font-medium text-gray-700 mb-1"
-                    >Wastage</label
-                >
-                <input
-                    v-model="form.wastage"
-                    type="text"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
+                <p v-if="errors.cutting_cost" class="text-red-500 text-md mt-1">{{ errors.cutting_cost[0]}}</p>
             </div>
             <div class="pt-3">
                 <button

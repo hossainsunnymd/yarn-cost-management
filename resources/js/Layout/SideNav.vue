@@ -10,7 +10,7 @@ const yarnDropdown = ref(page.url.includes("yarn"));
 const knittingDropdown = ref(page.url.includes("knitting"));
 const dyeingDropdown = ref(page.url.includes("dyeing"));
 const cuttingDropdown = ref(page.url.includes("cutting"));
-const sweingDropdown = ref(page.url.includes("sweing"));
+const sweingDropdown = ref(page.url.includes("sewing"));
 
 const isActiveRoute = (route) => {
     return currentUrl.value.startsWith(route);
@@ -313,21 +313,6 @@ const toggleSidebar = () => {
                             >
                                 <li>
                                     <Link
-                                        href="/cutting-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/cutting-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Cutting Party List
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
                                         href="/cutting-list"
                                         :class="[
                                             'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
@@ -385,6 +370,21 @@ const toggleSidebar = () => {
                                 v-if="sweingDropdown"
                                 class="ml-6 mt-2 space-y-2"
                             >
+                               <li>
+                                    <Link
+                                        href="/sewing-party-list"
+                                        :class="[
+                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
+                                            isActiveRoute('/sewing-party-list')
+                                                ? 'bg-gray-700 text-blue-300 font-semibold'
+                                                : '',
+                                        ]"
+                                    >
+                                        <span class="material-icons">list</span>
+                                        Sweing Party List
+                                    </Link>
+                                </li>
+
                                 <li>
                                     <Link
                                         href="/sewing-list"

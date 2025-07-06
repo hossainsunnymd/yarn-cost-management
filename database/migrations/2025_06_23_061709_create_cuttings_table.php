@@ -21,6 +21,7 @@ return new class extends Migration
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
+            $table->decimal('roll', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

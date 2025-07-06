@@ -19,76 +19,11 @@ use Illuminate\Support\Facades\Validator;
 class KnittingController extends Controller
 {
 
-    //knitting party list
-    public function knittingPartyList()
-    {
-        $knittingPartyList = KnittingParty::with('knittings')->get();
-        $knittingPayment = KnittingPayment::latest()->first();
-        return Inertia::render('Knittings/KnittingPartyListPage', ['knittingPartyList' => $knittingPartyList, 'knittingPayment' => $knittingPayment]);
-    }
-
-    //knitting party save page
-    public function knittingPartySavePage(Request $request)
-    {
-        $knittingParty = KnittingParty::find($request->knitting_party_id);
-        return Inertia::render('Knittings/KnittingPartySavePage', ['knittingParty' => $knittingParty]);
-    }
-
-    //create knitting party
-    public function createKnittingParty(Request $request)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
-        }
-
-        $data = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'total_amount' => 0,
-            'due_amount' => 0,
-            'last_payment' => 0
-        ];
-
-        KnittingParty::create($data);
-        return redirect()->back()->with(['status' => true, 'message' => 'Knitting Party Created Successfully', 'error' => '']);
-    }
-
-    //update knitting party
-    public function updateKnittingParty(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
-        }
-
-        $data = [
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'address' => $request->address,
-        ];
-
-        KnittingParty::where('id', $request->knitting_party_id)->update($data);
-        return redirect()->back()->with(['status' => true, 'message' => 'Knitting Party Updated Successfully', 'error' => '']);
-    }
-
     //knitting list
     public function knittingList()
     {
         $knittingList = Knitting::with('knittingYarn', 'knittingParty')->get();
-        return Inertia::render('Knittings/KnittingListPage', ['knittingList' => $knittingList]);
+        return Inertia::render('Knittings/Knitting/KnittingListPage', ['knittingList' => $knittingList]);
     }
 
     //knitting save page
@@ -96,7 +31,7 @@ class KnittingController extends Controller
     {
         $knittingPartyList = KnittingParty::all();
         $yarnPurchaseList = YarnPurchase::all();
-        return Inertia::render('Knittings/KnittingSavePage', ['knittingPartyList' => $knittingPartyList, 'yarnPurchaseList' => $yarnPurchaseList]);
+        return Inertia::render('Knittings/Knitting/KnittingSavePage', ['knittingPartyList' => $knittingPartyList, 'yarnPurchaseList' => $yarnPurchaseList]);
     }
 
     //create knitting
@@ -109,7 +44,6 @@ class KnittingController extends Controller
                 'knitting_party_id' => 'required',
                 'yarns' => 'required',
                 'total' => 'required',
-                'role' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -160,14 +94,14 @@ class KnittingController extends Controller
     public function knittingReceiveList()
     {
         $knittingReceiveList = KnittingReceive::get();
-        return Inertia::render('Knittings/KnittingReceiveListPage', ['knittingReceiveList' => $knittingReceiveList]);
+        return Inertia::render('Knittings/Knitting/KnittingReceiveListPage', ['knittingReceiveList' => $knittingReceiveList]);
     }
 
     //knitting receive page
     public function knittingReceivePage(Request $request)
     {
 
-        return Inertia::render('Knittings/KnittingReceivePage');
+        return Inertia::render('Knittings/Knitting/KnittingReceivePage');
     }
 
     //create knitting receive
@@ -198,6 +132,7 @@ class KnittingController extends Controller
                 'available_unit' => $request->unit,
                 'knitting_cost' => $request->knitting_receive_cost,
                 'per_unit_cost' => $receivePerUnitCost,
+                'roll' => $request->roll,
                 'wastage' => 0
 
             ];
@@ -205,7 +140,6 @@ class KnittingController extends Controller
             KnittingReceive::create($data);
             $knitting = Knitting::where('id', $request->knitting_id);
             $knitting->decrement('available_unit', $request->unit);
-            $knitting->decrement('role', 1);
             KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_receive_cost);
 
             DB::commit();
@@ -216,49 +150,5 @@ class KnittingController extends Controller
         }
     }
 
-    //knitting sale page
-    public function knittingSalePage(Request $request)
-    {
-        return Inertia::render('Knittings/KnittingSalePage');
-    }
-
-    //create knitting sale
-    public function createKnittingSale(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'unit' => 'required|numeric',
-            'total_amount' => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
-        }
-
-        $data = [
-            'knitting_receive_id' => $request->knitting_receive_id,
-            'unit' => $request->unit,
-            'total_amount' => $request->total_amount,
-        ];
-        KnittingSale::create($data);
-        KnittingReceive::where('id', $request->knitting_receive_id)->decrement('available_unit', $request->unit);
-        return redirect()->back()->with(['status' => true, 'message' => 'Knitting Sale Created Successfully', 'error' => '']);
-    }
-
-    //knitting sale list
-    public function knittingSaleList()
-    {
-        $knittingSaleList = KnittingSale::get();
-        return Inertia::render('Knittings/KnittingSaleListPage', ['knittingSaleList' => $knittingSaleList]);
-    }
-
-    public function saveKnittingPayment(Request $request)
-    {
-        $knittingParty = KnittingParty::find($request->knitting_party_id);
-        $knittingParty->decrement('due_amount', $request->amount);
-        KnittingPayment::create([
-            'knitting_party_id' => $request->knitting_party_id,
-            'amount' => $request->amount
-        ]);
-        return redirect('/knitting-party-list')->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);
-    }
+  
 }

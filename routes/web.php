@@ -2,7 +2,6 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\YarnController;
 use App\Http\Controllers\DyeingController;
 use App\Http\Controllers\FabricController;
 use App\Http\Controllers\SewingController;
@@ -13,7 +12,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\KnittingController;
-use App\Http\Controllers\CuttingPartyController;
+use App\Http\Controllers\YarnSaleController;
+use App\Http\Controllers\YarnPartyController;
+use App\Http\Controllers\DyeingPartyController;
+use App\Http\Controllers\SewingPartyController;
+use App\Http\Controllers\KnittingSaleController;
+use App\Http\Controllers\YarnPurchaseController;
+use App\Http\Controllers\KnittingPartyController;
 
 
 
@@ -29,39 +34,39 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-    Route::get('/dashboard', [YarnController::class, 'yarnPurchaseList'])->name('dashboard');
+    Route::get('/dashboard', [YarnPurchaseController::class, 'yarnPurchaseList'])->name('dashboard');
     //yarn party
-    Route::get('/yarn-party-list', [YarnController::class, 'yarnPartyList'])->name('yarn-party-list');
-    Route::get('/yarn-party-save-page', [YarnController::class, 'yarnPartySavePage'])->name('yarn-party-save-page');
-    Route::post('/create-yarn-party', [YarnController::class, 'createYarnParty'])->name('create-yarn-party');
-    Route::post('/update-yarn-party', [YarnController::class, 'updateYarnParty'])->name('update-yarn-party');
-    Route::get('/yarn-party-delete', [YarnController::class, 'yarnPartyDelete'])->name('yarn-party-delete');
+    Route::get('/yarn-party-list', [YarnPartyController::class, 'yarnPartyList'])->name('yarn-party-list');
+    Route::get('/yarn-party-save-page', [YarnPartyController::class, 'yarnPartySavePage'])->name('yarn-party-save-page');
+    Route::post('/create-yarn-party', [YarnPartyController::class, 'createYarnParty'])->name('create-yarn-party');
+    Route::post('/update-yarn-party', [YarnPartyController::class, 'updateYarnParty'])->name('update-yarn-party');
+    Route::get('/yarn-party-delete', [YarnPartyController::class, 'yarnPartyDelete'])->name('yarn-party-delete');
 
 
     //yarn purchase
-    Route::get('/yarn-purchase-list', [YarnController::class, 'yarnPurchaseList'])->name('yarn-purchase-list');
-    Route::get('/yarn-purchase-save-page', [YarnController::class, 'yarnPurchaseSavePage'])->name('yarn-purchase-save-page');
-    Route::post('/create-yarn-purchase', [YarnController::class, 'createYarnPurchase'])->name('create-yarn-purchase');
-    Route::post('/update-yarn-purchase', [YarnController::class, 'updateYarnPurchase'])->name('upadate-yarn-purchase');
-    Route::get('/yarn-purchase-delete', [YarnController::class, 'yarnPurchaseDelete'])->name('yarn-purchase-delete');
+    Route::get('/yarn-purchase-list', [YarnPurchaseController::class, 'yarnPurchaseList'])->name('yarn-purchase-list');
+    Route::get('/yarn-purchase-save-page', [YarnPurchaseController::class, 'yarnPurchaseSavePage'])->name('yarn-purchase-save-page');
+    Route::post('/create-yarn-purchase', [YarnPurchaseController::class, 'createYarnPurchase'])->name('create-yarn-purchase');
+    Route::post('/update-yarn-purchase', [YarnPurchaseController::class, 'updateYarnPurchase'])->name('upadate-yarn-purchase');
+    Route::get('/yarn-purchase-delete', [YarnPurchaseController::class, 'yarnPurchaseDelete'])->name('yarn-purchase-delete');
 
 
     //yarn sale
-    Route::get('/yarn-sale-list', [YarnController::class, 'yarnSaleList'])->name('yarn-sale-list');
-    Route::get('/yarn-sale-page', [YarnController::class, 'yarnSalePage'])->name('yarn-sale-page');
-    Route::post('/create-yarn-sale', [YarnController::class, 'createYarnSale'])->name('create-yarn-sale');
+    Route::get('/yarn-sale-list', [YarnSaleController::class, 'yarnSaleList'])->name('yarn-sale-list');
+    Route::get('/yarn-sale-page', [YarnSaleController::class, 'yarnSalePage'])->name('yarn-sale-page');
+    Route::post('/create-yarn-sale', [YarnSaleController::class, 'createYarnSale'])->name('create-yarn-sale');
 
     //yarn payment
-    Route::post('/save-yarn-payment', [YarnController::class, 'saveYarnPayment'])->name('save-yarn-payment');
+    Route::post('/save-yarn-payment', [YarnPartyController::class, 'saveYarnPayment'])->name('save-yarn-payment');
 
 
 
     //knitting party
-    Route::get('/knitting-party-list', [KnittingController::class, 'knittingPartyList'])->name('knitting-party-list');
-    Route::get('/knitting-party-save-page', [KnittingController::class, 'knittingPartySavePage'])->name('knitting-party-save-page');
-    Route::post('/create-knitting-party', [KnittingController::class, 'createKnittingParty'])->name('create-knitting-party');
-    Route::post('/update-knitting-party', [KnittingController::class, 'updateKnittingParty'])->name('update-knitting-party');
-    Route::get('/knitting-party-delete', [KnittingController::class, 'knittingPartyDelete'])->name('knitting-party-delete');
+    Route::get('/knitting-party-list', [KnittingPartyController::class, 'knittingPartyList'])->name('knitting-party-list');
+    Route::get('/knitting-party-save-page', [KnittingPartyController::class, 'knittingPartySavePage'])->name('knitting-party-save-page');
+    Route::post('/create-knitting-party', [KnittingPartyController::class, 'createKnittingParty'])->name('create-knitting-party');
+    Route::post('/update-knitting-party', [KnittingPartyController::class, 'updateKnittingParty'])->name('update-knitting-party');
+    Route::get('/knitting-party-delete', [KnittingPartyController::class, 'knittingPartyDelete'])->name('knitting-party-delete');
 
 
 
@@ -76,9 +81,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/knitting-receive-list', [KnittingController::class, 'knittingReceiveList'])->name('knitting-receive-list');
 
     //knitting sale
-    Route::get('/knitting-sale-page', [KnittingController::class, 'knittingSalePage'])->name('knitting-sale-page');
-    Route::post('/create-knitting-sale', [KnittingController::class, 'createKnittingSale'])->name('create-knitting-sale');
-    Route::get('/knitting-sale-list', [KnittingController::class, 'knittingSaleList'])->name('knitting-sale-list');
+    Route::get('/knitting-sale-page', [KnittingSaleController::class, 'knittingSalePage'])->name('knitting-sale-page');
+    Route::post('/create-knitting-sale', [KnittingSaleController::class, 'createKnittingSale'])->name('create-knitting-sale');
+    Route::get('/knitting-sale-list', [KnittingSaleController::class, 'knittingSaleList'])->name('knitting-sale-list');
 
     //knitting payment
     Route::post('/save-knitting-payment', [KnittingController::class, 'saveKnittingPayment'])->name('save-knitting-payment');
@@ -86,11 +91,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     //dyeing party
-    Route::get('/dyeing-party-list', [DyeingController::class, 'dyeingPartyList'])->name('dyeing-party-list');
-    Route::get('/dyeing-party-save-page', [DyeingController::class, 'dyeingPartySavePage'])->name('dyeing-party-save-page');
-    Route::post('/create-dyeing-party', [DyeingController::class, 'createDyeingParty'])->name('create-dyeing-party');
-    Route::post('/update-dyeing-party', [DyeingController::class, 'updateDyeingParty'])->name('update-dyeing-party');
-    Route::get('/dyeing-party-delete', [DyeingController::class, 'dyeingPartyDelete'])->name('dyeing-party-delete');
+    Route::get('/dyeing-party-list', [DyeingPartyController::class, 'dyeingPartyList'])->name('dyeing-party-list');
+    Route::get('/dyeing-party-save-page', [DyeingPartyController::class, 'dyeingPartySavePage'])->name('dyeing-party-save-page');
+    Route::post('/create-dyeing-party', [DyeingPartyController::class, 'createDyeingParty'])->name('create-dyeing-party');
+    Route::post('/update-dyeing-party', [DyeingPartyController::class, 'updateDyeingParty'])->name('update-dyeing-party');
+    Route::get('/dyeing-party-delete', [DyeingPartyController::class, 'dyeingPartyDelete'])->name('dyeing-party-delete');
 
 
 
@@ -119,17 +124,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
 
 
-    //cutting party
-    Route::get('/cutting-party-list', [CuttingPartyController::class, 'cuttingPartyList'])->name('cutting-party-list');
-    Route::get('/cutting-party-save-page', [CuttingPartyController::class, 'cuttingPartySavePage'])->name('cutting-party-save-page');
-    Route::post('/create-cutting-party', [CuttingPartyController::class, 'createCuttingParty'])->name('create-cutting-party');
-    Route::post('/update-cutting-party', [CuttingPartyController::class, 'updateCuttingParty'])->name('update-cutting-party');
-    Route::get('/cutting-party-delete', [CuttingPartyController::class, 'cuttingPartyDelete'])->name('cutting-party-delete');
-
-    //cutting payment
-    Route::post('/save-cutting-payment', [CuttingPartyController::class, 'cuttingPayment'])->name('save-cutting-payment');
-
-
     //cuttings
     Route::get('/cutting-list', [CuttingController::class, 'cuttingList'])->name('cuttings.list');
     Route::get('/cutting-save-page', [CuttingController::class, 'cuttingSavePage'])->name('cuttings.save.page');
@@ -140,11 +134,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     //sewing party
-    Route::get('/sewing-party-list', [SewingController::class, 'sewingPartyList'])->name('sewing-party-list');
-    Route::get('/sewing-party-save-page', [SewingController::class, 'sewingPartySavePage'])->name('sewing-party-save-page');
-    Route::post('/create-sewing-party', [SewingController::class, 'createSewingParty'])->name('create-sewing-party');
-    Route::post('/update-sewing-party', [SewingController::class, 'updateSewingParty'])->name('update-sewing-party');
-    Route::get('/sewing-party-delete', [SewingController::class, 'sewingPartyDelete'])->name('sewing-party-delete');
+    Route::get('/sewing-party-list', [SewingPartyController::class, 'sewingPartyList'])->name('sewing-party-list');
+    Route::get('/sewing-party-save-page', [SewingPartyController::class, 'sewingPartySavePage'])->name('sewing-party-save-page');
+    Route::post('/create-sewing-party', [SewingPartyController::class, 'createSewingParty'])->name('create-sewing-party');
+    Route::post('/update-sewing-party', [SewingPartyController::class, 'updateSewingParty'])->name('update-sewing-party');
+    Route::get('/sewing-party-delete', [SewingPartyController::class, 'sewingPartyDelete'])->name('sewing-party-delete');
 
     //sewing
     Route::get('/sewing-list', [SewingController::class, 'sewingList'])->name('sewing.list');
@@ -153,6 +147,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sewing-receive-list', [SewingController::class, 'sewingReceiveList'])->name('sewing.receive.list');
     Route::get('/sewing-receive-page', [SewingController::class, 'sewingReceivePage'])->name('sewing.receive.page');
     Route::post('/create-sewing-receive', [SewingController::class, 'createSewingReceive'])->name('sewing.receive.create');
+
+    //sewing payment
+    Route::post('/save-sewing-payment', [SewingPartyController::class, 'saveSewingPayment'])->name('save-sewing-payment');
 
     //products
     Route::get('/product-list', [ProductController::class, 'productList'])->name('product.list');

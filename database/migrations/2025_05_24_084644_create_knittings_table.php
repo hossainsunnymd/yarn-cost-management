@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('knitting_party_id');
             $table->foreign('knitting_party_id')->references('id')->on('knitting_parties')->
             restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('role', 8, 2);
             $table->decimal('total_unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
             $table->decimal('total_cost', 8, 2);

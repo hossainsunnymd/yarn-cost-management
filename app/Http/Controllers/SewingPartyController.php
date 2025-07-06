@@ -14,7 +14,7 @@ class SewingPartyController extends Controller
     {
 
         $sewingParties = SewingParty::all();
-        return Inertia::render('SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
+        return Inertia::render('Sewings/SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
     }
 
     //sewing party save page
@@ -22,7 +22,7 @@ class SewingPartyController extends Controller
     {
 
         $sewingParty = SewingParty::find($request->sewing_party_id);
-        return Inertia::render('SewingParty/SewingPartySavePage', ['sewingParty' => $sewingParty]);
+        return Inertia::render('Sewings/SewingParty/SewingPartySavePage', ['sewingParty' => $sewingParty]);
     }
 
     //sewing party save
@@ -36,7 +36,7 @@ class SewingPartyController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return redirect()->back()->with(['errors' => $validation->errors()]);
+            return redirect()->back()->with(['error' => $validation->errors()]);
         } else {
             $data = [
                 'name' => $request->name,

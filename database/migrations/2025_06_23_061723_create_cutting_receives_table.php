@@ -16,9 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('cutting_id');
             $table->foreign('cutting_id')->references('id')->on('cuttings')
             ->restrictOnDelete()->cascadeOnUpdate();
-                   $table->decimal('unit', 8, 2);
+            $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
-            $table->decimal('wastage', 8, 2)->nullable();
             $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('cutting_cost', 8, 2);
             $table->decimal('total_cost', 8, 2);

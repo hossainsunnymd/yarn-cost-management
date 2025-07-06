@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Inertia\Inertia;
+use App\Models\YarnSale;
+use App\Models\YarnPurchase;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class YarnSaleController extends Controller
+{
+       //yarn sale page
+    public function yarnSalePage()
+    {
+        $yarnSale = YarnSale::all();
+        return Inertia::render('Yarn/YarnSale/YarnSalePage', ['yarnSale' => $yarnSale]);
+    }
+
+    //create yarn sale
+    public function createYarnSale(Request $request)
+    {
+
+        $validation = Validator::make($request->all(), [
+            'unit' => 'required|numeric',
+            'total_amount' => 'required|numeric',
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['errors' => $validation->errors()]);
+        }
+
+
+        $data = [
+            'yarn_purchase_id' => $request->yarn_purchase_id,
+            'unit' => $request->unit,
+            'total_amount' => $request->total_amount,
+
+        ];
+        YarnSale::create($data);
+        $yarnPurchase = YarnPurchase::find($request->yarn_purchase_id);
+        $yarnPurchase->decrement('available_unit', $request->unit);
+        $perUnitCost = $yarnPurchase->per_unit_cost;
+        $currentTotalAmount = $yarnPurchase->available_unit * $perUnitCost;
+        $yarnPurchase->update(['current_total_amount' => $currentTotalAmount]);
+        return redirect()->back()->with(['status' => true, 'message' => 'Yarn Sale Created Successfully', 'error' => '']);
+    }
+
+    //yarn sale list
+    public function yarnSaleList()
+    {
+        $yarnSaleList = YarnSale::all();
+        return Inertia::render('Yarn/YarnSale/YarnSaleListPage', ['yarnSaleList' => $yarnSaleList]);
+    }
+
+}

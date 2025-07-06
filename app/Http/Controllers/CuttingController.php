@@ -6,10 +6,11 @@ use Exception;
 use Inertia\Inertia;
 use App\Models\Cutting;
 use App\Models\Category;
-use App\Models\CuttingReceive;
 use Illuminate\Http\Request;
 use App\Models\DyeingReceive;
+use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CuttingController extends Controller
 {
@@ -17,7 +18,7 @@ class CuttingController extends Controller
     //list cutting
     public function cuttingList()
     {
-        $cuttings = Cutting::all();
+        $cuttings = Cutting::with('category')->get();
         return Inertia::render('Cutting/CuttingListPage', ['cuttings' => $cuttings]);
     }
 
@@ -32,6 +33,16 @@ class CuttingController extends Controller
     public function createCutting(Request $request)
     {
 
+        $validation=Validator::make($request->all(),[
+            'category_id'=>'required',
+            'unit'=>'required',
+            'roll'=>'required'
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with([ 'error' => $validation->errors()]);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -40,6 +51,7 @@ class CuttingController extends Controller
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
+                'roll' => $request->roll
             ];
 
             Cutting::create($data);
@@ -52,14 +64,14 @@ class CuttingController extends Controller
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Created Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => $e->getMessage()]);
+            return redirect()->back()->with(['status' => false, 'message' =>  $e->getMessage(), 'error' => $e->getMessage()]);
         }
     }
 
     //cutting receive list
     public function cuttingReceiveList()
     {
-        $cuttingReceives = CuttingReceive::all();
+        $cuttingReceives = CuttingReceive::with('cutting.category')->get();
         return Inertia::render('Cutting/CuttingReceiveListPage', ['cuttingReceives' => $cuttingReceives]);
     }
 
@@ -72,33 +84,41 @@ class CuttingController extends Controller
     //create cutting receive
     public function createCuttingReceive(Request $request)
     {
+        $validation=Validator::make($request->all(),[
+            'cutting_cost'=>'required',
+            'unit'=>'required',
+        ],[
+            'unit.required'=>'Pcs is required',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with([ 'error' => $validation->errors()]);
+        }
+
         DB::beginTransaction();
         try {
             $cutting = Cutting::findOrFail($request->cutting_id);
+            $totalUnit=$cutting->unit;
             $perUnitCost = DyeingReceive::find($cutting->dyeing_receive_id)->per_unit_cost;
 
-            //calulate received cutting unit cost
-            $receivedCuttingUnitCost = ($request->unit * $perUnitCost) + $request->cutting_cost ?? 0;
-            $receiveCuttingPerUnitCost = $receivedCuttingUnitCost / $request->unit;
+            //calculate total unit cost
+            $totalUnitCost = ($totalUnit * $perUnitCost) + $request->cutting_cost ?? 0;
 
-            if ($request->wastage > 0) {
-                $receivedCuttingUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $request->cutting_cost ?? 0;
-                $receiveCuttingPerUnitCost = $receivedCuttingUnitCost / $request->unit;
-            }
+            //calculate per unit cost
+            $perUnitCost = $totalUnitCost / $request->unit;
 
             $data = [
                 'cutting_id' => $request->cutting_id,
-                'total_cost' => $receivedCuttingUnitCost,
-                'per_unit_cost' => $receiveCuttingPerUnitCost,
+                'total_cost' => $totalUnitCost,
+                'per_unit_cost' => $perUnitCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
-                'wastage' => $request->wastage,
                 'cutting_cost' => $request->cutting_cost
             ];
 
             CuttingReceive::create($data);
             $receive = Cutting::findOrFail($request->cutting_id);
-            $receive->decrement('available_unit', $request->unit);
+            $receive->decrement('available_unit', $cutting->unit);
 
             DB::commit();
 
