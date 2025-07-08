@@ -37,7 +37,7 @@ class YarnPartyController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return redirect()->back()->with(['errors' => $validation->errors()]);
+            return redirect()->back()->with(['error' => $validation->errors()]);
         }
 
         $data = [

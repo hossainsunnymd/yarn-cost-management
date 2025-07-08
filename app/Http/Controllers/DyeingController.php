@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Dyeing;
-use App\Models\Knitting;
 use App\Models\DyeingParty;
 use Illuminate\Http\Request;
-use App\Models\DyeingPayment;
 use App\Models\DyeingReceive;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
@@ -35,16 +33,25 @@ class DyeingController extends Controller
     //create dyeing
     public function createDyeing(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'dyeing_party_id' => 'required',
+            'unit' => 'required|numeric',
+            'color' => 'required',
+            'roll' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with(['error' => $validator->errors()]);
+        }
+
+        //check knitting receive available unit
+        $knittingReceive = KnittingReceive::findOrFail($request->knitting_receive_id);
+        if ($knittingReceive->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Knitting Receive Available Unit Not Available', 'error' => '']);
+        }
+
         DB::beginTransaction();
         try {
-            $validator = Validator::make($request->all(), [
-                'dyeing_party_id' => 'required',
-                'unit' => 'required|numeric',
-            ]);
-
-            if ($validator->fails()) {
-                return redirect()->back()->with(['errors' => $validator->errors()]);
-            }
 
             $data = [
                 'dyeing_party_id' => $request->dyeing_party_id,
@@ -75,6 +82,22 @@ class DyeingController extends Controller
     //create dyeing receive
     public function createDyeingReceive(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'unit' => 'required|numeric',
+            'dyeing_cost' => 'required|numeric',
+            'roll' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with(['error' => $validator->errors()]);
+        }
+
+        //check is dyeing  unit available
+        $dyeing = Dyeing::find($request->dyeing_id);
+        if ($dyeing->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Dyeing Unit Not Available', 'error' => '']);
+        }
+
         DB::beginTransaction();
         try {
             $dyeing = Dyeing::find($request->dyeing_id);
@@ -99,12 +122,12 @@ class DyeingController extends Controller
                 'available_unit' => $request->unit,
                 'wastage' => $request->wastage,
                 'dyeing_cost' => $request->dyeing_cost,
-                'roll'=>$request->roll
+                'roll' => $request->roll
 
             ];
 
             DyeingReceive::create($data);
-            $dyeing=Dyeing::findOrFail($request->dyeing_id);
+            $dyeing = Dyeing::findOrFail($request->dyeing_id);
             $dyeing->decrement('available_unit', $request->unit);
             $dyeing->decrement('roll', $request->roll);
             DyeingParty::find($dyeingPartyId)->increment('due_amount', $request->dyeing_cost);
@@ -116,6 +139,4 @@ class DyeingController extends Controller
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
     }
-
-
 }

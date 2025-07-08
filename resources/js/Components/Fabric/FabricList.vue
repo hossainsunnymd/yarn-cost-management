@@ -43,6 +43,7 @@ if(page.props.flash.status==true){
             placeholder="Search by name"
         >
     </div>
+    <Link :href="`/fabric-sale-page`" class="bg-blue-500 text-white font-bold py-1 px-6 rounded ml-1">Sale</Link>
 </div>
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">

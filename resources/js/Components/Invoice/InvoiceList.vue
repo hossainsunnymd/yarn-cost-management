@@ -35,7 +35,6 @@ if (page.props.flash.status === true) {
 function showInvoiceDetailsModal(id) {
     products.value = items.value.find((item) => item.id == id);
     modal.value = true;
-    console.log(products.value);
 }
 </script>
 
@@ -68,9 +67,9 @@ function showInvoiceDetailsModal(id) {
                 <div class="flex space-x-2">
                     <button
                         @click="showInvoiceDetailsModal(id)"
-                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition"
+                        class="border border-gray-700 text-gray-700 text-xs px-2 py-1 rounded hover:bg-gray-200 transition duration-300"
                     >
-                        view
+                        <span class="material-icons text-sm">visibility</span>
                     </button>
                     <button
                         @click="deleteVendor(id)"

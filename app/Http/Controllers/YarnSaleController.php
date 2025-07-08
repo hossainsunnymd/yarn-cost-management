@@ -27,9 +27,14 @@ class YarnSaleController extends Controller
         ]);
 
         if ($validation->fails()) {
-            return redirect()->back()->with(['errors' => $validation->errors()]);
+            return redirect()->back()->with(['error' => $validation->errors()]);
         }
 
+        //check is yarn unit available
+        $yarnPurchase = YarnPurchase::find($request->yarn_purchase_id);
+        if ($yarnPurchase->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Yarn unit not available', 'error' => '']);
+        }
 
         $data = [
             'yarn_purchase_id' => $request->yarn_purchase_id,

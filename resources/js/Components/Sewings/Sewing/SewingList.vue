@@ -38,7 +38,7 @@ const searchItem=ref();
 
 <EasyDataTable :headers="headers" :items="items" alternating :rows-per-page="5" :search-field="searchField" :search-value="searchItem">
     <template #item-action="{ id }">
-       <Link :href="`/sewing-receive-page?sewing_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Receive Sewing</Link>
+       <Link :href="`/sewing-receive-page?sewing_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Receive Product</Link>
     </template>
 </EasyDataTable>
 </template>

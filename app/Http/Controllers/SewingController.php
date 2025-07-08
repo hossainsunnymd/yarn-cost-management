@@ -42,6 +42,12 @@ class SewingController extends Controller
             return redirect()->back()->with([ 'error' => $validation->errors()]);
         }
 
+        //check available unit
+        $cutting = CuttingReceive::findOrFail($request->cutting_receive_id);
+        if ($cutting->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Unit Not Available', 'error' => '']);
+        }
+
 
         DB::beginTransaction();
         try {
@@ -73,6 +79,7 @@ class SewingController extends Controller
     //create sewing receive
     public function createSewingReceive(Request $request)
     {
+        // return $request->all();
         $validation = Validator::make($request->all(), [
             'sewing_cost' => 'required',
             'unit' => 'required',
@@ -84,6 +91,12 @@ class SewingController extends Controller
             return redirect()->back()->with([ 'error' => $validation->errors()]);
 
         }
+
+        // //check available unit
+        // $sewing = Sewing::findOrFail($request->sewing_id);
+        // if ($sewing->available_unit < $request->unit) {
+        //     return redirect()->back()->with(['status' => false, 'message' => 'Unit Not Available', 'error' => '']);
+        // }
 
         DB::beginTransaction();
         try {
@@ -110,6 +123,14 @@ class SewingController extends Controller
                 'wastage' => $request->wastage,
                 'sewing_cost' => $request->sewing_cost
             ];
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $fileName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('uploads', $fileName);
+                $data['image'] = $fileName;
+            }
+
 
             SewingReceive::create($data);
             $receive = Sewing::findOrFail($request->sewing_id);

@@ -4,7 +4,7 @@ import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
-const errors = computed(() => page.props.flash.errors || {});
+const errors = computed(() => page.props.flash.error || {});
 const toaster = createToaster({});
 const page = usePage();
 const dyeingPartyId = new URLSearchParams(window.location.search).get(

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('sewing_cost', 8, 2);
             $table->decimal('total_cost', 8, 2);
+            $table->string('image')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

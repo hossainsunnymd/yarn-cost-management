@@ -10,8 +10,12 @@
             aria-modal="true"
             aria-labelledby="modal-title"
         >
-            <div class="flex justify-between items-center px-4 py-2 rounded-t-lg">
-                <h1 id="modal-title" class="text-xl font-bold text-black">Add Quantity</h1>
+            <div
+                class="flex justify-between items-center px-4 py-2 rounded-t-lg"
+            >
+                <h1 id="modal-title" class="text-xl font-bold text-black">
+                    Add Quantity
+                </h1>
                 <button
                     type="button"
                     class="text-white text-2xl font-bold bg-red-500 hover:bg-red-600 rounded-sm w-8 h-8 flex items-center justify-center"
@@ -23,11 +27,12 @@
             </div>
             <div class="px-6 py-4 space-y-4">
                 <div>
-                    <label for="qtyKg" class="block font-semibold mb-1">Weight</label>
+                    <label for="Weight" class="block font-semibold mb-1"
+                        >Weight</label
+                    >
                     <input
                         v-model="weight"
                         type="text"
-                        id="weight"
                         class="w-full border px-3 py-2 rounded"
                     />
                 </div>
@@ -96,9 +101,17 @@
                         :headers="yarnPurchaseHeaders"
                         :rows-per-page="10"
                     >
-                        <template #item-action="{ id, per_unit_cost,available_unit }">
+                        <template
+                            #item-action="{ id, per_unit_cost, available_unit }"
+                        >
                             <button
-                                @click="openQtyModal(id, per_unit_cost,available_unit)"
+                                @click="
+                                    openQtyModal(
+                                        id,
+                                        per_unit_cost,
+                                        available_unit
+                                    )
+                                "
                                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
                             >
                                 Select
@@ -126,19 +139,52 @@
                 <table class="min-w-full border border-gray-300 table-auto">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">No</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Weight</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Per Unit Cost</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Total</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Action</th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                No
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Weight
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Per Unit Cost
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Total
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="yarnList.length > 0" v-for="(yarn, index) in yarnList" :key="index" class="odd:bg-gray-50">
-                            <td class="border px-2 py-1 text-xs">{{ index + 1 }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.weight }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.per_unit_cost }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.total_cost }}</td>
+                        <tr
+                            v-if="yarnList.length > 0"
+                            v-for="(yarn, index) in yarnList"
+                            :key="index"
+                            class="odd:bg-gray-50"
+                        >
+                            <td class="border px-2 py-1 text-xs">
+                                {{ index + 1 }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.weight }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.per_unit_cost }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.total_cost }}
+                            </td>
                             <td class="border px-2 py-1 text-xs">
                                 <button
                                     @click="removeYarns(index)"
@@ -149,14 +195,22 @@
                             </td>
                         </tr>
                         <tr v-else>
-                            <td colspan="5" class="text-center py-3 text-gray-600 text-sm">
+                            <td
+                                colspan="5"
+                                class="text-center py-3 text-gray-600 text-sm"
+                            >
                                 No product added yet
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="font-semibold">
-                            <td colspan="3" class="border px-2 py-1 text-sm text-right">Total</td>
+                            <td
+                                colspan="3"
+                                class="border px-2 py-1 text-sm text-right"
+                            >
+                                Total
+                            </td>
                             <td colspan="2" class="border px-2 py-1 text-sm">
                                 {{ calculate.total }}
                             </td>
@@ -165,7 +219,9 @@
                 </table>
             </div>
 
-            <div class="mt-6 flex flex-col 2xl:flex-row 2xl:justify-between space-y-3 2xl:space-y-0">
+            <div
+                class="mt-6 flex flex-col 2xl:flex-row 2xl:justify-between space-y-3 2xl:space-y-0"
+            >
                 <button
                     @click="createInvoice"
                     class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded w-full md:w-auto"
@@ -186,13 +242,13 @@ const page = usePage();
 const toaster = createToaster({});
 
 const showModal = ref(false);
-const weight = ref(0);
+const weight = ref("");
 
 const selectedYarns = reactive({
-  id: '',
-  per_unit_cost: 0,
-  weight: "",
-  available_weight: 0
+    id: "",
+    per_unit_cost: 0,
+    weight: "",
+    available_weight: 0,
 });
 
 const searchCustomer = ref("");
@@ -201,129 +257,128 @@ const searchProduct = ref("");
 const knittingPartyList = ref(page.props.knittingPartyList || []);
 const yarnPurchaseList = ref(page.props.yarnPurchaseList || []);
 
-
 const knittingPartyHeaders = [
-  { text: "No", value: "id" },
-  { text: "Name", value: "name", sortable: true },
-  { text: "Mobile", value: "phone" },
-  { text: "Action", value: "action" },
+    { text: "No", value: "id" },
+    { text: "Name", value: "name", sortable: true },
+    { text: "Mobile", value: "phone" },
+    { text: "Action", value: "action" },
 ];
 
 const yarnPurchaseHeaders = [
-  { text: "No", value: "id" },
-  { text: "Per Unit Cost", value: "per_unit_cost", sortable: true },
-  { text: "Available Unit", value: "available_unit", sortable: true },
-  { text: "Action", value: "action" },
+    { text: "No", value: "id" },
+    { text: "Per Unit Cost", value: "per_unit_cost", sortable: true },
+    { text: "Available Unit", value: "available_unit", sortable: true },
+    { text: "Action", value: "action" },
 ];
 
 const yarnParty = reactive({ name: "", phone: "", id: "" });
 const yarnList = ref([]);
 
-
 function addYarnParty(name, phone, id) {
-  yarnParty.name = name;
-  yarnParty.phone = phone;
-  yarnParty.id = id;
+    yarnParty.name = name;
+    yarnParty.phone = phone;
+    yarnParty.id = id;
 }
 
-function openQtyModal(id, per_unit_cost,available_unit) {
-  selectedYarns.id = id;
-  selectedYarns.per_unit_cost = per_unit_cost;
-  selectedYarns.available_weight = available_unit;
-  weight.value = 0;
-  showModal.value = true;
-
+function openQtyModal(id, per_unit_cost, available_unit) {
+    selectedYarns.id = id;
+    selectedYarns.per_unit_cost = per_unit_cost;
+    selectedYarns.available_weight = available_unit;
+    weight.value = 0;
+    showModal.value = true;
 }
 
 function closeModal() {
-  showModal.value = false;
+    showModal.value = false;
 }
 
 function addYarns() {
-    const ifExist = yarnList.value.find(yarn => yarn.id === selectedYarns.id);
-    if(ifExist){
+    const ifExist = yarnList.value.find((yarn) => yarn.id === selectedYarns.id);
+    if (ifExist) {
         toaster.error("Yarn already added");
         return;
-    }else if (weight.value <= 0) {
-    toaster.error("Please enter a quantity (Kg or Pc) greater than zero.");
-    return;
-  }else if(weight.value > selectedYarns.available_weight){
-    toaster.error("Quantity is not available");
-    return;
-  }
+    } else if (weight.value <= 0) {
+        toaster.error("Please enter a quantity (Kg or Pc) greater than zero.");
+        return;
+    } else if (
+        parseFloat(weight.value) > parseFloat(selectedYarns.available_weight)
+    ) {
+        toaster.error("Only " + selectedYarns.available_weight + " available.");
+        return;
+    }
 
-  yarnList.value.push({
-    id: selectedYarns.id,
-    per_unit_cost: selectedYarns.per_unit_cost,
-    weight: weight.value,
-    total_cost: (parseFloat(selectedYarns.per_unit_cost) * parseFloat(weight.value)).toFixed(2)
-  });
+    yarnList.value.push({
+        id: selectedYarns.id,
+        per_unit_cost: selectedYarns.per_unit_cost,
+        weight: weight.value,
+        total_cost: (
+            parseFloat(selectedYarns.per_unit_cost) * parseFloat(weight.value)
+        ).toFixed(2),
+    });
 
-  closeModal();
-  calculateTotal();
+    closeModal();
+    calculateTotal();
 }
 
 function removeYarns(index) {
-  yarnList.value.splice(index, 1);
-  calculateTotal();
+    yarnList.value.splice(index, 1);
+    calculateTotal();
 }
 
 const calculate = reactive({ total: 0, weight: 0 });
 
 function calculateTotal() {
-  calculate.total = 0;
-  calculate.weight = 0;
+    calculate.total = 0;
+    calculate.weight = 0;
 
-  yarnList.value.forEach((yarn) => {
-    calculate.total += parseFloat(yarn.per_unit_cost * yarn.weight);
-    calculate.weight += parseFloat(yarn.weight);
-  });
+    yarnList.value.forEach((yarn) => {
+        calculate.total += parseFloat(yarn.per_unit_cost * yarn.weight);
+        calculate.weight += parseFloat(yarn.weight);
+    });
 
-  calculate.total = calculate.total.toFixed(2);
+    calculate.total = calculate.total.toFixed(2);
 }
 
 const form = useForm({
-  knitting_party_id: "",
-  yarns: [],
-  total: "",
-  role: "",
-  total_weight: "",
+    knitting_party_id: "",
+    yarns: [],
+    total: "",
+    role: "",
+    total_weight: "",
 });
 
 function createInvoice() {
-  if (!yarnParty.name) {
-    toaster.error("Yarn Party is required");
-    return;
-  }
+    if (!yarnParty.name) {
+        toaster.error("Yarn Party is required");
+        return;
+    }
 
-  if (yarnList.value.length === 0) {
-    toaster.error("Yarn is required");
-    return;
-  }
+    if (yarnList.value.length === 0) {
+        toaster.error("Yarn is required");
+        return;
+    }
 
-  form.knitting_party_id = yarnParty.id;
-  form.yarns = yarnList.value;
-  form.total = calculate.total;
-  form.role = form.role;
-  form.total_weight = calculate.weight;
+    form.knitting_party_id = yarnParty.id;
+    form.yarns = yarnList.value;
+    form.total = calculate.total;
+    form.role = form.role;
+    form.total_weight = calculate.weight;
 
+    form.post("create-knitting", {
+        onSuccess: () => {
+            if (page.props.flash.status == true) {
+                form.reset();
+                yarnList.value = [];
+                calculate.total = 0;
+                toaster.success(page.props.flash.message);
 
-  form.post("create-knitting", {
-    onSuccess: () => {
-      if (page.props.flash.status == true) {
-        form.reset();
-        yarnList.value = [];
-        calculate.total = 0;
-        toaster.success(page.props.flash.message);
-
-        setTimeout(() => {
-          router.get("/knitting-list");
-        }, 500);
-      } else if(page.props.flash.status == false)  {
-        toaster.error(page.props.flash.error);
-
-      }
-    },
-  });
+                setTimeout(() => {
+                    router.get("/knitting-list");
+                }, 500);
+            } else if (page.props.flash.status == false) {
+                toaster.error(page.props.flash.error);
+            }
+        },
+    });
 }
 </script>

@@ -5,16 +5,14 @@ import { Link, usePage } from "@inertiajs/vue3";
 const page = usePage();
 const currentUrl = computed(() => page.url);
 
-// Dropdown open states
 const yarnDropdown = ref(page.url.includes("yarn"));
 const knittingDropdown = ref(page.url.includes("knitting"));
 const dyeingDropdown = ref(page.url.includes("dyeing"));
 const cuttingDropdown = ref(page.url.includes("cutting"));
 const sweingDropdown = ref(page.url.includes("sewing"));
+const fabricDropdown = ref(page.url.includes("fabric"));
 
-const isActiveRoute = (route) => {
-    return currentUrl.value.startsWith(route);
-};
+const isActiveRoute = (route) => currentUrl.value.startsWith(route);
 
 const sidebarOpen = ref(false);
 const toggleSidebar = () => {
@@ -370,7 +368,7 @@ const toggleSidebar = () => {
                                 v-if="sweingDropdown"
                                 class="ml-6 mt-2 space-y-2"
                             >
-                               <li>
+                                <li>
                                     <Link
                                         href="/sewing-party-list"
                                         :class="[
@@ -435,20 +433,63 @@ const toggleSidebar = () => {
                         </Link>
                     </li>
 
-                    <!-- Fabric -->
+                    <!-- Fabric Dropdown -->
                     <li>
-                        <Link
-                            href="/fabric-list"
+                        <div
+                            @click="fabricDropdown = !fabricDropdown"
                             :class="[
-                                'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
-                                isActiveRoute('/fabric-list')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
+                                fabricDropdown
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-gray-700',
                             ]"
                         >
                             <span class="material-icons">checkroom</span>
-                            <span>Fabrics</span>
-                        </Link>
+                            <span>Fabric</span>
+                            <span
+                                class="ml-auto transform transition-transform duration-300"
+                                :class="{ 'rotate-180': fabricDropdown }"
+                            >
+                                <span class="material-icons">expand_more</span>
+                            </span>
+                        </div>
+                        <transition name="slide-fade">
+                            <ul
+                                v-if="fabricDropdown"
+                                class="ml-6 mt-2 space-y-2"
+                            >
+                                <li>
+                                    <Link
+                                        href="/fabric-list"
+                                        :class="[
+                                            isActiveRoute('/fabric-list')
+                                                ? 'bg-gray-700 text-blue-300 font-semibold'
+                                                : '',
+                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
+                                        ]"
+                                    >
+                                        <span class="material-icons"
+                                            >checkroom</span
+                                        >
+                                        Fabric List
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/fabric-sale-list"
+                                        :class="[
+                                            isActiveRoute('/fabric-sale-list')
+                                                ? 'bg-gray-700 text-blue-300 font-semibold'
+                                                : '',
+                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
+                                        ]"
+                                    >
+                                        <span class="material-icons">sell</span>
+                                        Fabric Sale
+                                    </Link>
+                                </li>
+                            </ul>
+                        </transition>
                     </li>
 
                     <!-- Product -->

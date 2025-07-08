@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Knitting;
-use App\Models\KnittingSale;
 use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use App\Models\KnittingParty;
-use App\Models\KnittingPayment;
 use App\Models\KnittingReceive;
 use App\Models\KnittingYarn;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +68,7 @@ class KnittingController extends Controller
                 ]);
 
 
-                $yarnPurchase = YarnPurchase::find($yarn['id']);
+                $yarnPurchase = YarnPurchase::findOrFail($yarn['id']);
 
                 $yarnPurchase->decrement('available_unit', $yarn['weight']);
 
@@ -107,21 +105,37 @@ class KnittingController extends Controller
     //create knitting receive
     public function createKnittingReceive(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'unit' => 'required',
+            'knitting_cost' => 'required',
+            'roll' => 'required'
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['error' => $validation->errors()]);
+        }
+
+        //check is knitting unit available
+        $knittingUnit=Knitting::findOrFail($request->knitting_id);
+        if ($knittingUnit->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'You cannot receive more unit than available unit']);
+        }
+
 
         DB::beginTransaction();
         try {
-            $knitting = Knitting::find($request->knitting_id);
+            $knitting = Knitting::findOrFail($request->knitting_id);
             $knittingPartyId = $knitting->knitting_party_id;
             $perUnitKnittingCost = $knitting->per_unit_cost;
 
 
             //calculate received knitting unit cost
-            $receivedKnittingUnitCost = ($request->unit * $perUnitKnittingCost) + $request->knitting_receive_cost;
+            $receivedKnittingUnitCost = ($request->unit * $perUnitKnittingCost) + $request->knitting_cost;
             $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
 
             if ($request->wastage > 0) {
 
-                $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $request->knitting_receive_cost;
+                $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $request->knitting_cost;
                 $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
             }
 
@@ -130,17 +144,17 @@ class KnittingController extends Controller
                 'total_cost' => $receivedKnittingUnitCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
-                'knitting_cost' => $request->knitting_receive_cost,
+                'knitting_cost' => $request->knitting_cost,
                 'per_unit_cost' => $receivePerUnitCost,
                 'roll' => $request->roll,
-                'wastage' => 0
+                'wastage' => $request->wastage
 
             ];
 
             KnittingReceive::create($data);
             $knitting = Knitting::where('id', $request->knitting_id);
-            $knitting->decrement('available_unit', $request->unit);
-            KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_receive_cost);
+            $knitting->decrement('available_unit', $request->unit+$request->wastage??0);
+            KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_cost);
 
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully', 'error' => '']);
@@ -149,6 +163,4 @@ class KnittingController extends Controller
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => $e->getMessage()]);
         }
     }
-
-  
 }

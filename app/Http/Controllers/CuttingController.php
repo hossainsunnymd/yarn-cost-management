@@ -43,6 +43,12 @@ class CuttingController extends Controller
             return redirect()->back()->with([ 'error' => $validation->errors()]);
         }
 
+        //check available unit
+        $cutting = DyeingReceive::findOrFail($request->dyeing_receive_id);
+        if ($cutting->available_unit < $request->unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Unit Not Available', 'error' => '']);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -104,13 +110,15 @@ class CuttingController extends Controller
             //calculate total unit cost
             $totalUnitCost = ($totalUnit * $perUnitCost) + $request->cutting_cost ?? 0;
 
+
             //calculate per unit cost
-            $perUnitCost = $totalUnitCost / $request->unit;
+            $perPcCost = $totalUnitCost / $request->unit;
+
 
             $data = [
                 'cutting_id' => $request->cutting_id,
                 'total_cost' => $totalUnitCost,
-                'per_unit_cost' => $perUnitCost,
+                'per_unit_cost' => $perPcCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
                 'cutting_cost' => $request->cutting_cost

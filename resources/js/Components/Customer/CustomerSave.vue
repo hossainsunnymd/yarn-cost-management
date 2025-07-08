@@ -5,7 +5,7 @@ import { router, Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 const page = usePage();
-const errors = computed(() => page.props.flash.errors || {});
+const errors = computed(() => page.props.flash.error || {});
 const toaster = createToaster({});
 
 const customerId = new URLSearchParams(window.location.search).get("customer_id");

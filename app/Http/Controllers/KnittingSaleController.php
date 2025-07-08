@@ -25,7 +25,13 @@ class KnittingSaleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
+            return redirect()->back()->with(['error' => $validator->errors()]);
+        }
+
+        //check available unit
+        $knittingReceive = KnittingReceive::findOrFail($request->knitting_receive_id);
+        if ($request->unit > $knittingReceive->available_unit) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Unit not available', 'error' => '']);
         }
 
         $data = [

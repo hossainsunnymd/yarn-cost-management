@@ -111,8 +111,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     //fabric
-    Route::get('/fabric-list', [FabricController::class, 'fabricList'])->name('fabric-list');
-    Route::get('/fabric-sale-page', [FabricController::class, 'fabricSalePage'])->name('fabric-sale-page');
+    Route::get('/fabric-list', [FabricController::class, 'fabricList'])->name('fabric.list');
+    Route::get('/fabric-sale-page', [FabricController::class, 'fabricSalePage'])->name('fabric.sale.page');
+    Route::post('/fabric-sale', [FabricController::class, 'fabricSale'])->name('fabric.sale');
+    Route::get('/fabric-sale-list', [FabricController::class, 'fabricSaleList'])->name('fabric.sale.list');
 
 
 
@@ -153,6 +155,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     //products
     Route::get('/product-list', [ProductController::class, 'productList'])->name('product.list');
+    Route::get('/product-update-page', [ProductController::class, 'updateProductPage'])->name('product.update.page');
+    Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');
 
     //sale page
     Route::get('/sale-page', [InvoiceController::class, 'salePage'])->name('sale.page');

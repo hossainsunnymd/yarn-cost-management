@@ -4,6 +4,7 @@ import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
+
 const errors = computed(() => page.props.flash.error || {});
 const toaster = createToaster({});
 const page = usePage();
@@ -76,7 +77,6 @@ function submitForm() {
                     {{ errors.unit[0] }}
                 </p>
             </div>
-
             <div class="pt-3">
                 <button
                     type="submit"

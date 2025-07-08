@@ -34,7 +34,7 @@ class CategoryController extends Controller
 
         if ($validator->fails()) {
 
-            return redirect()->back()->with(['errors' => $validator->errors()]);
+            return redirect()->back()->with(['error' => $validator->errors()]);
         }
 
       try{

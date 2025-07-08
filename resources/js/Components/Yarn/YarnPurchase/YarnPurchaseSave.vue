@@ -8,7 +8,7 @@ const page = usePage();
 
 const yarnPurchaseId = new URLSearchParams(window.location.search).get("id");
 const yarnPurchase = page.props.yarnPurchase;
-const errors = computed(() => page.props.flash.errors || {});
+const errors = computed(() => page.props.flash.error || {});
 
 let URL = "/create-yarn-purchase";
 

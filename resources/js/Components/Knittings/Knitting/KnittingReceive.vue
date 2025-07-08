@@ -2,7 +2,9 @@
 import { usePage, useForm } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
+import { computed } from "vue";
 
+const errors = computed(() => page.props.flash.error || {});
 const toaster = createToaster({});
 const page = usePage();
 const knittingId = new URLSearchParams(window.location.search).get(
@@ -14,7 +16,7 @@ const form = useForm({
     unit: "",
     wastage: "",
     roll: "",
-    knitting_receive_cost: "",
+    knitting_cost: "",
 
 });
 let URL = "/create-knitting-receive";
@@ -41,7 +43,7 @@ function submitForm() {
         </h2>
 
         <form @submit.prevent="submitForm" class="space-y-5">
-
+            <!-- unit -->
             <div>
                 <label
                     for="unit"
@@ -50,10 +52,13 @@ function submitForm() {
                 >
                 <input
                     v-model="form.unit"
-                    type="number"
+                    type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.unit" class="text-red-500 text-md mt-1">{{ errors.unit[0] }}</p>
             </div>
+
+            <!-- Knitting cost -->
                <div>
                 <label
                     for="knitting_cost"
@@ -61,12 +66,14 @@ function submitForm() {
                     >Knitting Cost</label
                 >
                 <input
-                    v-model="form.knitting_receive_cost"
+                    v-model="form.knitting_cost"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.knitting_cost" class="text-red-500 text-md mt-1">{{ errors.knitting_cost[0] }}</p>
             </div>
 
+            <!-- Roll -->
             <div>
                 <label
                     for="roll"
@@ -78,8 +85,10 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
+                <p v-if="errors.roll" class="text-red-500 text-md mt-1">{{ errors.roll[0] }}</p>
             </div>
 
+            <!-- Wastage -->
             <div>
                 <label
                     for="knitting_cost"

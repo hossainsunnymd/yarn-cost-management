@@ -1,11 +1,11 @@
 <script setup>
 import SideNav from '../../Layout/SideNav.vue';
-import ProductSave from '../../Components/Products/ProductSave.vue';
+import ProductUpdate from '../../Components/Products/ProductUpdate.vue';
 </script>
 
 <template>
 <SideNav>
-    <ProductSave/>
+    <ProductUpdate/>
 </SideNav>
 </template>
 
