@@ -217,10 +217,15 @@ const customerHeaders = [
   { text: "Action", value: "action" },
 ];
 
+
 const productHeaders = [
   { text: "No", value: "id" },
-  { text: "Per Unit Cost", value: "per_unit_cost", sortable: true },
-  { text: "Available Unit", value: "available_unit", sortable: true },
+  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name", sortable: true },
+  //{ text: "Category", value: "category.name", sortable: true },
+  //{ text: "Weight", value: "weight", sortable: true },
+  { text: "Pcs", value: "unit", sortable: true },
+  { text: "Per Pcs Cost", value: "per_unit_cost", sortable: true },
+  { text: "Available Pcs", value: "available_unit", sortable: true },
   { text: "Action", value: "action" },
 ];
 

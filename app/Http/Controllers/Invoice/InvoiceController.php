@@ -17,7 +17,7 @@ class InvoiceController extends Controller
     //sale page
     public function salePage()
     {
-        $sewingReceive = SewingReceive::all();
+        $sewingReceive = SewingReceive::with('sewing.cuttingReceive.cutting.category')->get();
         $customer = Customer::all();
         return Inertia::render('Sale/SalePage', ['sewingReceive' => $sewingReceive, 'customer' => $customer]);
     }

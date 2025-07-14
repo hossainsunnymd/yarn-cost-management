@@ -85,7 +85,7 @@ function submitForm() {
                     for="unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                    Unit
+                    Pcs
                 </label>
                 <input
                     v-model="form.unit"

@@ -9,10 +9,10 @@ const page = usePage();
 // Table headers 
 const headers = [
   { text: 'ID', value: 'id' },
-  { text: 'Pcs', value: 'unit' },
+  { text: 'Unit', value: 'unit' },
   { text: 'Category', value: 'category.name' },
   { text: 'Roll', value: 'roll' },
-  { text: 'Available Pcs', value: 'available_unit' },
+  { text: 'Available Unit', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
 
