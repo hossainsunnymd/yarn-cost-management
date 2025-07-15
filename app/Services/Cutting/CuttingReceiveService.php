@@ -19,12 +19,20 @@ class CuttingReceiveService
             $totalUnit = $cutting->unit;
             $perUnitCost = DyeingReceive::find($cutting->dyeing_receive_id)->per_unit_cost;
 
-            //calculate total unit cost
-            $totalUnitCost = ($totalUnit * $perUnitCost) + $request->cutting_cost ?? 0;
+            //calculate total cutting cost
+            $totalCuttingCost=$request->unit*$request->per_unit_cutting_cost;
 
+            //calculate total unit cost
+            $totalUnitCost = ($totalUnit * $perUnitCost) + $totalCuttingCost;
 
             //calculate per unit cost
             $perPcCost = $totalUnitCost / $request->unit;
+
+            //check wastage
+            if($request->wastage > 0){
+                $totalUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $totalCuttingCost;
+                $perPcCost = $totalUnitCost / $request->unit;
+            }
 
 
             $data = [
@@ -33,7 +41,8 @@ class CuttingReceiveService
                 'per_unit_cost' => $perPcCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
-                'cutting_cost' => $request->cutting_cost
+                'cutting_cost' => $totalCuttingCost,
+                'wastage' => $request->wastage
             ];
 
             CuttingReceive::create($data);
@@ -45,7 +54,7 @@ class CuttingReceiveService
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception("Something went wrong");
+            throw new Exception($e->getMessage());
         }
     }
 }

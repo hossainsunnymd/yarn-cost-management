@@ -12,26 +12,26 @@ const toaster = createToaster();
 const errors = computed(() => page.props.flash.error || {});
 
 // Get sewing party ID from query params
-const sewingPartyId = new URLSearchParams(window.location.search).get(
-    "sewing_party_id"
+const cuttingPartyId = new URLSearchParams(window.location.search).get(
+    "cutting_party_id"
 );
-const sewingParty = page.props.sewingParty;
+const cuttingParty = page.props.cuttingParty;
 
 // Form setup
 const form = useForm({
-    sewing_party_id: sewingPartyId,
+    cutting_party_id: cuttingPartyId,
     name: "",
     phone: "",
     address: "",
 });
 
 // Set form values and URL conditionally for update
-let URL = "/create-sewing-party";
-if (sewingPartyId != 0 && sewingParty != null) {
-    form.name = sewingParty.name;
-    form.phone = sewingParty.phone;
-    form.address = sewingParty.address;
-    URL = "/update-sewing-party";
+let URL = "/create-cutting-party";
+if (cuttingPartyId != 0 && cuttingParty != null) {
+    form.name = cuttingParty.name;
+    form.phone = cuttingParty.phone;
+    form.address = cuttingParty.address;
+    URL = "/update-cutting-party";
 }
 
 // Form submission handler
@@ -41,7 +41,7 @@ function submitForm() {
         onSuccess: () => {
             if (page.props.flash.status===false) {
                 toaster.success(page.props.flash.message);
-                router.visit("/sewing-party-list");
+                router.visit("/cutting-party-list");
             } else if (page.props.flash.status===true) {
                 toaster.error(page.props.flash.message);
             }
@@ -55,7 +55,7 @@ function submitForm() {
         <!-- Title -->
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
             {{
-                sewingPartyId == 0 ? "Add Sewing Party" : "Update Sewing Party"
+                cuttingPartyId == 0 ? "Add Cutting Party" : "Update Cutting Party"
             }}
         </h2>
 
@@ -122,9 +122,9 @@ function submitForm() {
                     class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300"
                 >
                     {{
-                        sewingPartyId == 0
-                            ? "Add Sewing Party"
-                            : "Update Sewing Party"
+                        cuttingPartyId == 0
+                            ? "Add Cutting Party"
+                            : "Update Cutting Party"
                     }}
                 </button>
             </div>

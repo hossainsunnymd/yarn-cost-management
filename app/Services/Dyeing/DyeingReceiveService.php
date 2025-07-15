@@ -25,13 +25,15 @@ class DyeingReceiveService
             $dyeingPartyId = $dyeing->dyeing_party_id;
             $perUnitknittingReceiveCost = KnittingReceive::find($dyeing->knitting_receive_id)->per_unit_cost;
 
+            //calculate total dyeing cost
+            $totalDyeingCost =$request->unit * $request->per_unit_dyeing_cost;
 
             //calculate received dyeing unit cost
-            $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
+            $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $totalDyeingCost;
             $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit;
 
             if ($request->wastage > 0) {
-                $receivedDyeingUnitCost = (($request->unit + $request->wastage) * $perUnitknittingReceiveCost) + $request->dyeing_cost ?? 0;
+                $receivedDyeingUnitCost = (($request->unit + $request->wastage) * $perUnitknittingReceiveCost) + $totalDyeingCost;
                 $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit;
             }
 
@@ -42,16 +44,16 @@ class DyeingReceiveService
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
                 'wastage' => $request->wastage,
-                'dyeing_cost' => $request->dyeing_cost,
+                'dyeing_cost' => $totalDyeingCost,
                 'roll' => $request->roll
 
             ];
 
             DyeingReceive::create($data);
             $dyeing = Dyeing::findOrFail($request->dyeing_id);
-            $dyeing->decrement('available_unit', $request->unit);
+            $dyeing->decrement('available_unit', $request->unit+$request->wastage??0);
             $dyeing->decrement('roll', $request->roll);
-            DyeingParty::find($dyeingPartyId)->increment('due_amount', $request->dyeing_cost);
+            DyeingParty::find($dyeingPartyId)->increment('due_amount', $totalDyeingCost);
 
             DB::commit();
             return true;

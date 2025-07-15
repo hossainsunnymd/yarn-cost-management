@@ -20,7 +20,7 @@ class KnittingController extends Controller
     //knitting list
     public function knittingList()
     {
-        $knittingList = Knitting::with('knittingYarn', 'knittingParty')->get();
+        $knittingList = Knitting::with('knittingYarn.yarnPurchase', 'knittingParty')->get();
         return Inertia::render('Knittings/Knitting/KnittingListPage', ['knittingList' => $knittingList]);
     }
 
@@ -64,8 +64,8 @@ class KnittingController extends Controller
     //knitting receive page
     public function knittingReceivePage(Request $request)
     {
-
-        return Inertia::render('Knittings/Knitting/KnittingReceivePage');
+        $knitting=Knitting::find($request->knitting_id);
+        return Inertia::render('Knittings/Knitting/KnittingReceivePage',['knitting'=>$knitting]);
     }
 
     //create knitting receive
@@ -73,7 +73,7 @@ class KnittingController extends Controller
     {
         $validation = Validator::make($request->all(), [
             'unit' => 'required',
-            'knitting_cost' => 'required',
+            'per_unit_knitting_cost' => 'required',
             'roll' => 'required'
         ]);
 

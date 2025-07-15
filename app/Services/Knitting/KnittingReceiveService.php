@@ -25,14 +25,16 @@ class KnittingReceiveService{
             $knittingPartyId = $knitting->knitting_party_id;
             $perUnitKnittingCost = $knitting->per_unit_cost;
 
+            //calculate total knitting cost
+            $totalKnittingCost=$request->unit*$request->per_unit_knitting_cost;
 
             //calculate received knitting unit cost
-            $receivedKnittingUnitCost = ($request->unit * $perUnitKnittingCost) + $request->knitting_cost;
+            $receivedKnittingUnitCost = ($request->unit * $perUnitKnittingCost) + $totalKnittingCost;
             $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
 
             if ($request->wastage > 0) {
 
-                $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $request->knitting_cost;
+                $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $totalKnittingCost;
                 $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
             }
 
@@ -41,7 +43,7 @@ class KnittingReceiveService{
                 'total_cost' => $receivedKnittingUnitCost,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
-                'knitting_cost' => $request->knitting_cost,
+                'knitting_cost' => $totalKnittingCost,
                 'per_unit_cost' => $receivePerUnitCost,
                 'roll' => $request->roll,
                 'wastage' => $request->wastage
@@ -51,7 +53,7 @@ class KnittingReceiveService{
             KnittingReceive::create($data);
             $knitting = Knitting::where('id', $request->knitting_id);
             $knitting->decrement('available_unit', $request->unit + $request->wastage ?? 0);
-            KnittingParty::find($knittingPartyId)->increment('due_amount', $request->knitting_cost);
+            KnittingParty::find($knittingPartyId)->increment('due_amount', $totalKnittingCost);
 
             DB::commit();
             return true;

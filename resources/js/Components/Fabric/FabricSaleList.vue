@@ -18,12 +18,14 @@ const fabricProducts = ref({});
 const headers = [
     { text: "ID", value: "id" },
     { text: "Customer", value: "customer.name" },
-    { text: "Total Cost", value: "total" },
+    { text: "Total Cost", value: "total_cost" },
+    { text: "Total Sale Price", value: "total_sale_price" },
     { text: "Action", value: "action" },
 ];
 
 // Data items to display in the table
 const items = ref(page.props.fabricSaleList);
+console.log(items.value);
 
 // Search configuration for filtering table data
 const searchField = ref(["id", "name", "category.name", "parts_no"]);
@@ -48,7 +50,7 @@ function showModal(id) {
     <FabricSaleDetails v-model:modal="modal" :fabricProducts="fabricProducts" />
 
     <div class="container mx-auto p-4 bg-white">
-        <h1 class="text-2xl font-bold mb-4">Product List</h1>
+        <h1 class="text-2xl font-bold mb-4">Fabric Sale List</h1>
 
         <!-- Search input -->
         <input

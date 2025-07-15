@@ -17,4 +17,8 @@ class Cutting extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    public function cuttingParty(){
+        return $this->belongsTo(CuttingParty::class);
+    }
 }

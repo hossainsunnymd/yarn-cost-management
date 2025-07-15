@@ -13,6 +13,7 @@ const page = usePage();
 const headers = [
     { text: 'ID', value: 'id' },
     { text: 'Name', value: 'name' },
+    { text: 'Price', value: 'price' },
     { text: 'Action', value: 'action' },
 ];
 

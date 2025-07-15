@@ -8,6 +8,7 @@ const headers = [
   { text: 'ID', value: 'id' },
   { text: 'Dyeing Party Name', value: 'dyeing_party.name' },
   { text: 'Design Name', value: 'design_name' },
+  { text: 'Color Name', value: 'color' },
   { text: 'Unit', value: 'unit' },
   { text: 'Available Unit', value: 'available_unit' },
   { text: 'Roll', value: 'roll' },

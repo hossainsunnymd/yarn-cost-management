@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cutting_receives', function (Blueprint $table) {
+        Schema::create('cutting_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cutting_id');
-            $table->foreign('cutting_id')->references('id')->on('cuttings')
+            $table->unsignedBigInteger('cutting_party_id');
+            $table->foreign('cutting_party_id')->references('id')->on('cutting_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('unit', 8, 2);
-            $table->decimal('available_unit', 8, 2);
-            $table->decimal('per_unit_cost', 8, 2);
-            $table->decimal('cutting_cost', 8, 2);
-            $table->decimal('total_cost', 8, 2);
-            $table->decimal('wastage', 8, 2)->nullable();
+            $table->decimal('amount', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cutting_receives');
+        Schema::dropIfExists('cutting_payments');
     }
 };

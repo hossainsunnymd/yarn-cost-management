@@ -15,13 +15,14 @@ const page = usePage();
 // Get category_id from URL query parameter
 const category_id = new URLSearchParams(window.location.search).get("category_id");
 
-// Get the category data 
+// Get the category data
 const category = page.props.category;
 
 // Initialize the form with default values
 const form = useForm({
   category_id: category_id,
   category_name: "",
+  price: "",
 });
 
 // Determine API endpoint for create or update
@@ -68,6 +69,8 @@ function submitForm() {
 
     <!-- Category form -->
     <form @submit.prevent="submitForm" class="w-full max-w-lg mx-auto bg-white p-8 rounded-md shadow-md">
+
+      <!-- Category Name -->
       <div>
         <label for="category_name" class="block text-sm font-medium text-gray-700 mb-1">
           Category Name
@@ -82,6 +85,23 @@ function submitForm() {
           {{ errors.category_name[0] }}
         </p>
       </div>
+
+      <!-- Price -->
+       <div>
+        <label for="price" class="block text-sm font-medium text-gray-700 mb-1">
+          Price
+        </label>
+        <input
+          v-model="form.price"
+          type="text"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <!-- Show validation error if any -->
+        <p v-if="errors.price" class="text-red-500">
+          {{ errors.price[0] }}
+        </p>
+      </div>
+
 
       <!-- Submit button -->
       <div class="pt-3">

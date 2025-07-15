@@ -5,18 +5,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dyeing\DyeingController;
 use App\Http\Controllers\Fabric\FabricController;
 use App\Http\Controllers\Sewing\SewingController;
+use App\Http\Controllers\Yarn\YarnSaleController;
+use App\Http\Controllers\Yarn\YarnPartyController;
 use App\Http\Controllers\Cutting\CuttingController;
 use App\Http\Controllers\Invoice\InvoiceController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Knitting\KnittingController;
-use App\Http\Controllers\Yarn\YarnSaleController;
-use App\Http\Controllers\Yarn\YarnPartyController;
+use App\Http\Controllers\Yarn\YarnPurchaseController;
 use App\Http\Controllers\Dyeing\DyeingPartyController;
 use App\Http\Controllers\Sewing\SewingPartyController;
+use App\Http\Controllers\Cutting\CuttingPartyController;
 use App\Http\Controllers\Knitting\KnittingSaleController;
-use App\Http\Controllers\Yarn\YarnPurchaseController;
 use App\Http\Controllers\Knitting\KnittingPartyController;
 
 
@@ -111,6 +112,14 @@ use App\Http\Controllers\Knitting\KnittingPartyController;
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');
     Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
     Route::get('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
+
+
+    //cutting party
+    Route::get('/cutting-party-list', [CuttingPartyController::class, 'cuttingPartyList'])->name('cutting-party-list');
+    Route::get('/cutting-party-save-page', [CuttingPartyController::class, 'cuttingPartySavePage'])->name('cutting-party-save-page');
+    Route::post('/create-cutting-party', [CuttingPartyController::class, 'createcuttingParty'])->name('create-cutting-party');
+    Route::post('/update-cutting-party', [CuttingPartyController::class, 'updatecuttingParty'])->name('update-cutting-party');
+    Route::get('/cutting-party-delete', [CuttingPartyController::class, 'cuttingPartyDelete'])->name('cutting-party-delete');
 
 
     //cuttings

@@ -26,7 +26,7 @@ class FabricController extends Controller
     //fabric sale list
     public function fabricSaleList()
     {
-        $fabricSaleList = FabricSale::with('fabricSaleProducts', 'customer')->get();
+        $fabricSaleList = FabricSale::with('fabricSaleProducts.dyeingReceive.dyeing', 'customer')->get();
         return Inertia::render('Fabric/FabricSaleListPage', ['fabricSaleList' => $fabricSaleList]);
     }
 
@@ -34,7 +34,7 @@ class FabricController extends Controller
     public function fabricSalePage()
     {
         $customers = Customer::all();
-        $fabrics = DyeingReceive::all();
+        $fabrics = DyeingReceive::with('dyeing')->get();
         return Inertia::render('Fabric/FabricSalePage', ['customers' => $customers, 'fabrics' => $fabrics]);
     }
 
@@ -42,11 +42,13 @@ class FabricController extends Controller
     public function fabricSale(Request $request)
     {
 
+
             DB::beginTransaction();
         try {
             $fabricSale = FabricSale::create([
                 'customer_id' => $request->customer_id,
-                'total' => $request->total,
+                'total_cost' => $request->total_cost,
+                'total_sale_price' => $request->total_sale_price
             ]);
 
             foreach ($request->fabrics as $fabric) {
@@ -54,16 +56,21 @@ class FabricController extends Controller
                     'fabric_sale_id' =>$fabricSale->id,
                     'dyeing_receive_id' => $fabric['id'],
                     'per_unit_cost' => $fabric['per_unit_cost'],
+                    'total_cost' => $fabric['total_cost'],
+                    'sale_price'=> $fabric['sale_price'],
+                    'role'=> $fabric['role'],
                     'unit' => $fabric['weight'],
                 ]);
-                DyeingReceive::findOrFail($fabric['id'])->decrement('available_unit', $fabric['weight']);
+               $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
+               $dyeingReceive->decrement('available_unit', $fabric['weight']);
+               $dyeingReceive->decrement('roll', $fabric['roll']);
             }
 
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
 }

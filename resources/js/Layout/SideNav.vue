@@ -311,6 +311,20 @@ const toggleSidebar = () => {
                             >
                                 <li>
                                     <Link
+                                        href="/cutting-party-list"
+                                        :class="[
+                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
+                                            isActiveRoute('/cutting-party-list')
+                                                ? 'bg-gray-700 text-blue-300 font-semibold'
+                                                : '',
+                                        ]"
+                                    >
+                                        <span class="material-icons">list</span>
+                                        Cutting Party List
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
                                         href="/cutting-list"
                                         :class="[
                                             'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',

@@ -1,7 +1,7 @@
 <script setup>
 // Props received from parent
 const props = defineProps({
-  knittingYarn: Object, 
+  knittingYarn: Object,
   modal: Boolean
 });
 
@@ -42,6 +42,7 @@ const printModal = () => {
           <thead class="bg-gray-100">
             <tr>
               <th class="px-4 py-2 border text-center ">#</th>
+              <th class="px-4 py-2 border text-center ">Yarn Name</th>
               <th class="px-4 py-2 border text-center ">Per Unit Cost</th>
               <th class="px-4 py-2 border text-center ">Unit</th>
 
@@ -50,6 +51,7 @@ const printModal = () => {
           <tbody>
             <tr v-for="(item, index) in props.knittingYarn.knitting_yarn" :key="index" class="hover:bg-gray-50 border-1 print:border-2">
               <td class="px-4 py-2 border text-center">{{ index + 1 }}</td>
+              <td class="px-4 py-2 border text-center">{{ item.yarn_purchase.name }}</td>
               <td class="px-4 py-2 border text-center">{{ item.per_unit_cost }}</td>
               <td class="px-4 py-2 border text-center">{{ item.unit }}</td>
             </tr>

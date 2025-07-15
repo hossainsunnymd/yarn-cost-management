@@ -12,6 +12,8 @@ const page = usePage();
 const headers = [
     { text: "No", value: "id" },
     { text: "Unit", value: "unit" },
+    { text: "Design Name", value: "dyeing.design_name" },
+    { text: "Color", value: "dyeing.color" },
     { text: "Per Unit Cost", value: "per_unit_cost" },
     { text: "Total Cost", value: "total_cost" },
     { text: "Available Unit", value: "available_unit" },

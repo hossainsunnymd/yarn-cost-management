@@ -17,4 +17,9 @@ class Knitting extends Model
     {
         return $this->hasMany(KnittingYarn::class);
     }
+
+    public function yarnPurchase()
+    {
+        return $this->belongsTo(YarnPurchase::class);
+    }
 }

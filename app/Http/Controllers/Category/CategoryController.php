@@ -31,6 +31,7 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), [
             'category_name' => 'required',
+            'price' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -40,7 +41,8 @@ class CategoryController extends Controller
 
       try{
          Category::create([
-            'name'=>$request->category_name
+            'name'=>$request->category_name,
+            'price'=>$request->price
         ]);
         return redirect()->back()->with(['status'=>true,'message'=>'Category created successfully']);
       }catch(Exception $e){
@@ -53,6 +55,7 @@ class CategoryController extends Controller
 
           $validator = Validator::make($request->all(), [
             'category_name' => 'required',
+            'price' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -61,7 +64,8 @@ class CategoryController extends Controller
         }
        try{
         Category::where('id',$request->category_id)->update([
-            'name'=>$request->category_name
+            'name'=>$request->category_name,
+            'price'=>$request->price
         ]);
         return redirect()->back()->with(['status'=>true,'message'=>'Category updated successfully']);
        }catch(Exception $e){

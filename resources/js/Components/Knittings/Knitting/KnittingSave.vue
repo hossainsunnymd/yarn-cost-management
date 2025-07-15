@@ -216,6 +216,7 @@ const selectedYarns = reactive({
 const knittingPartyList = ref(page.props.knittingPartyList || []);
 const yarnPurchaseList = ref(page.props.yarnPurchaseList || []);
 
+
 // Table Headers
 const knittingPartyHeaders = [
     { text: "No", value: "id" },
@@ -226,6 +227,7 @@ const knittingPartyHeaders = [
 
 const yarnPurchaseHeaders = [
     { text: "No", value: "id" },
+    { text: "Name", value: "name" },
     { text: "Per Unit Cost", value: "per_unit_cost", sortable: true },
     { text: "Available Unit", value: "available_unit", sortable: true },
     { text: "Action", value: "action" },

@@ -28,6 +28,7 @@ const headers = [
 // Table items from backend
 const items = ref(page.props.knittingList);
 
+
 // Search functionality
 const searchField = ref("name");
 const searchItem = ref("");

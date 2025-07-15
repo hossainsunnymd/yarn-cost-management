@@ -7,7 +7,6 @@ import { computed } from "vue";
 // Initialize toaster for success/error notifications
 const toaster = createToaster({});
 
-
 const page = usePage();
 
 // Get dyeing_id from the URL query parameters
@@ -21,10 +20,13 @@ const form = useForm({
     dyeing_id: dyeingId,
     unit: "",
     wastage: "",
-    dyeing_cost: "",
+    per_unit_dyeing_cost: "",
     roll: "",
 });
-
+//calculote total dyeing cost
+const totalDyeingCost = computed(() => {
+    return form.per_unit_dyeing_cost * form.unit;
+});
 
 let URL = "/create-dyeing-receive";
 
@@ -33,7 +35,6 @@ function submitForm() {
     form.post(URL, {
         preserveScroll: true,
         onSuccess: () => {
-
             if (page.props.flash.status === false) {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status === true) {
@@ -54,9 +55,28 @@ function submitForm() {
 
         <!-- Form -->
         <form @submit.prevent="submitForm" class="space-y-5">
+            <!-- Available Unit Input -->
+            <div>
+                <label
+                    for="available_unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Available Unit</label
+                >
+                <input
+                    :value="page.props.dyeing.available_unit"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    readonly
+                />
+            </div>
+
             <!-- Unit Input -->
             <div>
-                <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                <label
+                    for="unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Unit</label
+                >
                 <input
                     v-model="form.unit"
                     type="text"
@@ -67,22 +87,48 @@ function submitForm() {
                 </p>
             </div>
 
-            <!-- Dyeing Cost Input -->
+            <!-- Per Unit Dyeing Cost Input -->
             <div>
-                <label for="dyeing_cost" class="block text-sm font-medium text-gray-700 mb-1">Dyeing Cost</label>
+                <label
+                    for="per_unit_dyeing_cost"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Per Unit Dyeing Cost</label
+                >
                 <input
-                    v-model="form.dyeing_cost"
+                    v-model="form.per_unit_dyeing_cost"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-                <p v-if="errors.dyeing_cost" class="text-red-500 text-md mt-1">
-                    {{ errors.dyeing_cost[0] }}
+                <p
+                    v-if="errors.per_unit_dyeing_cost"
+                    class="text-red-500 text-md mt-1"
+                >
+                    {{ errors.per_unit_dyeing_cost[0] }}
                 </p>
+            </div>
+
+            <!-- Total Dyeing Cost Input -->
+            <div>
+                <label
+                    for="total_dyeing_cost"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Total Dyeing Cost</label
+                >
+                <input
+                    :value="totalDyeingCost"
+                    type="text"
+                    readonly
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
             </div>
 
             <!-- Wastage Input -->
             <div>
-                <label for="wastage" class="block text-sm font-medium text-gray-700 mb-1">Wastage</label>
+                <label
+                    for="wastage"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Wastage</label
+                >
                 <input
                     v-model="form.wastage"
                     type="text"
@@ -93,7 +139,11 @@ function submitForm() {
 
             <!-- Roll Input -->
             <div>
-                <label for="roll" class="block text-sm font-medium text-gray-700 mb-1">Roll</label>
+                <label
+                    for="roll"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Roll</label
+                >
                 <input
                     v-model="form.roll"
                     type="text"

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\DyeingReceive;
 use App\Services\Cutting\CuttingService;
 
 class CuttingController extends Controller
@@ -20,14 +21,15 @@ class CuttingController extends Controller
     public function cuttingList()
     {
         $cuttings = Cutting::with('category')->get();
-        return Inertia::render('Cutting/CuttingListPage', ['cuttings' => $cuttings]);
+        return Inertia::render('Cuttings/Cutting/CuttingListPage', ['cuttings' => $cuttings]);
     }
 
     //cutting save page
-    public function cuttingSavePage()
+    public function cuttingSavePage(Request $request)
     {
         $categories = Category::all();
-        return Inertia::render('Cutting/CuttingSavePage', ['categories' => $categories]);
+        $dyeingReceive=DyeingReceive::find($request->dyeing_receive_id);
+        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories,'dyeingReceive'=>$dyeingReceive]);
     }
 
     //create cutting
@@ -62,26 +64,28 @@ class CuttingController extends Controller
 
 
     //cutting receive list
-    public function cuttingReceiveList()
+    public function cuttingReceiveList(Request $request)
     {
         $cuttingReceives = CuttingReceive::with('cutting.category')->get();
-        return Inertia::render('Cutting/CuttingReceiveListPage', ['cuttingReceives' => $cuttingReceives]);
+        return Inertia::render('Cuttings/Cutting/CuttingReceiveListPage', ['cuttingReceives' => $cuttingReceives]);
     }
 
     //cutting receive page
-    public function cuttingReceivePage()
+    public function cuttingReceivePage(Request $request)
     {
-        return Inertia::render('Cutting/CuttingReceivePage');
+         $cutting=Cutting::find($request->cutting_id);
+        return Inertia::render('Cuttings/Cutting/CuttingReceivePage',['cutting'=>$cutting]);
     }
 
     //create cutting receive
     public function createCuttingReceive(CuttingReceiveService $cuttingReceiveService, Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'cutting_cost' => 'required',
+            'per_unit_cutting_cost' => 'required',
             'unit' => 'required',
         ], [
             'unit.required' => 'Pcs is required',
+            'per_unit_cutting_cost.required' => 'Per Unit Cutting Cost is required',
         ]);
 
         if ($validation->fails()) {

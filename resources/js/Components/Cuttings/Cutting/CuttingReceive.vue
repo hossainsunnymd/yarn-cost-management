@@ -1,39 +1,36 @@
 <script setup>
-// Imports
-import { usePage, useForm } from "@inertiajs/vue3";
+import { usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
-// Access Inertia page props
 const page = usePage();
-const toaster = createToaster();
+const toaster = createToaster({});
 
-// Get knitting_id from query string
-const knittingId = new URLSearchParams(window.location.search).get(
-    "knitting_id"
-);
-
-// Form state
-const form = useForm({
-    knitting_id: knittingId,
-    unit: "",
-    wastage: "",
-    roll: "",
-    per_unit_knitting_cost: "",
-});
-
-//calculate total knitting cost
-const totalKnittingCost = computed(() => {
-    return form.per_unit_knitting_cost * form.unit
-})
-
-// Display validation errors
+// Compute errors from flash message errors (if any)
 const errors = computed(() => page.props.flash.error || {});
 
-// Submit handler
-const URL = "/create-knitting-receive";
+// Get cutting_id from URL query parameters
+const cuttingId = new URLSearchParams(window.location.search).get("cutting_id");
 
+// Initialize the form with default values and the cutting_id
+const form = useForm({
+    cutting_id: cuttingId,
+    unit: "",
+    wastage: "",
+    per_unit_cutting_cost: "",
+});
+
+//calculate total cutting cost
+const totalCuttingCost = computed(() => {
+    return form.per_unit_cutting_cost * form.unit;
+});
+
+
+
+// API endpoint for submitting the form
+const URL = "/create-cutting-receive";
+
+// Submit form handler
 function submitForm() {
     form.post(URL, {
         preserveScroll: true,
@@ -42,7 +39,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status === true) {
                 toaster.success(page.props.flash.message);
-                router.visit("/knitting-list");
+                router.visit("/cutting-list");
             }
         },
     });
@@ -52,33 +49,35 @@ function submitForm() {
 <template>
     <div class="p-6 max-w-2xl w-full mx-auto">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            Knitting Receive
+            Cutting Receive
         </h2>
 
         <form @submit.prevent="submitForm" class="space-y-5">
-
-              <!--Availabe Unit Field -->
+            <!--Available Unit input -->
             <div>
                 <label
                     for="available_unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                    Available Unit
+                    Pcs
                 </label>
                 <input
+                    :value="page.props.cutting.available_unit"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                     readonly
-                    :value="page.props.knitting.available_unit"
                 />
+                <p v-if="errors.unit" class="text-red-500 text-md mt-1">
+                    {{ errors.unit[0] }}
+                </p>
             </div>
-            <!-- Unit Field -->
+            <!-- Unit input -->
             <div>
                 <label
                     for="unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                    Unit
+                    Pcs
                 </label>
                 <input
                     v-model="form.unit"
@@ -90,62 +89,44 @@ function submitForm() {
                 </p>
             </div>
 
-            <!--Per Unit Knitting Cost Field -->
+            <!--Per Cutting Cost input -->
             <div>
                 <label
-                    for="per_unit_knitting_cost"
+                    for="per_unit_cutting_cost"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                   Per Unit Knitting Cost
+                    Per Unit Cutting Cost
                 </label>
                 <input
-                    v-model="form.per_unit_knitting_cost"
+                    v-model="form.per_unit_cutting_cost"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
                 <p
-                    v-if="errors.per_unit_knitting_cost"
+                    v-if="errors.per_unit_cutting_cost"
                     class="text-red-500 text-md mt-1"
                 >
-                    {{ errors.per_unit_knitting_cost[0] }}
+                    {{ errors.per_unit_cutting_cost[0] }}
                 </p>
             </div>
 
-            <!--Total Knitting Cost Field -->
+            <!--Total Cutting Cost input -->
             <div>
                 <label
-                    for="total_knitting_cost"
+                    for="total_cutting_cost"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Total Knitting Cost
+                    Total Cutting Cost
                 </label>
                 <input
-                    :value="totalKnittingCost"
+                    :value="totalCuttingCost"
                     type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                     readonly
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
             </div>
 
-            <!-- Roll Field -->
-            <div>
-                <label
-                    for="roll"
-                    class="block text-sm font-medium text-gray-700 mb-1"
-                >
-                    Roll
-                </label>
-                <input
-                    v-model="form.roll"
-                    type="text"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <p v-if="errors.roll" class="text-red-500 text-md mt-1">
-                    {{ errors.roll[0] }}
-                </p>
-            </div>
-
-            <!-- Wastage Field -->
+              <!--Wastage -->
             <div>
                 <label
                     for="wastage"
@@ -157,13 +138,11 @@ function submitForm() {
                     v-model="form.wastage"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    
                 />
-                <p v-if="errors.wastage" class="text-red-500 text-md mt-1">
-                    {{ errors.wastage[0] }}
-                </p>
             </div>
 
-            <!-- Submit Button -->
+            <!-- Submit button -->
             <div class="pt-3">
                 <button
                     type="submit"

@@ -1,36 +1,35 @@
 <?php
 
-namespace App\Http\Controllers\Sewing;
+namespace App\Http\Controllers\Cutting;
 
 use Exception;
 use Inertia\Inertia;
-use App\Models\SewingParty;
+use App\Models\CuttingParty;
 use Illuminate\Http\Request;
-use App\Models\SewingPayment;
+use App\Models\CuttingPayment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
-class SewingPartyController extends Controller
+class CuttingPartyController extends Controller
 {
-    //sewing party list
-    public function sewingPartyList()
+     public function CuttingPartyList()
     {
 
-        $sewingParties = SewingParty::all();
-        return Inertia::render('Sewings/SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
+        $cuttingParties = CuttingParty::all();
+        return Inertia::render('Cuttings/CuttingParty/CuttingPartyListPage', ['cuttingParties' => $cuttingParties]);
     }
 
     //sewing party save page
-    public function sewingPartySavePage(Request $request)
+    public function cuttingPartySavePage(Request $request)
     {
-      
-        $sewingParty = SewingParty::find($request->sewing_party_id);
-        return Inertia::render('Sewings/SewingParty/SewingPartySavePage', ['sewingParty' => $sewingParty]);
+
+        $cuttingParty = CuttingParty::find($request->sewing_party_id);
+        return Inertia::render('Cuttings/CuttingParty/CuttingPartySavePage', ['cuttingParty' => $cuttingParty]);
     }
 
     //sewing party save
-    public function createSewingParty(Request $request)
+    public function createCuttingParty(Request $request)
     {
 
         $validation = Validator::make($request->all(), [
@@ -48,13 +47,13 @@ class SewingPartyController extends Controller
                 'address' => $request->address,
                 'due_amount' => 0
             ];
-            SewingParty::create($data);
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Created Successfully', 'error' => '']);
+            CuttingParty::create($data);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Party Created Successfully', 'error' => '']);
         }
     }
 
     //sewing party update
-    public function updateSewingParty(Request $request)
+    public function updateCuttingParty(Request $request)
     {
 
         $validation = Validator::make($request->all(), [
@@ -72,24 +71,24 @@ class SewingPartyController extends Controller
                 'phone' => $request->phone,
                 'address' => $request->address,
             ];
-            SewingParty::where('id', $request->sewing_party_id)->update($data);
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Updated Successfully', 'error' => '']);
+            CuttingParty::where('id', $request->cutting_party_id)->update($data);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Party Updated Successfully', 'error' => '']);
         }
     }
 
     //sewing payment
-    public function saveSewingPayment(Request $request)
+    public function saveCuttingPayment(Request $request)
     {
         DB::beginTransaction();
         try {
-            $sweingParty = SewingParty::find($request->sewing_party_id);
-            $sweingParty->decrement('due_amount', $request->amount);
-            SewingPayment::create([
+            $cuttingParty = CuttingParty::find($request->sewing_party_id);
+            $cuttingParty->decrement('due_amount', $request->amount);
+            CuttingPayment::create([
                 'sewing_party_id' => $request->sewing_party_id,
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/sewing-party-list')->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
+            return redirect('/cutting-party-list')->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
@@ -97,11 +96,11 @@ class SewingPartyController extends Controller
     }
 
     //sewing party delete
-    public function sewingPartyDelete(Request $request)
+    public function cuttingPartyDelete(Request $request)
     {
         try {
-            SewingParty::findOrFail($request->sewing_party_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Deleted Successfully', 'error' => '']);
+            CuttingParty::findOrFail($request->cutting_party_id)->delete();
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Party Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
         }

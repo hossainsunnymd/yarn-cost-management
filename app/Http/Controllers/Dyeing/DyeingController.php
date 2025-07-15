@@ -52,9 +52,10 @@ class DyeingController extends Controller
         }
     }
     //dyeing receive page
-    public function dyeingReceivePage()
+    public function dyeingReceivePage(Request $request)
     {
-        return Inertia::render('Dyeings/Dyeing/DyeingReceivePage');
+        $dyeing=Dyeing::find($request->dyeing_id);
+        return Inertia::render('Dyeings/Dyeing/DyeingReceivePage', ['dyeing' => $dyeing]);
     }
 
     //create dyeing receive
@@ -62,7 +63,7 @@ class DyeingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'unit' => 'required|numeric',
-            'dyeing_cost' => 'required|numeric',
+            'per_unit_dyeing_cost' => 'required|numeric',
             'roll' => 'required|numeric',
         ]);
 
