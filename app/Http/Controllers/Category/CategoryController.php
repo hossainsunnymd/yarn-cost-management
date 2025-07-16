@@ -69,7 +69,7 @@ class CategoryController extends Controller
         ]);
         return redirect()->back()->with(['status'=>true,'message'=>'Category updated successfully']);
        }catch(Exception $e){
-        return redirect()->back()->with(['status'=>false,'message'=>'somethintg went wrong']);
+        return redirect()->back()->with(['status'=>false,'message'=>$e->getMessage()]);
        }
     }
 

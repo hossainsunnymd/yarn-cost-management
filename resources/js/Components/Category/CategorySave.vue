@@ -29,6 +29,7 @@ const form = useForm({
 let URL = "/create-category";
 if (category_id != 0 && category != null) {
   form.category_name = category.name;
+  form.price = category.price;
   URL = "/update-category";
 }
 

@@ -59,7 +59,7 @@ function submitForm() {
                     for="available_unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                    Pcs
+                    Unit
                 </label>
                 <input
                     :value="page.props.cutting.available_unit"
