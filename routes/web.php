@@ -1,6 +1,17 @@
 <?php
 
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+
+//login page
+Route::get('/', [AuthController::class, 'loginPage'])->name('login-page');
+
+//user login
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+//user logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 require_once __DIR__.'/Category/Category.php';
 require_once __DIR__.'/Customer/Customer.php';

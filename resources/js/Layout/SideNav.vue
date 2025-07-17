@@ -1,19 +1,16 @@
 <script setup>
 import { ref, computed } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
+import Yarn from "./Yarn.vue";
+import Knitting from "./Knitting.vue";
+import Sewing from "./Sewing.vue";
+import Fabric from "./Fabric.vue";
+import Dyeing from "./Dyeing.vue";
+import Cutting from "./Cutting.vue";
 
 const page = usePage();
 const currentUrl = computed(() => page.url);
-
-const yarnDropdown = ref(page.url.includes("yarn"));
-const knittingDropdown = ref(page.url.includes("knitting"));
-const dyeingDropdown = ref(page.url.includes("dyeing"));
-const cuttingDropdown = ref(page.url.includes("cutting"));
-const sweingDropdown = ref(page.url.includes("sewing"));
-const fabricDropdown = ref(page.url.includes("fabric"));
-
 const isActiveRoute = (route) => currentUrl.value.startsWith(route);
-
 const sidebarOpen = ref(false);
 const toggleSidebar = () => {
     sidebarOpen.value = !sidebarOpen.value;
@@ -46,11 +43,14 @@ const toggleSidebar = () => {
             <nav class="p-4 flex-1 overflow-y-auto">
                 <ul class="space-y-2">
                     <!-- Users -->
-                    <li>
+                    <li v-if="page.props.user.can['list-user']">
                         <Link
                             href="/list-user"
-                            :class="[`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
-                            isActiveRoute('/list-user') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+                            :class="[
+                                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
+                                isActiveRoute('/list-user')
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-gray-700',
                             ]"
                         >
                             <span class="material-icons">groups</span>
@@ -58,380 +58,41 @@ const toggleSidebar = () => {
                         </Link>
                     </li>
 
-                       <!-- Roles -->
-                    <li>
+                    <!-- Roles -->
+                    <li v-if="page.props.user.can['list-role']">
                         <Link
                             href="/list-role"
-                            :class="[`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
-                                isActiveRoute('/list-role') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+                            :class="[
+                                `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
+                                isActiveRoute('/list-role')
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-gray-700',
                             ]"
                         >
-                            <span class="material-icons">admin_panel_settings</span>
+                            <span class="material-icons"
+                                >admin_panel_settings</span
+                            >
                             <span>Role</span>
                         </Link>
                     </li>
 
                     <!-- Yarn Dropdown -->
-                    <li>
-                        <div
-                            @click="yarnDropdown = !yarnDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                yarnDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">storefront</span>
-                            <span>Yarn</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': yarnDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul v-if="yarnDropdown" class="ml-6 mt-2 space-y-2">
-                                <li>
-                                    <Link
-                                        href="/yarn-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/yarn-party-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >groups</span
-                                        >
-                                        Yarn Party List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/yarn-purchase-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/yarn-purchase-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >shopping_cart</span
-                                        >
-                                        Yarn Purchase
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/yarn-sale-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/yarn-sale-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">sell</span>
-                                        Yarn Sale List
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
+                    <Yarn />
 
                     <!-- Knitting Dropdown -->
-                    <li>
-                        <div
-                            @click="knittingDropdown = !knittingDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                knittingDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">design_services</span>
-                            <span>Knitting</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': knittingDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul
-                                v-if="knittingDropdown"
-                                class="ml-6 mt-2 space-y-2"
-                            >
-                                <li>
-                                    <Link
-                                        href="/knitting-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute(
-                                                '/knitting-party-list'
-                                            )
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >groups</span
-                                        >
-                                        Knitting Party List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/knitting-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/knitting-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >reorder</span
-                                        >
-                                        Knitting
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/knitting-receive-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute(
-                                                '/knitting-receive-list'
-                                            )
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >inventory_2</span
-                                        >
-                                        Knitting Receive
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/knitting-sale-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/knitting-sale-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">sell</span>
-                                        Knitting Sale List
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
+                    <Knitting />
 
                     <!-- Dyeing Dropdown -->
-                    <li>
-                        <div
-                            @click="dyeingDropdown = !dyeingDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                dyeingDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">color_lens</span>
-                            <span>Dyeing</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': dyeingDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul
-                                v-if="dyeingDropdown"
-                                class="ml-6 mt-2 space-y-2"
-                            >
-                                <li>
-                                    <Link
-                                        href="/dyeing-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/dyeing-party-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >groups</span
-                                        >
-                                        Dyeing Party List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/dyeing-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/dyeing-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >palette</span
-                                        >
-                                        Dyeing
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
+                    <Dyeing />
 
                     <!-- Cutting Dropdown -->
-                    <li>
-                        <div
-                            @click="cuttingDropdown = !cuttingDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                cuttingDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">content_cut</span>
-                            <span>Cutting</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': cuttingDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul
-                                v-if="cuttingDropdown"
-                                class="ml-6 mt-2 space-y-2"
-                            >
-                                <li>
-                                    <Link
-                                        href="/cutting-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/cutting-party-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Cutting Party List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/cutting-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/cutting-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Cutting List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/cutting-receive-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute(
-                                                '/cutting-receive-list'
-                                            )
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Cutting Receive
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
+                    <Cutting />
 
                     <!-- Sweing Dropdown -->
-                    <li>
-                        <div
-                            @click="sweingDropdown = !sweingDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                sweingDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">check</span>
-                            <span>Sweing</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': sweingDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul
-                                v-if="sweingDropdown"
-                                class="ml-6 mt-2 space-y-2"
-                            >
-                                <li>
-                                    <Link
-                                        href="/sewing-party-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/sewing-party-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Sweing Party List
-                                    </Link>
-                                </li>
-
-                                <li>
-                                    <Link
-                                        href="/sewing-list"
-                                        :class="[
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                            isActiveRoute('/sewing-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                        ]"
-                                    >
-                                        <span class="material-icons">list</span>
-                                        Sweing List
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
+                    <Sewing />
 
                     <!-- customer -->
-                    <li>
+                    <li v-if="page.props.user.can['customer-list']">
                         <Link
                             href="/customer-list"
                             :class="[
@@ -447,7 +108,7 @@ const toggleSidebar = () => {
                     </li>
 
                     <!-- Category -->
-                    <li>
+                    <li v-if="page.props.user.can['list-category']">
                         <Link
                             href="/list-category"
                             :class="[
@@ -463,66 +124,9 @@ const toggleSidebar = () => {
                     </li>
 
                     <!-- Fabric Dropdown -->
-                    <li>
-                        <div
-                            @click="fabricDropdown = !fabricDropdown"
-                            :class="[
-                                'flex items-center gap-3 px-4 py-3 cursor-pointer rounded-lg transition-all duration-300',
-                                fabricDropdown
-                                    ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
-                            ]"
-                        >
-                            <span class="material-icons">checkroom</span>
-                            <span>Fabric</span>
-                            <span
-                                class="ml-auto transform transition-transform duration-300"
-                                :class="{ 'rotate-180': fabricDropdown }"
-                            >
-                                <span class="material-icons">expand_more</span>
-                            </span>
-                        </div>
-                        <transition name="slide-fade">
-                            <ul
-                                v-if="fabricDropdown"
-                                class="ml-6 mt-2 space-y-2"
-                            >
-                                <li>
-                                    <Link
-                                        href="/fabric-list"
-                                        :class="[
-                                            isActiveRoute('/fabric-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                        ]"
-                                    >
-                                        <span class="material-icons"
-                                            >checkroom</span
-                                        >
-                                        Fabric List
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/fabric-sale-list"
-                                        :class="[
-                                            isActiveRoute('/fabric-sale-list')
-                                                ? 'bg-gray-700 text-blue-300 font-semibold'
-                                                : '',
-                                            'flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-700',
-                                        ]"
-                                    >
-                                        <span class="material-icons">sell</span>
-                                        Fabric Sale
-                                    </Link>
-                                </li>
-                            </ul>
-                        </transition>
-                    </li>
-
+                    <Fabric />
                     <!-- Product -->
-                    <li>
+                    <li v-if="page.props.user.can['product-list']">
                         <Link
                             href="/product-list"
                             :class="[
@@ -539,7 +143,7 @@ const toggleSidebar = () => {
 
                     <!-- Sale -->
 
-                    <li>
+                    <li v-if="page.props.user.can['sale-page']">
                         <Link
                             href="/sale-page"
                             :class="[
@@ -556,7 +160,7 @@ const toggleSidebar = () => {
 
                     <!-- Sale -->
 
-                    <li>
+                    <li v-if="page.props.user.can['invoice-list']">
                         <Link
                             href="/invoice-list"
                             :class="[
