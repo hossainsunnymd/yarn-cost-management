@@ -49,10 +49,25 @@ const toggleSidebar = () => {
                     <li>
                         <Link
                             href="/list-user"
-                            class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200"
+                            :class="[`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
+                            isActiveRoute('/list-user') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+                            ]"
                         >
                             <span class="material-icons">groups</span>
                             <span>Users</span>
+                        </Link>
+                    </li>
+
+                       <!-- Roles -->
+                    <li>
+                        <Link
+                            href="/list-role"
+                            :class="[`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
+                                isActiveRoute('/list-role') ? 'bg-gray-700 text-white' : 'hover:bg-gray-700'
+                            ]"
+                        >
+                            <span class="material-icons">admin_panel_settings</span>
+                            <span>Role</span>
                         </Link>
                     </li>
 
