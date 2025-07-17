@@ -64,9 +64,9 @@ class DyeingController extends Controller
     public function createDyeingReceive(DyeingReceiveService $dyeingReceiveService, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'unit' => 'required|numeric',
-            'per_unit_dyeing_cost' => 'required|numeric',
-            'roll' => 'required|numeric',
+            'unit' => 'required|numeric|min:1',
+            'per_unit_dyeing_cost' => 'required|numeric|min:1',
+            'roll' => 'required|numeric|min:1',
         ]);
 
         if ($validator->fails()) {
