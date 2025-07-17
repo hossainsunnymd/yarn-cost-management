@@ -47,7 +47,11 @@ class InvoiceController extends Controller
                     'invoice_id' => $invoice->id,
                     'sewing_receive_id' => $product['id'],
                     'unit' => $product['weight'],
+                    'sale_price'=>$product['sale_price']
                 ]);
+
+                //update available unit
+                SewingReceive::find($product['id'])->decrement('available_unit', $product['weight']);
             }
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Created Successfully', 'error' => '']);

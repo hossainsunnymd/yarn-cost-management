@@ -18,7 +18,7 @@ const products = ref([]);
 const headers = [
   { text: "ID", value: "id" },
   { text: "Customer Name", value: "customer.name" },
-  { text: "Total Unit", value: "total" },
+  { text: "Total", value: "total" },
   { text: "Action", value: "action" },
 ];
 

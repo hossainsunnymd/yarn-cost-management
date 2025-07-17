@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('sewing_receive_id')->references('id')->on('sewing_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
+            $table->decimal('sale_price', 8, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

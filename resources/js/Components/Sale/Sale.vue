@@ -197,7 +197,7 @@ const searchProduct = ref("");
 const customer = reactive({ name: "", phone: "", id: "" });
 
 // Reactive selected product info with available units
-const selectedProduct = reactive({ id: "", available_unit: 0 });
+const selectedProduct = reactive({ id: "", available_unit: 0 ,price:0});
 
 // Lists for customers and products fetched from backend props
 const customerItem = ref(page.props.customer || []);
@@ -220,10 +220,8 @@ const customerHeaders = [
 
 const productHeaders = [
   { text: "No", value: "id" },
-  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name", sortable: true },
-  //{ text: "Category", value: "category.name", sortable: true },
-  //{ text: "Weight", value: "weight", sortable: true },
-  { text: "Pcs", value: "unit", sortable: true },
+  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name"},
+  { text: "Price", value: "sewing.cutting_receive.cutting.category.price"},
   { text: "Per Pcs Cost", value: "per_unit_cost", sortable: true },
   { text: "Available Pcs", value: "available_unit", sortable: true },
   { text: "Action", value: "action" },
@@ -246,6 +244,7 @@ function openQtyModal(id) {
 
   selectedProduct.id = product.id;
   selectedProduct.available_unit = product.available_unit;
+  selectedProduct.price = product.sewing.cutting_receive.cutting.category.price;
   weight.value = 0;
   showModal.value = true;
 }
@@ -274,6 +273,7 @@ function addProduct() {
   // Add product to the list
   selectedProductList.value.push({
     id: selectedProduct.id,
+    sale_price: parseFloat(selectedProduct.price) * parseFloat(weight.value),
     weight: weight.value,
   });
 
@@ -291,7 +291,7 @@ function removeProduct(index) {
 // Calculate total weight from selected products
 function calculateTotal() {
   totalWeight.value = selectedProductList.value
-    .reduce((sum, item) => sum + parseFloat(item.weight), 0)
+    .reduce((sum, item) => sum + parseFloat(item.sale_price), 0)
     .toFixed(2);
 }
 
