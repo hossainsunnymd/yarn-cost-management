@@ -17,7 +17,7 @@ class SewingReceiveService{
         //check available unit
         $sewing = Sewing::findOrFail($request->sewing_id);
         if ($sewing->available_unit < $request->unit) {
-            throw new Exception("Unit Not Available");
+            throw new Exception("Pcs Not Available");
         }
 
         DB::beginTransaction();

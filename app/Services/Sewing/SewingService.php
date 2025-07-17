@@ -16,7 +16,7 @@ class SewingService{
         //check available unit
         $cutting = CuttingReceive::findOrFail($request->cutting_receive_id);
         if ($cutting->available_unit < $request->unit) {
-            throw new Exception("Unit Not Available");
+            throw new Exception("Pcs Not Available");
         }
 
 
