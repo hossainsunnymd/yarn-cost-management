@@ -40,7 +40,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status === true) {
                 toaster.success(page.props.flash.message);
-               
+
                 router.visit("/knitting-receive-list");
             }
         },
@@ -80,6 +80,32 @@ function submitForm() {
                 <p v-if="errors.dyeing_party_id" class="text-red-500 text-md mt-1">
                     {{ errors.dyeing_party_id[0] }}
                 </p>
+            </div>
+
+                <!--Available Unit Field -->
+            <div>
+                <label for="available_unit" class="block text-sm font-medium text-gray-700 mb-1">
+                    Available Unit
+                </label>
+                <input
+                    :value="page.props.knittingReceive.available_unit"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    readonly
+                />
+            </div>
+
+                  <!--Available Roll Field -->
+            <div>
+                <label for="roll" class="block text-sm font-medium text-gray-700 mb-1">
+                    Available Roll
+                </label>
+                <input
+                    :value="page.props.knittingReceive.roll"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    readonly
+                />
             </div>
 
             <!-- Unit Field -->

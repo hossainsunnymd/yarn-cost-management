@@ -20,7 +20,13 @@ const form = useForm({
     unit: "",
     wastage: "",
     sewing_cost: "",
+    extra_cost: "",
     image: "",
+});
+
+//calculate total sewing cost
+const totalSewingCost = computed(() => {
+    return form.sewing_cost * form.unit;
 });
 
 // Form submission URL
@@ -51,6 +57,21 @@ function submitForm() {
 
         <!-- Product Receive Form -->
         <form @submit.prevent="submitForm" class="space-y-5">
+            <!--Available Unit Input -->
+            <div>
+                <label
+                    for="available_unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                   Available Pcs
+                </label>
+                <input
+                    :value="page.props.sewing.available_unit"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
             <!-- Unit Input -->
             <div>
                 <label
@@ -85,6 +106,36 @@ function submitForm() {
                 <p v-if="errors.sewing_cost" class="text-red-500 text-md mt-1">
                     {{ errors.sewing_cost[0] }}
                 </p>
+            </div>
+
+            <!--Tota Sewing Cost Input -->
+            <div>
+                <label
+                    for="total_sewing_cost"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Total Sewing Cost
+                </label>
+                <input
+                    :value="totalSewingCost"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
+
+             <!--Extra Input -->
+            <div>
+                <label
+                    for="extra_cost"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Extra Cost
+                </label>
+                <input
+                    v-model="form.extra_cost"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
             </div>
 
             <!-- Wastage Input -->

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('wastage', 8, 2)->nullable();
             $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('sewing_cost', 8, 2);
+            $table->decimal('extra_cost', 8, 2)->nullable();
             $table->decimal('total_cost', 8, 2);
             $table->string('image')->nullable();
             $table->timestamp('created_at')->useCurrent();

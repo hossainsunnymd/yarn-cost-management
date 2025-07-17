@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Dyeing;
 use App\Models\DyeingParty;
 use Illuminate\Http\Request;
+use App\Models\KnittingReceive;
 use App\Http\Controllers\Controller;
 use App\Services\Dyeing\DyeingService;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,8 @@ class DyeingController extends Controller
     public function dyeingSavePage(Request $request)
     {
         $dyeingPartyList = DyeingParty::all();
-        return Inertia::render('Dyeings/Dyeing/DyeingSavePage', ['dyeingPartyList' => $dyeingPartyList]);
+        $knittingReceive=KnittingReceive::find($request->knitting_receive_id);
+        return Inertia::render('Dyeings/Dyeing/DyeingSavePage', ['dyeingPartyList' => $dyeingPartyList,'knittingReceive'=>$knittingReceive]);
     }
 
     //create dyeing
