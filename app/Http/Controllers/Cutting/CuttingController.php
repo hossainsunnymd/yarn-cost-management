@@ -38,7 +38,7 @@ class CuttingController extends Controller
         $validation = Validator::make($request->all(), [
             'category_id' => 'required',
             'unit' => 'required|numeric|min:1',
-            'roll' => 'required'
+            'roll' => 'required|min:1'
         ]);
 
         if ($validation->fails()) {
@@ -81,8 +81,8 @@ class CuttingController extends Controller
     public function createCuttingReceive(CuttingReceiveService $cuttingReceiveService, Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'per_unit_cutting_cost' => 'required',
-            'unit' => 'required',
+            'per_unit_cutting_cost' => 'required|numeric|min:1',
+            'unit' => 'required|numeric|min:1',
         ], [
             'unit.required' => 'Pcs is required',
             'per_unit_cutting_cost.required' => 'Per Unit Cutting Cost is required',

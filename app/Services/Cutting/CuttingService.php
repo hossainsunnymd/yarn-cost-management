@@ -6,7 +6,7 @@ use Exception;
 use App\Models\Cutting;
 use App\Models\DyeingReceive;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+
 
 
 class CuttingService {
@@ -14,8 +14,15 @@ class CuttingService {
     {
 
         $cutting = DyeingReceive::findOrFail($request->dyeing_receive_id);
+
+        //check available unit
         if ($cutting->available_unit < $request->unit) {
             throw new Exception("Unit Not Available");
+        }
+
+        //check available roll
+        if ($cutting->roll < $request->roll) {
+            throw new Exception("Roll Not Available");
         }
 
         DB::beginTransaction();
