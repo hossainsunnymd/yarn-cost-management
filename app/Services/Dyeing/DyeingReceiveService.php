@@ -19,6 +19,11 @@ class DyeingReceiveService
             throw new Exception('Dyeing unit not available');
         }
 
+        //check is dyeing  roll available
+        if ($dyeing->roll < $request->roll) {
+            throw new Exception('Dyeing roll not available');
+        }
+
         DB::beginTransaction();
         try {
             $unit = $request->unit;
@@ -36,7 +41,7 @@ class DyeingReceiveService
             if ($request->wastage > 0) {
                 $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $totalDyeingCost;
                 $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / ($request->unit - $request->wastage);
-              
+
                 $unit = $request->unit - $request->wastage;
             }
 

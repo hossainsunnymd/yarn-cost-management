@@ -18,6 +18,11 @@ class DyeingService
             throw new Exception("Unit Not Available");
         }
 
+        //check knitting receive available roll
+        if ($knittingReceive->roll < $request->roll) {
+            throw new Exception("Roll Not Available");
+        }
+
         DB::beginTransaction();
         try {
 
