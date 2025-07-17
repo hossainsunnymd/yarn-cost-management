@@ -29,10 +29,10 @@ class CuttingReceiveService
             $perPcCost = $totalUnitCost / $request->unit;
 
             //check wastage
-            if($request->wastage > 0){
-                $totalUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $totalCuttingCost;
-                $perPcCost = $totalUnitCost / $request->unit;
-            }
+            // if($request->wastage > 0){
+            //     $totalUnitCost = (($request->unit + $request->wastage) * $perUnitCost) + $totalCuttingCost;
+            //     $perPcCost = $totalUnitCost / $request->unit;
+            // }
 
 
             $data = [
@@ -42,7 +42,7 @@ class CuttingReceiveService
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
                 'cutting_cost' => $totalCuttingCost,
-                'wastage' => $request->wastage
+                //'wastage' => $request->wastage
             ];
 
             CuttingReceive::create($data);

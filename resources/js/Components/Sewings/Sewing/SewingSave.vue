@@ -79,6 +79,24 @@ function submitForm() {
                 </p>
             </div>
 
+            <!-- Avilable Unit -->
+            <div>
+                <label
+                    for="available_unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Available Pcs
+                </label>
+                <input
+                    :value ="page.props.cuttingReceive.available_unit"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <p v-if="errors.unit" class="text-red-500 text-md mt-1">
+                    {{ errors.unit[0] }}
+                </p>
+            </div>
+
             <!-- Unit Input -->
             <div>
                 <label

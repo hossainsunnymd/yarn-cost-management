@@ -62,7 +62,7 @@ function submitForm() {
             <!-- Dyeing Party Dropdown -->
             <div>
                 <label for="yarn_party" class="block text-sm font-medium text-gray-700 mb-1">
-                    Select Knitting Party
+                    Select Dyeing Party
                 </label>
                 <select
                     v-model="form.dyeing_party_id"
@@ -85,7 +85,7 @@ function submitForm() {
                 <!--Available Unit Field -->
             <div>
                 <label for="available_unit" class="block text-sm font-medium text-gray-700 mb-1">
-                    Available Unit
+                    Available Knitting Unit
                 </label>
                 <input
                     :value="page.props.knittingReceive.available_unit"
@@ -111,7 +111,7 @@ function submitForm() {
             <!-- Unit Field -->
             <div>
                 <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">
-                    Unit
+                    Sending Unit
                 </label>
                 <input
                     v-model="form.unit"

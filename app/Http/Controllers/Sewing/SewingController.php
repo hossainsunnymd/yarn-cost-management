@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sewing;
 
+use App\Models\CuttingReceive;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Sewing;
@@ -22,10 +23,12 @@ class SewingController extends Controller
     }
 
     //Sewing Save page
-    public function sewingSavePage()
+    public function sewingSavePage(Request $request)
     {
+        $cuttingReceive = CuttingReceive::findOrFail($request->cutting_receive_id);
+
         $sewingParty=SewingParty::all();
-        return Inertia::render('Sewings/Sewing/SewingSavePage',['sewingParty'=>$sewingParty]);
+        return Inertia::render('Sewings/Sewing/SewingSavePage',['sewingParty'=>$sewingParty , 'cuttingReceive' => $cuttingReceive]);
     }
 
     //Sewing create

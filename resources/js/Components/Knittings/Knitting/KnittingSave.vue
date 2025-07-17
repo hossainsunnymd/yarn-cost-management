@@ -228,6 +228,7 @@ const knittingPartyHeaders = [
 const yarnPurchaseHeaders = [
     { text: "No", value: "id" },
     { text: "Name", value: "name" },
+    { text: "Description", value: "description" },
     { text: "Per Unit Cost", value: "per_unit_cost", sortable: true },
     { text: "Available Unit", value: "available_unit", sortable: true },
     { text: "Action", value: "action" },

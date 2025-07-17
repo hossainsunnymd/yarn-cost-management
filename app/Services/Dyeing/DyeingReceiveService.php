@@ -35,7 +35,8 @@ class DyeingReceiveService
 
             if ($request->wastage > 0) {
                 $receivedDyeingUnitCost = ($request->unit * $perUnitknittingReceiveCost) + $totalDyeingCost;
-                $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / $request->unit - $request->wastage;
+                $receiveDyeingPerUnitCost = $receivedDyeingUnitCost / ($request->unit - $request->wastage);
+              
                 $unit = $request->unit - $request->wastage;
             }
 

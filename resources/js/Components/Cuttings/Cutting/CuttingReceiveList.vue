@@ -15,7 +15,7 @@ const headers = [
   { text: 'Category', value: 'cutting.category.name' }, // Nested relation
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
   { text: 'Total Cost', value: 'total_cost' },
-  { text: 'Available Unit', value: 'available_unit' },
+  { text: 'Available Pcs', value: 'available_unit' },
   { text: 'Action', value: 'action' },
 ];
 

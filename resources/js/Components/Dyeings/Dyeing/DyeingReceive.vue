@@ -90,7 +90,7 @@ function submitForm() {
                 <label
                     for="unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
-                    >Unit</label
+                    >Receiving Unit</label
                 >
                 <input
                     v-model="form.unit"

@@ -40,10 +40,11 @@ function submitForm() {
         preserveScroll: true,
         onSuccess: () => {
             if (page.props.flash.status===false) {
+                toaster.error(page.props.flash.message);
+                
+            } else if (page.props.flash.status===true) {
                 toaster.success(page.props.flash.message);
                 router.visit("/cutting-party-list");
-            } else if (page.props.flash.status===true) {
-                toaster.error(page.props.flash.message);
             }
         },
     });
