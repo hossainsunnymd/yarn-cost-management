@@ -31,7 +31,7 @@ function submitForm() {
       <img class="h-[100px]" src="../../Assets/img/logo.jpg" alt="Logo"/>
     </div> -->
 
-    <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Store Management System</h2>
+    <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Yarn Cost Management System</h2>
 
     <form @submit.prevent="submitForm" class="space-y-4">
       <div>
