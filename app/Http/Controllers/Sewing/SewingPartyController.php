@@ -24,9 +24,9 @@ class SewingPartyController extends Controller
     //sewing party details list
     public function sewingPartyDetailList(Request $request)
     {
-        $sewings = Sewing::where('sewing_party_id',$request->sewing_party_id)->with('sewingParty')->get();
-        $sewingPayments=SewingPayment::latest()->first();
-        return Inertia::render('Sewings/SewingParty/SewingPartyDetailListPage', ['sewings' => $sewings,'sewingPayments'=>$sewingPayments]);
+        $sewings = Sewing::where('sewing_party_id', $request->sewing_party_id)->with('sewingParty')->get();
+        $sewingPayments = SewingPayment::latest()->first();
+        return Inertia::render('Sewings/SewingParty/SewingPartyDetailListPage', ['sewings' => $sewings, 'sewingPayments' => $sewingPayments]);
     }
 
     //sewing party save page
@@ -95,6 +95,14 @@ class SewingPartyController extends Controller
     //sewing payment
     public function saveSewingPayment(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['message' => 'Please Enter valid amount']);
+        }
+
         DB::beginTransaction();
         try {
             $sweingParty = SewingParty::find($request->sewing_party_id);

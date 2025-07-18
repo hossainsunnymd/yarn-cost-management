@@ -17,7 +17,6 @@ class CuttingPartyController extends Controller
     //cutting party list
     public function CuttingPartyList()
     {
-
         $cuttingParties = CuttingParty::all();
         return Inertia::render('Cuttings/CuttingParty/CuttingPartyListPage', ['cuttingParties' => $cuttingParties]);
     }
@@ -98,6 +97,14 @@ class CuttingPartyController extends Controller
     //cutting payment
     public function saveCuttingPayment(Request $request)
     {
+        $validation=Validator::make($request->all(),[
+            'amount'=>'required|numeric|min:1',
+        ]);
+
+        if($validation->fails()){
+            return redirect()->back()->with(['message' => 'Please Enter valid amount']);
+        }
+
         DB::beginTransaction();
         try {
             $cuttingParty = CuttingParty::find($request->cutting_party_id);

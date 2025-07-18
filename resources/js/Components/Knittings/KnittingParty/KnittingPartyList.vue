@@ -77,13 +77,14 @@ function deleteKnittingParty(id) {
     >
         <!-- Action Column -->
         <template #item-action="{ id }">
-            <Link
+          <div class="flex flex-wrap gap-1">
+              <Link
                 v-if="
                     page.props.user.can['knitting-party-save-page'] &&
                     page.props.user.can['update-knitting-party']
                 "
                 :href="`/knitting-party-save-page?knitting_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
             >
                 Edit
             </Link>
@@ -91,23 +92,24 @@ function deleteKnittingParty(id) {
             <button
                 v-if="page.props.user.can['knitting-party-delete']"
                 @click="deleteKnittingParty(id)"
-                class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
+                class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
             >
                 Delete
             </button>
 
             <Link
                 :href="`/knitting-party-detail-list?knitting_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
+                class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >Go to Details</Link
             >
 
             <Link
                 :href="`/knitting-payment-list?knitting_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
+                class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
             >
                 Payment History
             </Link>
+          </div>
         </template>
     </EasyDataTable>
 </template>

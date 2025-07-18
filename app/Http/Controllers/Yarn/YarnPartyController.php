@@ -101,6 +101,14 @@ class YarnPartyController extends Controller
     //yarn payment
     public function saveYarnPayment(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['message' => 'Please Enter valid amount']);
+        }
+
         DB::beginTransaction();
         try {
             $yarnParty = YarnParty::findOrFail($request->yarn_party_id);

@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
-
 // Setup
 const toaster = createToaster({});
 const page = usePage();
@@ -38,7 +37,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-
     <!-- Title -->
     <p class="text-2xl font-bold mb-4">Dyeing Party List</p>
 
@@ -78,37 +76,39 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Buttons -->
         <template #item-action="{ id }">
-            <Link
-                v-if="
-                    page.props.user.can['dyeing-save-page'] &&
-                    page.props.user.can['update-dyeing-party']
-                "
-                :href="`/dyeing-party-save-page?dyeing_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-            >
-                Edit
-            </Link>
+            <div class="flex flex-wrap gap-1">
+                <Link
+                    v-if="
+                        page.props.user.can['dyeing-save-page'] &&
+                        page.props.user.can['update-dyeing-party']
+                    "
+                    :href="`/dyeing-party-save-page?dyeing_party_id=${id}`"
+                    class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
+                >
+                    Edit
+                </Link>
 
-            <button
-                v-if="page.props.user.can['dyeing-party-delete']"
-                @click="deleteDyeingParty(id)"
-                class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
-            >
-                Delete
-            </button>
+                <button
+                    v-if="page.props.user.can['dyeing-party-delete']"
+                    @click="deleteDyeingParty(id)"
+                    class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
+                >
+                    Delete
+                </button>
 
-            <Link
-                :href="`/dyeing-party-detail-list?dyeing_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
-                >Go to Details</Link
-            >
+                <Link
+                    :href="`/dyeing-party-detail-list?dyeing_party_id=${id}`"
+                    class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
+                    >Go to Details</Link
+                >
 
-            <Link
-                :href="`/dyeing-payment-list?dyeing_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
-            >
-                Payment History
-            </Link>
+                <Link
+                    :href="`/dyeing-payment-list?dyeing_party_id=${id}`"
+                    class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
+                >
+                    Payment History
+                </Link>
+            </div>
         </template>
     </EasyDataTable>
 </template>

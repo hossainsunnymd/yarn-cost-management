@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { router, usePage, Link } from "@inertiajs/vue3";
+import {  usePage } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import SewingPartyDetails from "./SewingPartyDetails.vue";
 

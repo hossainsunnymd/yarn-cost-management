@@ -31,11 +31,13 @@ function confirmPayment() {
         preserveScroll: true,
         onSuccess: () => {
             const flash = page.props.flash;
-            if (flash.status === false) {
-                toaster.error(flash.message);
-            } else if (flash.status === true) {
+            if (flash.status) {
                 toaster.success(flash.message);
-                router.visit(`/knitting-payment-list?knitting_party_id=${props.paymentId}`);
+                router.visit(
+                    `/knitting-payment-list?knitting_party_id=${props.paymentId}`
+                );
+            } else {
+                toaster.error(flash.message);
             }
         },
     });
@@ -43,7 +45,6 @@ function confirmPayment() {
     emit("update:paymentModal", false);
 }
 </script>
-
 
 <template>
     <!-- Modal Overlay -->
@@ -55,7 +56,9 @@ function confirmPayment() {
         <div class="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
             <!-- Amount Input -->
             <div class="mb-4">
-                <label for="amount" class="block mb-1 font-medium">Amount</label>
+                <label for="amount" class="block mb-1 font-medium"
+                    >Amount</label
+                >
                 <input
                     v-model="form.amount"
                     type="text"
@@ -82,7 +85,5 @@ function confirmPayment() {
         </div>
     </div>
 </template>
-
-
 
 <style scoped></style>

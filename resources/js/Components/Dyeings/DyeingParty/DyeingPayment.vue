@@ -31,11 +31,13 @@ function confirmPayment() {
   form.post(`/save-dyeing-payment?dyeing_party_id=${props.paymentId}`, {
     preserveScroll: true,
     onSuccess: () => {
-      if (page.props.flash.status === false) {
-        toaster.error(page.props.flash.message);
-      } else if (page.props.flash.status === true) {
+      const flash = page.props.flash;
+      if (flash.status) {
         toaster.success(page.props.flash.message);
         router.visit(`/dyeing-payment-list?dyeing_party_id=${props.paymentId}`);
+      } else {
+        toaster.error(page.props.flash.message);
+
       }
     },
   });

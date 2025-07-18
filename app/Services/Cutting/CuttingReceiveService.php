@@ -27,7 +27,7 @@ class CuttingReceiveService
             //calculate total unit cost
             $totalUnitCost = ($totalUnit * $perUnitCost) + $totalCuttingCost;
 
-            //calculate per unit cost
+            //convert total unit cost to per pc
             $perPcCost = $totalUnitCost / $request->unit;
 
             $data = [

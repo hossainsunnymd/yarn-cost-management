@@ -74,20 +74,22 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Buttons for Each Row -->
         <template #item-action="{ id }">
-            <Link
+          <div class="flex flex-wrap gap-1">
+              <Link
                 :href="`/yarn-party-save-page?yarn_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+                class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
             >
                 Edit
             </Link>
             <button
                 @click="deleteYarnParty(id)"
-                class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
+                class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
             >
                 Delete
             </button>
-            <Link :href="`/yarn-party-detail-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Go to Details</Link>
-            <Link :href="`/yarn-payment-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Payment History</Link>
+            <Link :href="`/yarn-party-detail-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs">Go to Details</Link>
+            <Link :href="`/yarn-payment-list?yarn_party_id=${id}`" class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">Payment History</Link>
+          </div>
         </template>
     </EasyDataTable>
 </template>

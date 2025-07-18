@@ -31,11 +31,13 @@ function confirmPayment() {
         preserveScroll: true,
         onSuccess: () => {
             const flash = page.props.flash;
-            if (flash.status === false) {
-                toaster.error(flash.message);
-            } else if (flash.status === true) {
+            if (flash.status) {
                 toaster.success(flash.message);
-                router.visit(`/yarn-payment-list?yarn_party_id=${props.paymentId}`);
+                router.visit(
+                    `/yarn-payment-list?yarn_party_id=${props.paymentId}`
+                );
+            } else {
+                toaster.error(flash.message);
             }
         },
     });

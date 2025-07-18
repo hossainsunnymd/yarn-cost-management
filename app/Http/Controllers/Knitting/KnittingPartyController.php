@@ -97,6 +97,13 @@ class KnittingPartyController extends Controller
     //save knitting payment
     public function saveKnittingPayment(Request $request)
     {
+        $validation = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['message' => 'Please Enter valid amount']);
+        }
         DB::beginTransaction();
         try {
             $knittingParty = KnittingParty::findOrFail($request->knitting_party_id);
