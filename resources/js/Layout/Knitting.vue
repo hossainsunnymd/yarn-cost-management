@@ -12,7 +12,7 @@ const knittingDropdown = ref(page.url.includes("knitting"));
 </script>
 
 <template>
-    <li>
+    <li v-if="page.props.user.can['knitting-dropdown']">
         <div
             @click="knittingDropdown = !knittingDropdown"
             :class="[

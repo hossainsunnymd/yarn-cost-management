@@ -113,6 +113,9 @@ class PermissionSeeder extends Seeder
     'cutting-receive-page',
     'create-cutting-receive',
 
+    // Cutting Payment
+    'save-cutting-payment',
+
     // Sewing Party
     'sewing-party-list',
     'sewing-party-save-page',
@@ -157,10 +160,20 @@ class PermissionSeeder extends Seeder
     'create-role',
     'update-role',
     'delete-role',
+
+    //dropdown
+    'yarn-dropdown',
+    'knitting-dropdown',
+    'dyeing-dropdown',
+    'cutting-dropdown',
+    'sewing-dropdown',
+    'fabric-dropdown',
 ];
 
         foreach ($permissions as $permission) {
-            $permission = Permission::create(['name' => $permission]);
+            Permission::create(['name' => $permission]);
         }
+
+
     }
 }

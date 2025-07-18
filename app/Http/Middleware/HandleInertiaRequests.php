@@ -38,14 +38,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        // $user=Auth::user();
-        $user=User::whereName('Super Admin')->first();
+        $user=Auth::user();
 
         $can=[];
         $permissions=Permission::all();
 
         foreach($permissions as $permission){
-            $can[$permission->name]=$user->can($permission->name);
+            $can[$permission->name]=$user && $user->can($permission->name);
         }
 
         return [

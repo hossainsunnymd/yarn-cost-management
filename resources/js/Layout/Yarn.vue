@@ -9,7 +9,7 @@ const currentUrl = computed(() => page.url);
 </script>
 
 <template>
-    <li>
+    <li v-if="page.props.user.can['yarn-dropdown']">
         <div
             @click="yarnDropdown = !yarnDropdown"
             :class="[

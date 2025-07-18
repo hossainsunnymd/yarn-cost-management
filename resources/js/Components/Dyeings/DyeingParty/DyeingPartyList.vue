@@ -105,14 +105,14 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Buttons -->
         <template #item-action="{ id }">
-            <Link
+            <Link v-if="page.props.user.can['dyeing-save-page'] && page.props.user.can['update-dyeing-party']"
                 :href="`/dyeing-party-save-page?dyeing_party_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
             >
                 Edit
             </Link>
 
-            <button
+            <button v-if="page.props.user.can['delete-dyeing-party']"
                 @click="deleteDyeingParty(id)"
                 class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
             >

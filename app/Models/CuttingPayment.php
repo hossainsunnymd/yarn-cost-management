@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class CuttingPayment extends Model
 {
-   protected $fillable=['sewing_party_id','amount'];
+   protected $fillable=['cutting_party_id','amount'];
 }

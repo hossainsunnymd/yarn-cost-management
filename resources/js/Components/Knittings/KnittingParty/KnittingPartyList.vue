@@ -108,7 +108,7 @@ function deleteKnittingParty(id) {
   >
     <!-- Action Column -->
     <template #item-action="{ id }">
-      <Link v-if="page.props.user.can['knitting-party-save-page']"
+      <Link v-if="page.props.user.can['knitting-party-save-page'] && page.props.user.can['update-knitting-party']"
         :href="`/knitting-party-save-page?knitting_party_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
       >

@@ -101,7 +101,7 @@ if (page.props.flash.status === true) {
         <!-- Action Buttons -->
         <template #item-action="{ id }">
             <div class="flex flex-wrap gap-1">
-                <Link v-if="page.props.user.can['cutting-party-save-page']"
+                <Link v-if="page.props.user.can['cutting-party-save-page'] && page.props.user.can['update-cutting-party']"
                     :href="`/cutting-party-save-page?cutting_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >

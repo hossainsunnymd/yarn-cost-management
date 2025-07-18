@@ -75,7 +75,7 @@ if (page.props.flash.status === true) {
       <template #item-action="{ id }">
         <div class="flex space-x-2">
           <!-- Edit button -->
-          <Link v-if="page.props.user.can['customer-save-page']"
+          <Link v-if="page.props.user.can['customer-save-page'] && page.props.user.can['update-customer']"
             :href="`/customer-save-page?customer_id=${id}`"
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition"
           >

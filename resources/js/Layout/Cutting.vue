@@ -9,7 +9,7 @@ const cuttingDropdown = ref(page.url.includes("cutting"));
 </script>
 
 <template>
-    <li>
+    <li v-if="page.props.user.can['cutting-dropdown']">
         <div
             @click="cuttingDropdown = !cuttingDropdown"
             :class="[

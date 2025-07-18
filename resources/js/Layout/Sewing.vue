@@ -10,7 +10,7 @@ const isActiveRoute = (route) => currentUrl.value === route;
 </script>
 
 <template>
-    <li>
+    <li v-if="page.props.user.can['sewing-dropdown']">
         <div
             @click="sweingDropdown = !sweingDropdown"
             :class="[

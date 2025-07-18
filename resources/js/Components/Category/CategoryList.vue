@@ -73,7 +73,7 @@ if (page.props.flash.status == true) {
             <!-- Action Buttons for each row -->
             <template #item-action="{ id }">
                 <!-- Edit Category Button -->
-                <Link v-if="page.props.user.can['category-save-page']"
+                <Link v-if="page.props.user.can['category-save-page'] && page.props.user.can['update-category']"
                     :href="`/category-save-page?category_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
                 >

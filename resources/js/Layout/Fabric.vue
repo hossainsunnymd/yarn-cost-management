@@ -12,7 +12,7 @@ const isActiveRoute = (route) => {
 </script>
 
 <template>
-    <li>
+    <li v-if="page.props.user.can['fabric-dropdown']">
         <div
             @click="fabricDropdown = !fabricDropdown"
             :class="[
@@ -32,7 +32,7 @@ const isActiveRoute = (route) => {
         <transition name="slide-fade">
             <ul v-if="fabricDropdown" class="ml-6 mt-2 space-y-2">
                 <li v-if="page.props.user.can['fabric-list']">
-                    <Link
+                    <Link v-if="page.props.user.can['fabric-list']"
                         href="/fabric-list"
                         :class="[
                             isActiveRoute('/fabric-list')
@@ -46,7 +46,7 @@ const isActiveRoute = (route) => {
                     </Link>
                 </li>
                 <li>
-                    <Link
+                    <Link v-if="page.props.user.can['fabric-sale-list']"
                         href="/fabric-sale-list"
                         :class="[
                             isActiveRoute('/fabric-sale-list')

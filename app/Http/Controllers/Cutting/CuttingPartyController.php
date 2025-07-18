@@ -81,10 +81,10 @@ class CuttingPartyController extends Controller
     {
         DB::beginTransaction();
         try {
-            $cuttingParty = CuttingParty::find($request->sewing_party_id);
+            $cuttingParty = CuttingParty::find($request->cutting_party_id);
             $cuttingParty->decrement('due_amount', $request->amount);
             CuttingPayment::create([
-                'sewing_party_id' => $request->sewing_party_id,
+                'cutting_party_id' => $request->cutting_party_id,
                 'amount' => $request->amount
             ]);
             DB::commit();

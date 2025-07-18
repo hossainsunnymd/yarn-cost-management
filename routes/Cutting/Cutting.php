@@ -19,3 +19,6 @@ Route::post('/create-cutting', [CuttingController::class, 'createCutting'])->nam
 Route::get('/cutting-receive-list', [CuttingController::class, 'cuttingReceiveList'])->name('cutting-receive-list')->middleware('permission:cutting-receive-list');
 Route::get('/cutting-receive-page', [CuttingController::class, 'cuttingReceivePage'])->name('cutting-receive-page')->middleware('permission:cutting-receive-page');
 Route::post('/create-cutting-receive', [CuttingController::class, 'createCuttingReceive'])->name('create-cutting-receive')->middleware('permission:create-cutting-receive');
+
+//cutting payment
+Route::post('/save-cutting-payment', [CuttingPartyController::class, 'saveCuttingPayment'])->name('save-cutting-payment')->middleware('permission:save-cutting-payment');

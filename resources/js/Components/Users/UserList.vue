@@ -40,7 +40,7 @@ if (page.props.flash.status == false) {
                 placeholder="Search here"
             />
         </div>
-        <div v-if="page.props.user.can['create-user']">
+        <div v-if="page.props.user.can['user-save-page']">
             <Link
                 :href="`/user-save-page?user_id=${0}`"
                 class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
@@ -62,7 +62,7 @@ if (page.props.flash.status == false) {
             </span>
         </template>
         <template #item-action="{ id }">
-            <Link v-if="page.props.user.can['update-user']"
+            <Link v-if="page.props.user.can['user-save-page'] && page.props.user.can['update-user']"
                 :href="`/user-save-page?user_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
                 >Edit</Link
