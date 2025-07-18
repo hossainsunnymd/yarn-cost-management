@@ -39,6 +39,7 @@ function deleteYarnParty(id) {
 // Show yarn party details in modal
 function yarnPartyDetails(id) {
     selectedParty.value = items.value.find((item) => item.id === id);
+    console.log(selectedParty.value);
     modal.value = true;
 }
 

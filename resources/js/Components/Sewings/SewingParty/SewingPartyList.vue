@@ -42,6 +42,7 @@ function deleteSewingParty(id) {
 // Show details modal (currently opens without specific data filtering)
 function sewingPartyDetails(id) {
     selectedParty.value = items.value.find((item) => item.id === id);
+    console.log(selectedParty.value);   
     modal.value = true;
 }
 
@@ -81,7 +82,7 @@ if (page.props.flash.status === true) {
             v-model="searchItem"
             placeholder="Search by name"
         />
-        <Link v-if="page.props.user.can['sewing-party-save-page']"
+        <Link
             :href="`/sewing-party-save-page?sewing_party_id=0`"
             class="bg-green-500 text-white py-2 px-4 rounded block text-center md:inline-block w-full md:w-auto"
         >
@@ -101,13 +102,13 @@ if (page.props.flash.status === true) {
         <!-- Action Buttons -->
         <template #item-action="{ id }">
             <div class="flex flex-wrap gap-1">
-                <Link v-if="page.props.user.can['sewing-party-save-page']"
+                <Link
                     :href="`/sewing-party-save-page?sewing_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
                     Edit
                 </Link>
-                <button v-if="page.props.user.can['delete-sewing-party']"
+                <button
                     @click="deleteSewingParty(id)"
                     class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
@@ -129,5 +130,4 @@ if (page.props.flash.status === true) {
         </template>
     </EasyDataTable>
 </template>
-
 

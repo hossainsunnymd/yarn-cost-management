@@ -1,7 +1,7 @@
 <script setup>
 
 const props = defineProps({
-    selectedParty: Array,
+    selectedParty: Object,
     modal: Boolean,
     sewingPayment: Object,
 });

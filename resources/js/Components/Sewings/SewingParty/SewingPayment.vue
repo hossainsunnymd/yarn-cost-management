@@ -27,12 +27,11 @@ function confirmPayment() {
     form.post(`/save-sewing-payment?sewing_party_id=${props.paymentId}`, {
         preserveScroll: true,
         onSuccess: () => {
-            const flash = page.props.flash;
-            if (flash.status) {
-                toaster.success(flash.message);
-                router.visit("/sewing-party-list");
-            } else {
-                toaster.error(flash.message);
+            if (page.props.flash.status === false) {
+                toaster.error(page.props.flash.message);
+            } else if (page.props.flash.status === true) {
+                toaster.success(page.props.flash.message);
+                router.visit(`/sewing-payment-list?sewing_party_id=${props.paymentId}`);
             }
         },
     });

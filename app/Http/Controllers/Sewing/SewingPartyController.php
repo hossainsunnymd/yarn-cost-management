@@ -17,14 +17,14 @@ class SewingPartyController extends Controller
     public function sewingPartyList()
     {
 
-        $sewingParties = SewingParty::all();
+        $sewingParties = SewingParty::with('sewings')->get();
         return Inertia::render('Sewings/SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
     }
 
     //sewing party save page
     public function sewingPartySavePage(Request $request)
     {
-      
+
         $sewingParty = SewingParty::find($request->sewing_party_id);
         return Inertia::render('Sewings/SewingParty/SewingPartySavePage', ['sewingParty' => $sewingParty]);
     }
@@ -89,7 +89,7 @@ class SewingPartyController extends Controller
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/sewing-party-list')->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
