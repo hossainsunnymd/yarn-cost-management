@@ -96,13 +96,13 @@ if (page.props.flash.status === true) {
                     Delete
                 </button>
 
-                <Link
+                <Link v-if="page.props.user.can['dyeing-party-detail-list']"
                     :href="`/dyeing-party-detail-list?dyeing_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                     >Go to Details</Link
                 >
 
-                <Link
+                <Link v-if="page.props.user.can['dyeing-payment-list']"
                     :href="`/dyeing-payment-list?dyeing_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >

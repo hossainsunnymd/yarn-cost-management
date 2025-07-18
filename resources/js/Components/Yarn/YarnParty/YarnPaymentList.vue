@@ -31,7 +31,7 @@ function openPaymentModal() {
 <template>
       <YarnPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
     <!-- Page Title -->
-    <p class="text-2xl font-bold">Yarn Party List</p>
+    <p class="text-2xl font-bold">Yarn Payment List</p>
 
     <!-- Search and Add Buttons -->
     <div

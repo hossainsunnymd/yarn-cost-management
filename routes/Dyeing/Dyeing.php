@@ -10,7 +10,7 @@ Route::get('/dyeing-party-save-page', [DyeingPartyController::class, 'dyeingPart
 Route::post('/create-dyeing-party', [DyeingPartyController::class, 'createDyeingParty'])->name('create-dyeing-party')->middleware('permission:create-dyeing-party');
 Route::post('/update-dyeing-party', [DyeingPartyController::class, 'updateDyeingParty'])->name('update-dyeing-party')->middleware('permission:update-dyeing-party');
 Route::get('/dyeing-party-delete', [DyeingPartyController::class, 'dyeingPartyDelete'])->name('dyeing-party-delete')->middleware('permission:dyeing-party-delete');
-Route::get('/dyeing-party-detail-list', [DyeingPartyController::class, 'dyeingPartyDetailList'])->name('dyeing-party-details');
+Route::get('/dyeing-party-detail-list', [DyeingPartyController::class, 'dyeingPartyDetailList'])->name('dyeing-party-detail-list')->middleware('permission:dyeing-party-detail-list');
 
 // Dyeing
 Route::get('/dyeing-list', [DyeingController::class, 'dyeingList'])->name('dyeing-list')->middleware('permission:dyeing-list');
@@ -21,4 +21,4 @@ Route::post('/create-dyeing-receive', [DyeingController::class, 'createDyeingRec
 
 // Dyeing Payment
 Route::post('/save-dyeing-payment', [DyeingPartyController::class, 'saveDyeingPayment'])->name('save-dyeing-payment')->middleware('permission:save-dyeing-payment');
-Route::get('/dyeing-payment-list', [DyeingPartyController::class, 'dyeingPaymentList'])->name('dyeing-payment-list');
+Route::get('/dyeing-payment-list', [DyeingPartyController::class, 'dyeingPaymentList'])->name('dyeing-payment-list')->middleware('permission:dyeing-payment-list');

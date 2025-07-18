@@ -93,12 +93,12 @@ if (page.props.flash.status === true) {
                 >
                     Delete
                 </button>
-                <Link
+                <Link v-if="page.props.user.can['cutting-party-detail-list']"
                     :href="`/cutting-party-detail-list?cutting_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                     >Go To Details</Link
                 >
-                <Link
+                <Link v-if="page.props.user.can['cutting-payment-list']"
                     :href="`/cutting-payment-list?cutting_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >

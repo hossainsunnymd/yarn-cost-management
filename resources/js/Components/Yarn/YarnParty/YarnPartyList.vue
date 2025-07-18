@@ -37,7 +37,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-
     <!-- Page Title -->
     <p class="text-2xl font-bold">Yarn Party List</p>
 
@@ -55,6 +54,7 @@ if (page.props.flash.status === true) {
         </div>
         <div class="w-full md:w-auto">
             <Link
+                v-if="page.props.user.can['yarn-party-save-page']"
                 :href="`/yarn-party-save-page?yarn_party_id=0`"
                 class="bg-green-500 text-white py-2 px-4 rounded block text-center md:inline-block w-full md:w-auto"
             >
@@ -74,22 +74,30 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Buttons for Each Row -->
         <template #item-action="{ id }">
-          <div class="flex flex-wrap gap-1">
-              <Link
-                :href="`/yarn-party-save-page?yarn_party_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
-            >
-                Edit
-            </Link>
-            <button
-                @click="deleteYarnParty(id)"
-                class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
-            >
-                Delete
-            </button>
-            <Link :href="`/yarn-party-detail-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs">Go to Details</Link>
-            <Link :href="`/yarn-payment-list?yarn_party_id=${id}`" class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">Payment History</Link>
-          </div>
+            <div class="flex flex-wrap gap-1">
+                <Link
+                    :href="`/yarn-party-save-page?yarn_party_id=${id}`"
+                    class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
+                >
+                    Edit
+                </Link>
+                <button
+                    @click="deleteYarnParty(id)"
+                    class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
+                >
+                    Delete
+                </button>
+                <Link
+                    :href="`/yarn-party-detail-list?yarn_party_id=${id}`"
+                    class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
+                    >Go to Details</Link
+                >
+                <Link
+                    :href="`/yarn-payment-list?yarn_party_id=${id}`"
+                    class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
+                    >Payment History</Link
+                >
+            </div>
         </template>
     </EasyDataTable>
 </template>

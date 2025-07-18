@@ -24,14 +24,12 @@ const searchItem = ref("");
 // Modal states
 const modal = ref(false);
 
-
 // Delete action with confirmation
 function deleteSewingParty(id) {
     if (confirm("Are you sure you want to delete this sewing party?")) {
         router.visit(`/sewing-party-delete?sewing_party_id=${id}`);
     }
 }
-
 
 // Flash message toast
 if (page.props.flash.status === true) {
@@ -42,7 +40,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-
     <!-- Header -->
     <p class="text-2xl font-bold mb-4">Sewing Party List</p>
 
@@ -76,20 +73,24 @@ if (page.props.flash.status === true) {
         <!-- Action Buttons -->
         <template #item-action="{ id }">
             <div class="flex flex-wrap gap-1">
-                <Link
+                <Link v-if="page.props.user.can['sewing-party-save-page'] && page.props.user.can['update-sewing-party']"
                     :href="`/sewing-party-save-page?sewing_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
                     Edit
                 </Link>
-                <button
+                <button v-if="page.props.user.can['sewing-party-delete']"
                     @click="deleteSewingParty(id)"
                     class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
                     Delete
                 </button>
-             <Link :href="`/sewing-party-detail-list?sewing_party_id=${id}`" class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs">Go To Details</Link>
-                <Link
+                <Link v-if="page.props.user.can['sewing-party-detail-list']"
+                    :href="`/sewing-party-detail-list?sewing_party_id=${id}`"
+                    class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
+                    >Go To Details</Link
+                >
+                <Link v-if="page.props.user.can['sewing-payment-list']"
                     :href="`/sewing-payment-list?sewing_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >
@@ -99,4 +100,3 @@ if (page.props.flash.status === true) {
         </template>
     </EasyDataTable>
 </template>
-

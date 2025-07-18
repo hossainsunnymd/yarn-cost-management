@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
     'create-yarn-party',
     'update-yarn-party',
     'yarn-party-delete',
+    'yarn-party-detail-list',
 
     // Yarn Purchase
     'yarn-purchase-list',
@@ -42,6 +43,7 @@ class PermissionSeeder extends Seeder
 
     // Yarn Payment
     'save-yarn-payment',
+    'yarn-payment-list',
 
     // Knitting Party
     'knitting-party-list',
@@ -49,6 +51,7 @@ class PermissionSeeder extends Seeder
     'create-knitting-party',
     'update-knitting-party',
     'knitting-party-delete',
+    'knitting-party-detail-list',
 
     // Knitting
     'knitting-list',
@@ -67,6 +70,7 @@ class PermissionSeeder extends Seeder
 
     // Knitting Payment
     'save-knitting-payment',
+    'knitting-payment-list',
 
     // Dyeing Party
     'dyeing-party-list',
@@ -74,6 +78,7 @@ class PermissionSeeder extends Seeder
     'create-dyeing-party',
     'update-dyeing-party',
     'dyeing-party-delete',
+    'dyeing-party-detail-list',
 
     // Dyeing
     'dyeing-list',
@@ -84,6 +89,7 @@ class PermissionSeeder extends Seeder
 
     // Dyeing Payment
     'save-dyeing-payment',
+    'dyeing-payment-list',
 
     // Fabric
     'fabric-list',
@@ -104,6 +110,7 @@ class PermissionSeeder extends Seeder
     'create-cutting-party',
     'update-cutting-party',
     'cutting-party-delete',
+    'cutting-party-detail-list',
 
     // Cuttings
     'cutting-list',
@@ -113,8 +120,10 @@ class PermissionSeeder extends Seeder
     'cutting-receive-page',
     'create-cutting-receive',
 
+
     // Cutting Payment
     'save-cutting-payment',
+    'cutting-payment-list',
 
     // Sewing Party
     'sewing-party-list',
@@ -122,6 +131,7 @@ class PermissionSeeder extends Seeder
     'create-sewing-party',
     'update-sewing-party',
     'sewing-party-delete',
+    'sewing-party-detail-list',
 
     // Sewing
     'sewing-list',
@@ -133,6 +143,7 @@ class PermissionSeeder extends Seeder
 
     // Sewing Payment
     'save-sewing-payment',
+    'sewing-payment-list',
 
     // Products
     'product-list',

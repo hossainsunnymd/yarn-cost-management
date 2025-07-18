@@ -11,7 +11,7 @@ Route::get('/cutting-party-save-page', [CuttingPartyController::class, 'cuttingP
 Route::post('/create-cutting-party', [CuttingPartyController::class, 'createcuttingParty'])->name('create-cutting-party')->middleware('permission:create-cutting-party');
 Route::post('/update-cutting-party', [CuttingPartyController::class, 'updatecuttingParty'])->name('update-cutting-party')->middleware('permission:update-cutting-party');
 Route::get('/cutting-party-delete', [CuttingPartyController::class, 'cuttingPartyDelete'])->name('cutting-party-delete')->middleware('permission:cutting-party-delete');
-Route::get('/cutting-party-detail-list', [CuttingPartyController::class, 'cuttingPartyDetailList'])->name('cutting-party-details');
+Route::get('/cutting-party-detail-list', [CuttingPartyController::class, 'cuttingPartyDetailList'])->name('cutting-party-details-list')->middleware('permission:cutting-party-detail-list');
 
 // Cuttings
 Route::get('/cutting-list', [CuttingController::class, 'cuttingList'])->name('cutting-list')->middleware('permission:cutting-list');
@@ -23,4 +23,4 @@ Route::post('/create-cutting-receive', [CuttingController::class, 'createCutting
 
 //cutting payment
 Route::post('/save-cutting-payment', [CuttingPartyController::class, 'saveCuttingPayment'])->name('save-cutting-payment')->middleware('permission:save-cutting-payment');
-Route::get('/cutting-payment-list', [CuttingPartyController::class, 'cuttingPaymentList'])->name('cutting-payment-list');
+Route::get('/cutting-payment-list', [CuttingPartyController::class, 'cuttingPaymentList'])->name('cutting-payment-list')->middleware('permission:cutting-payment-list');

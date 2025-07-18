@@ -12,7 +12,7 @@ Route::get('/knitting-party-save-page', [KnittingPartyController::class, 'knitti
 Route::post('/create-knitting-party', [KnittingPartyController::class, 'createKnittingParty'])->name('create-knitting-party')->middleware('permission:create-knitting-party');
 Route::post('/update-knitting-party', [KnittingPartyController::class, 'updateKnittingParty'])->name('update-knitting-party')->middleware('permission:update-knitting-party');
 Route::get('/knitting-party-delete', [KnittingPartyController::class, 'knittingPartyDelete'])->name('knitting-party-delete')->middleware('permission:knitting-party-delete');
-Route::get('/knitting-party-detail-list', [KnittingPartyController::class, 'knittingPartyDetailList'])->name('knitting-party-details');
+Route::get('/knitting-party-detail-list', [KnittingPartyController::class, 'knittingPartyDetailList'])->name('knitting-party-detail-list')->middleware('permission:knitting-party-detail-list');
 
 // Knitting
 Route::get('/knitting-list', [KnittingController::class, 'knittingList'])->name('knitting-list')->middleware('permission:knitting-list');
@@ -31,4 +31,4 @@ Route::get('/knitting-sale-list', [KnittingSaleController::class, 'knittingSaleL
 
 // Knitting Payment
 Route::post('/save-knitting-payment', [KnittingPartyController::class, 'saveKnittingPayment'])->name('save-knitting-payment')->middleware('permission:save-knitting-payment');
-Route::get('/knitting-payment-list', [KnittingPartyController::class, 'knittingPaymentList'])->name('knitting-payment-list');
+Route::get('/knitting-payment-list', [KnittingPartyController::class, 'knittingPaymentList'])->name('knitting-payment-list')->middleware('permission:knitting-payment-list');
