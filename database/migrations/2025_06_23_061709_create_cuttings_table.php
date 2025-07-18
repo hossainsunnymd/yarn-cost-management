@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('dyeing_receive_id');
             $table->foreign('dyeing_receive_id')->references('id')->on('dyeing_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('cutting_party_id');
+            $table->foreign('cutting_party_id')->references('id')->on('cutting_parties')
+            ->restrictOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();

@@ -6,6 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class YarnPurchase extends Model
 {
-    protected $fillable = ['yarn_party_id', 'name', 'description', 'unit', 'available_unit', 'bags', 'yarn_rate',
-                         'bill_amount', 'labour_cost', 'total_amount', 'current_total_amount', 'per_unit_cost'];
+    protected $fillable = [
+        'yarn_party_id',
+        'name',
+        'description',
+        'unit',
+        'available_unit',
+        'bags',
+        'yarn_rate',
+        'bill_amount',
+        'labour_cost',
+        'total_amount',
+        'current_total_amount',
+        'per_unit_cost'
+    ];
+
+    public function yarnParty(){
+        return $this->belongsTo(YarnParty::class);
+    }
 }

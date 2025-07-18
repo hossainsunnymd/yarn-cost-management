@@ -12,6 +12,7 @@ Route::get('/sewing-party-save-page', [SewingPartyController::class, 'sewingPart
 Route::post('/create-sewing-party', [SewingPartyController::class, 'createSewingParty'])->name('create-sewing-party')->middleware('permission:create-sewing-party');
 Route::post('/update-sewing-party', [SewingPartyController::class, 'updateSewingParty'])->name('update-sewing-party')->middleware('permission:update-sewing-party');
 Route::get('/sewing-party-delete', [SewingPartyController::class, 'sewingPartyDelete'])->name('sewing-party-delete')->middleware('permission:sewing-party-delete');
+Route::get('/sewing-party-detail-list', [SewingPartyController::class, 'sewingPartyDetailList'])->name('sewing-party-details');
 
 // Sewing
 Route::get('/sewing-list', [SewingController::class, 'sewingList'])->name('sewing-list')->middleware('permission:sewing-list');

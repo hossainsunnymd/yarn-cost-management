@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Middleware\AuthCheckMiddleware;
 
 //login page
 Route::get('/', [AuthController::class, 'loginPage'])->name('login-page');
@@ -12,6 +13,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 //user logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
 require_once __DIR__.'/Category/Category.php';
 require_once __DIR__.'/Customer/Customer.php';
@@ -26,6 +29,7 @@ require_once __DIR__.'/Sewing/Sewing.php';
 require_once __DIR__.'/User/User.php';
 require_once __DIR__.'/Yarn/Yarn.php';
 
+});
 
 
 

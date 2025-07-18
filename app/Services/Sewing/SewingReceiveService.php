@@ -4,6 +4,7 @@ namespace App\Services\Sewing;
 
 use Exception;
 use App\Models\Sewing;
+use App\Models\SewingParty;
 use App\Models\SewingReceive;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class SewingReceiveService{
         try {
             $unit=$request->unit;
             $sewing = Sewing::findOrFail($request->sewing_id);
+            $sewingPartyId = $sewing->sewing_party_id;
             $perUnitCost = CuttingReceive::find($sewing->cutting_receive_id)->per_unit_cost;
 
 
@@ -64,6 +66,7 @@ class SewingReceiveService{
             SewingReceive::create($data);
             $receive = Sewing::findOrFail($request->sewing_id);
             $receive->decrement('available_unit', $request->unit);
+            SewingParty::find($sewingPartyId)->increment('due_amount', $totalSewingCost);
 
             DB::commit();
             return true;

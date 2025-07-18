@@ -4,6 +4,7 @@ namespace App\Services\Cutting;
 
 use Exception;
 use App\Models\Cutting;
+use App\Models\CuttingParty;
 use App\Models\DyeingReceive;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class CuttingReceiveService
         try {
             $cutting = Cutting::findOrFail($request->cutting_id);
             $totalUnit = $cutting->unit;
+            $cuttingPartyId = $cutting->cutting_party_id;
             $perUnitCost = DyeingReceive::find($cutting->dyeing_receive_id)->per_unit_cost;
 
             //calculate total cutting cost
@@ -40,6 +42,7 @@ class CuttingReceiveService
             CuttingReceive::create($data);
             $receive = Cutting::findOrFail($request->cutting_id);
             $receive->decrement('available_unit', $cutting->unit);
+            CuttingParty::find($cuttingPartyId)->increment('due_amount', $totalCuttingCost);
 
             DB::commit();
 

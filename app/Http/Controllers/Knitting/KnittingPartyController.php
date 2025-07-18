@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Knitting;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Knitting;
 use Illuminate\Http\Request;
 use App\Models\KnittingParty;
 use App\Models\KnittingPayment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class KnittingPartyController extends Controller
 {
@@ -17,8 +18,15 @@ class KnittingPartyController extends Controller
     public function knittingPartyList()
     {
         $knittingPartyList = KnittingParty::with('knittings')->get();
-        $knittingPayment = KnittingPayment::latest()->first();
-        return Inertia::render('Knittings/KnittingParty/KnittingPartyListPage', ['knittingPartyList' => $knittingPartyList, 'knittingPayment' => $knittingPayment]);
+        return Inertia::render('Knittings/KnittingParty/KnittingPartyListPage', ['knittingPartyList' => $knittingPartyList]);
+    }
+
+    //knitting party detail list
+    public function knittingPartyDetailList(Request $request)
+    {
+        $knittingPayments = KnittingPayment::latest()->first();
+        $knittings = Knitting::where('knitting_party_id', $request->knitting_party_id)->with('knittingParty')->get();
+        return Inertia::render('Knittings/KnittingParty/KnittingPartyDetailListPage', ['knittings' => $knittings, 'knittingPayments' => $knittingPayments]);
     }
 
     //knitting party save page

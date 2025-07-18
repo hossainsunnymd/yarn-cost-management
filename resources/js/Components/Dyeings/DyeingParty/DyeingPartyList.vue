@@ -3,8 +3,6 @@ import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
-// Components
-import DyeingPartyDetails from "./DyeingPartyDetails.vue";
 
 // Setup
 const toaster = createToaster({});
@@ -12,9 +10,6 @@ const page = usePage();
 
 // State variables
 const items = ref(page.props.dyeingPartyList);
-const dyeingPayment = ref(page.props.dyeingPayment || {}); // Latest payment
-const selectedParty = ref([]);
-const modal = ref(false);
 const searchItem = ref();
 const searchField = ref("name");
 
@@ -34,12 +29,6 @@ function deleteDyeingParty(id) {
     }
 }
 
-// Open details modal for a specific dyeing party
-function dyeingPartyDetails(id) {
-    selectedParty.value = items.value.find((item) => item.id === id);
-    modal.value = true;
-}
-
 // Display toast message if any flash message exists
 if (page.props.flash.status === true) {
     toaster.success(page.props.flash.message);
@@ -49,12 +38,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-    <!-- Modals -->
-    <DyeingPartyDetails
-        :selectedParty="selectedParty"
-        v-model:modal="modal"
-        :dyeingPayment="dyeingPayment"
-    />
 
     <!-- Title -->
     <p class="text-2xl font-bold mb-4">Dyeing Party List</p>
@@ -95,26 +78,30 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Buttons -->
         <template #item-action="{ id }">
-            <Link v-if="page.props.user.can['dyeing-save-page'] && page.props.user.can['update-dyeing-party']"
+            <Link
+                v-if="
+                    page.props.user.can['dyeing-save-page'] &&
+                    page.props.user.can['update-dyeing-party']
+                "
                 :href="`/dyeing-party-save-page?dyeing_party_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
             >
                 Edit
             </Link>
 
-            <button v-if="page.props.user.can['dyeing-party-delete']"
+            <button
+                v-if="page.props.user.can['dyeing-party-delete']"
                 @click="deleteDyeingParty(id)"
                 class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
             >
                 Delete
             </button>
 
-            <button
-                @click="dyeingPartyDetails(id)"
+            <Link
+                :href="`/dyeing-party-detail-list?dyeing_party_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
+                >Go to Details</Link
             >
-                Details
-            </button>
 
             <Link
                 :href="`/dyeing-payment-list?dyeing_party_id=${id}`"

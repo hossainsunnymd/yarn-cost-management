@@ -10,6 +10,7 @@ Route::get('/dyeing-party-save-page', [DyeingPartyController::class, 'dyeingPart
 Route::post('/create-dyeing-party', [DyeingPartyController::class, 'createDyeingParty'])->name('create-dyeing-party')->middleware('permission:create-dyeing-party');
 Route::post('/update-dyeing-party', [DyeingPartyController::class, 'updateDyeingParty'])->name('update-dyeing-party')->middleware('permission:update-dyeing-party');
 Route::get('/dyeing-party-delete', [DyeingPartyController::class, 'dyeingPartyDelete'])->name('dyeing-party-delete')->middleware('permission:dyeing-party-delete');
+Route::get('/dyeing-party-detail-list', [DyeingPartyController::class, 'dyeingPartyDetailList'])->name('dyeing-party-details');
 
 // Dyeing
 Route::get('/dyeing-list', [DyeingController::class, 'dyeingList'])->name('dyeing-list')->middleware('permission:dyeing-list');

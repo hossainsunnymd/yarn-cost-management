@@ -4,27 +4,34 @@ namespace App\Http\Controllers\Sewing;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Sewing;
 use App\Models\SewingParty;
 use Illuminate\Http\Request;
 use App\Models\SewingPayment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class SewingPartyController extends Controller
 {
     //sewing party list
     public function sewingPartyList()
     {
-
-        $sewingParties = SewingParty::with('sewings')->get();
+        $sewingParties = SewingParty::all();
         return Inertia::render('Sewings/SewingParty/SewingPartyListPage', ['sewingParties' => $sewingParties]);
+    }
+
+    //sewing party details list
+    public function sewingPartyDetailList(Request $request)
+    {
+        $sewings = Sewing::where('sewing_party_id',$request->sewing_party_id)->with('sewingParty')->get();
+        $sewingPayments=SewingPayment::latest()->first();
+        return Inertia::render('Sewings/SewingParty/SewingPartyDetailListPage', ['sewings' => $sewings,'sewingPayments'=>$sewingPayments]);
     }
 
     //sewing party save page
     public function sewingPartySavePage(Request $request)
     {
-
         $sewingParty = SewingParty::find($request->sewing_party_id);
         return Inertia::render('Sewings/SewingParty/SewingPartySavePage', ['sewingParty' => $sewingParty]);
     }

@@ -1,7 +1,7 @@
 <script setup>
 // Props passed from parent
 const props = defineProps({
-  selectedItem: Object,
+  selectedParty: Object,
   modal: Boolean,
   knittingPayment: Object
 });
@@ -49,24 +49,26 @@ const printModal = () => {
 
       <!-- Party Name -->
       <h1 class="text-2xl font-bold text-left pb-2">
-        Party Name: {{ props.selectedItem.name }}
+        Party Name: {{ props.selectedParty[0].knitting_party.name }}
       </h1>
 
       <!-- Knitting Tables -->
       <div class="overflow-x-auto overflow-y-auto">
         <table
-          v-for="(knitting, i) in props.selectedItem.knittings"
+          v-for="(knitting, i) in props.selectedParty"
           :key="i"
           class="w-full border border-gray-300 text-sm mt-4"
         >
           <thead class="bg-gray-100">
             <tr>
+              <th class="px-4 py-2 border text-center">No</th>
               <th class="px-4 py-2 border text-center">Weight</th>
               <th class="px-4 py-2 border text-center">Available Weight</th>
             </tr>
           </thead>
           <tbody>
             <tr class="hover:bg-gray-50 border-1 print:border-2">
+              <td class="px-4 py-2 border text-center">{{ i + 1 }}</td>
               <td class="px-4 py-2 border text-center">{{ knitting.total_unit }}</td>
               <td class="px-4 py-2 border text-center">{{ knitting.available_unit }}</td>
             </tr>
@@ -75,7 +77,7 @@ const printModal = () => {
 
         <!-- Payment Summary -->
         <div class="mt-4 space-y-1 text-sm">
-          <p class="font-bold">Total Due: {{ props.selectedItem.due_amount }}</p>
+          <p class="font-bold">Total Due: {{ props.selectedParty[0].knitting_party.due_amount }}</p>
           <p class="font-bold">
             Last Paid Amount: {{ props.knittingPayment.amount || 0 }}
           </p>

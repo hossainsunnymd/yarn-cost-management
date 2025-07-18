@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cutting;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Cutting;
 use App\Models\CuttingParty;
 use Illuminate\Http\Request;
 use App\Models\CuttingPayment;
@@ -13,11 +14,20 @@ use Illuminate\Support\Facades\Validator;
 
 class CuttingPartyController extends Controller
 {
+    //cutting party list
     public function CuttingPartyList()
     {
 
         $cuttingParties = CuttingParty::all();
         return Inertia::render('Cuttings/CuttingParty/CuttingPartyListPage', ['cuttingParties' => $cuttingParties]);
+    }
+
+    //cutting party detail list
+    public function CuttingPartyDetailList(Request $request)
+    {
+        $cutting=Cutting::where('cutting_party_id',$request->cutting_party_id)->with('cuttingParty')->get();
+        $cuttingPayments=CuttingPayment::where('cutting_party_id',$request->cutting_party_id)->latest()->first();
+        return Inertia::render('Cuttings/CuttingParty/CuttingPartyDetailListPage', ['cutting' => $cutting,'cuttingPayments'=>$cuttingPayments]);
     }
 
     //sewing party save page

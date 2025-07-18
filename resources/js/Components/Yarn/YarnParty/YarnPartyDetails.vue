@@ -56,13 +56,13 @@ const printModal = () => {
 
             <!-- Title -->
             <h1 class="text-2xl font-bold text-left pb-2">
-                Party Name: {{ props.selectedParty.name }}
+                Party Name: {{ props.selectedParty[0].name }}
             </h1>
 
             <!-- Table: Yarn Purchases -->
             <div class="overflow-x-auto overflow-y-auto">
                 <table
-                    v-for="(purchase, i) in props.selectedParty.yarn_purchase"
+                    v-for="(purchase, i) in props.selectedParty"
                     :key="i"
                     class="w-full border border-gray-300 text-sm mt-4"
                 >
@@ -99,7 +99,7 @@ const printModal = () => {
                 <!-- Payment Summary -->
                 <div class="mt-4 space-y-1">
                     <p class="font-bold">
-                        Due Amount: {{ props.selectedParty.due_amount }}
+                        Due Amount: {{ props.selectedParty[0].yarn_party.due_amount }}
                     </p>
                     <p class="font-bold">
                         Last Paid Amount: {{ props.yarnPayment.amount || 0 }}

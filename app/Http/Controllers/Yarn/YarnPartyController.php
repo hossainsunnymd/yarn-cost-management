@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\YarnPurchase;
 
 class YarnPartyController extends Controller
 {
@@ -17,8 +18,15 @@ class YarnPartyController extends Controller
     public function yarnPartyList()
     {
         $yarnPartyList = YarnParty::with('yarnPurchase')->get();
+        return Inertia::render('Yarn/YarnParty/YarnPartyListPage', ['yarnPartyList' => $yarnPartyList]);
+    }
+
+    //yarn party detail list
+    public function yarnPartyDetailList(Request $request)
+    {
+        $yarnPurchases = YarnPurchase::where('yarn_party_id', $request->yarn_party_id)->with('yarnParty')->get();
         $yarnPayments = YarnPayment::latest()->first();
-        return Inertia::render('Yarn/YarnParty/YarnPartyListPage', ['yarnPartyList' => $yarnPartyList, 'yarnPayments' => $yarnPayments]);
+        return Inertia::render('Yarn/YarnParty/YarnPartyDetailListPage', ['yarnPurchases' => $yarnPurchases, 'yarnPayments' => $yarnPayments]);
     }
 
     //yarn save page

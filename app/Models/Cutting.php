@@ -8,6 +8,7 @@ class Cutting extends Model
 {
     protected $fillable=[
         'dyeing_receive_id',
+        'cutting_party_id',
         'category_id',
         'unit',
         'available_unit',

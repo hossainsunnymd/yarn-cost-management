@@ -12,6 +12,7 @@ Route::get('/knitting-party-save-page', [KnittingPartyController::class, 'knitti
 Route::post('/create-knitting-party', [KnittingPartyController::class, 'createKnittingParty'])->name('create-knitting-party')->middleware('permission:create-knitting-party');
 Route::post('/update-knitting-party', [KnittingPartyController::class, 'updateKnittingParty'])->name('update-knitting-party')->middleware('permission:update-knitting-party');
 Route::get('/knitting-party-delete', [KnittingPartyController::class, 'knittingPartyDelete'])->name('knitting-party-delete')->middleware('permission:knitting-party-delete');
+Route::get('/knitting-party-detail-list', [KnittingPartyController::class, 'knittingPartyDetailList'])->name('knitting-party-details');
 
 // Knitting
 Route::get('/knitting-list', [KnittingController::class, 'knittingList'])->name('knitting-list')->middleware('permission:knitting-list');

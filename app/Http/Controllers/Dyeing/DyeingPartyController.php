@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Dyeing;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Dyeing;
 use App\Models\DyeingParty;
 use Illuminate\Http\Request;
 use App\Models\DyeingPayment;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class DyeingPartyController extends Controller
 {
@@ -17,8 +18,15 @@ class DyeingPartyController extends Controller
     public function dyeingPartyList()
     {
         $dyeingPartyList = DyeingParty::with('dyeings')->get();
+        return Inertia::render('Dyeings/DyeingParty/DyeingPartyListPage', ['dyeingPartyList' => $dyeingPartyList]);
+    }
+
+    //dyeing party details list
+    public function dyeingPartyDetailList(Request $request)
+    {
+        $dyeings = Dyeing::where('dyeing_party_id', $request->dyeing_party_id)->with('dyeingParty')->get();
         $dyeingPayment = DyeingPayment::latest()->first();
-        return Inertia::render('Dyeings/DyeingParty/DyeingPartyListPage', ['dyeingPartyList' => $dyeingPartyList, 'dyeingPayment' => $dyeingPayment]);
+        return Inertia::render('Dyeings/DyeingParty/DyeingPartyDetailListPage', ['dyeings' => $dyeings, 'dyeingPayment' => $dyeingPayment]);
     }
 
     //dyeing save page

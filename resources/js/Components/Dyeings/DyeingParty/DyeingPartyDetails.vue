@@ -48,25 +48,27 @@ const printModal = () => {
 
       <!-- Party Name Title -->
       <h1 class="text-2xl font-bold text-left pb-2">
-        Party Name: {{ props.selectedParty.name }}
+        Party Name: {{ props.selectedParty[0].dyeing_party.name }}
       </h1>
 
       <!-- Table Section -->
       <div class="overflow-x-auto overflow-y-auto">
         <!-- Loop through each dyeing item -->
         <table
-          v-for="(dyeing, i) in props.selectedParty.dryings"
+          v-for="(dyeing, i) in props.selectedParty"
           :key="i"
           class="w-full border border-gray-300 text-sm mt-4"
         >
           <thead class="bg-gray-100">
             <tr>
+              <th class="px-4 py-2 border text-center">No</th>
               <th class="px-4 py-2 border text-center">Weight</th>
               <th class="px-4 py-2 border text-center">Available Weight</th>
             </tr>
           </thead>
           <tbody>
             <tr class="hover:bg-gray-50 border print:border-2">
+              <td class="px-4 py-2 border text-center">{{ i + 1 }}</td>
               <td class="px-4 py-2 border text-center">{{ dyeing.unit }}</td>
               <td class="px-4 py-2 border text-center">{{ dyeing.available_unit }}</td>
             </tr>
@@ -75,7 +77,7 @@ const printModal = () => {
 
         <!-- Summary Information -->
         <div class="mt-4 space-y-1 text-sm">
-          <p class="font-bold">Total Due: {{ props.selectedParty.due_amount }}</p>
+          <p class="font-bold">Total Due: {{ props.selectedParty[0].dyeing_party.due_amount }}</p>
           <p class="font-bold">
             Last Paid Amount: {{ props.dyeingPayment.amount || 0 }}
           </p>

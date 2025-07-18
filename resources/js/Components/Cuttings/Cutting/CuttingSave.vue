@@ -21,6 +21,7 @@ const dyeingReceiveId = new URLSearchParams(window.location.search).get("dyeing_
 const form = useForm({
   category_id: "",
   dyeing_receive_id: dyeingReceiveId,
+  cutting_party_id: "",
   unit: "",
   roll: "",
 });
@@ -53,6 +54,31 @@ function submitForm() {
     </h2>
 
     <form @submit.prevent="submitForm" class="space-y-5">
+
+
+           <!-- Cutting party Dropdown -->
+      <div>
+        <label for="cutting_party_id" class="block text-sm font-medium text-gray-700 mb-1">
+          Select Cutting Party
+        </label>
+        <select
+          v-model="form.cutting_party_id"
+          class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="" disabled>Select Cutting Party</option>
+          <option
+            v-for="cutting in page.props.cuttingParty"
+            :key="cutting.id"
+            :value="cutting.id"
+          >
+            {{ cutting.name }}
+          </option>
+        </select>
+        <p v-if="errors.category_id" class="text-red-500 text-md mt-1">
+          {{ errors.category_id[0] }}
+        </p>
+      </div>
+
       <!-- Category Dropdown -->
       <div>
         <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">

@@ -29,6 +29,7 @@ class CuttingService {
         try {
             Cutting::create([
                 'dyeing_receive_id' => $request->dyeing_receive_id,
+                'cutting_party_id' => $request->cutting_party_id,
                 'category_id' => $request->category_id,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,

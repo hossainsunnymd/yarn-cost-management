@@ -3,10 +3,6 @@ import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
-// Child Components
-import SewingPartyDetails from "./SewingPartyDetails.vue";
-
-
 // Initialize toaster
 const toaster = createToaster();
 const page = usePage();
@@ -22,10 +18,8 @@ const headers = [
 
 // Reactive state
 const items = ref(page.props.sewingParties);
-const sewingPayment = ref(page.props.sewingPayment || {});
 const searchField = ref("name");
 const searchItem = ref("");
-const selectedParty = ref([]);
 
 // Modal states
 const modal = ref(false);
@@ -38,13 +32,6 @@ function deleteSewingParty(id) {
     }
 }
 
-// Show details modal (currently opens without specific data filtering)
-function sewingPartyDetails(id) {
-    selectedParty.value = items.value.find((item) => item.id === id);
-    console.log(selectedParty.value);
-    modal.value = true;
-}
-
 
 // Flash message toast
 if (page.props.flash.status === true) {
@@ -55,12 +42,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-    <!-- Modals -->
-    <SewingPartyDetails
-        :selectedParty="selectedParty"
-        v-model:modal="modal"
-        :sewingPayment="sewingPayment"
-    />
 
     <!-- Header -->
     <p class="text-2xl font-bold mb-4">Sewing Party List</p>
@@ -107,17 +88,12 @@ if (page.props.flash.status === true) {
                 >
                     Delete
                 </button>
-                <button
-                    @click="sewingPartyDetails(id)"
-                    class="bg-blue-600 text-white font-bold py-1 px-3 rounded text-xs"
-                >
-                    Details
-                </button>
+             <Link :href="`/sewing-party-detail-list?sewing_party_id=${id}`" class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs">Go To Details</Link>
                 <Link
                     :href="`/sewing-payment-list?sewing_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >
-                    Payment History fff
+                    Payment History
                 </Link>
             </div>
         </template>

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\CuttingParty;
 use App\Models\DyeingReceive;
 use App\Services\Cutting\CuttingService;
 
@@ -28,8 +29,9 @@ class CuttingController extends Controller
     public function cuttingSavePage(Request $request)
     {
         $categories = Category::all();
-        $dyeingReceive=DyeingReceive::find($request->dyeing_receive_id);
-        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories,'dyeingReceive'=>$dyeingReceive]);
+        $cuttingParty = CuttingParty::all();
+        $dyeingReceive = DyeingReceive::find($request->dyeing_receive_id);
+        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories, 'dyeingReceive' => $dyeingReceive, 'cuttingParty' => $cuttingParty]);
     }
 
     //create cutting
@@ -73,8 +75,8 @@ class CuttingController extends Controller
     //cutting receive page
     public function cuttingReceivePage(Request $request)
     {
-         $cutting=Cutting::find($request->cutting_id);
-        return Inertia::render('Cuttings/Cutting/CuttingReceivePage',['cutting'=>$cutting]);
+        $cutting = Cutting::find($request->cutting_id);
+        return Inertia::render('Cuttings/Cutting/CuttingReceivePage', ['cutting' => $cutting]);
     }
 
     //create cutting receive

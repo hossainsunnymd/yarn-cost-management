@@ -14,6 +14,7 @@ Route::get('/yarn-party-save-page', [YarnPartyController::class, 'yarnPartySaveP
 Route::post('/create-yarn-party', [YarnPartyController::class, 'createYarnParty'])->name('create-yarn-party')->middleware('permission:create-yarn-party');
 Route::post('/update-yarn-party', [YarnPartyController::class, 'updateYarnParty'])->name('update-yarn-party')->middleware('permission:update-yarn-party');
 Route::get('/yarn-party-delete', [YarnPartyController::class, 'yarnPartyDelete'])->name('yarn-party-delete')->middleware('permission:yarn-party-delete');
+Route::get('/yarn-party-detail-list', [YarnPartyController::class, 'yarnPartyDetailList'])->name('yarn-party-details');
 
 // Yarn Purchase
 Route::get('/yarn-purchase-list', [YarnPurchaseController::class, 'yarnPurchaseList'])->name('yarn-purchase-list')->middleware('permission:yarn-purchase-list');

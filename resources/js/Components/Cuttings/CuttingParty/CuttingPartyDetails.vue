@@ -49,18 +49,19 @@ const printModal = () => {
 
             <!-- Party Information -->
             <h1 class="text-2xl font-bold pb-2">
-                Party Name: {{ props.selectedParty.name || "-" }}
+                Party Name: {{ props.selectedParty[0].cutting_party.name || "-" }}
             </h1>
 
             <!-- Sewing Data Table -->
             <div class="overflow-x-auto">
                 <table
-                    v-for="(cutting, index) in props.selectedParty.cuttings || []"
+                    v-for="(cutting, index) in props.selectedParty"
                     :key="index"
                     class="w-full border border-gray-300 text-sm mt-4"
                 >
                     <thead class="bg-gray-100">
                         <tr>
+                            <th class="px-4 py-2 border text-center">no</th>
                             <th class="px-4 py-2 border text-center">Weight</th>
                             <th class="px-4 py-2 border text-center">
                                 Available Weight
@@ -69,6 +70,9 @@ const printModal = () => {
                     </thead>
                     <tbody>
                         <tr class="hover:bg-gray-50">
+                             <td class="px-4 py-2 border text-center">
+                                {{ index + 1 }}
+                            </td>
                             <td class="px-4 py-2 border text-center">
                                 {{ cutting.unit }}
                             </td>
@@ -81,7 +85,7 @@ const printModal = () => {
 
                 <!-- Payment Summary -->
                 <div class="mt-4 space-y-1 font-bold">
-                    <p>Total Due: {{ props.selectedParty.due_amount || 0 }}</p>
+                    <p>Total Due: {{ props.selectedParty[0].cutting_party.due_amount || 0 }}</p>
                     <p>
                         Last Paid Amount: {{ props.cuttingPayment?.amount || 0 }}
                     </p>

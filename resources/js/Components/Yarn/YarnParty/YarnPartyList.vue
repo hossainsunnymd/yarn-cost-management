@@ -2,8 +2,6 @@
 import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import YarnPartyDetails from "./YarnPartyDetails.vue";
-
 
 // Initialize toaster and page data
 const toaster = createToaster({});
@@ -20,24 +18,14 @@ const headers = [
 
 // Reactive data
 const items = ref(page.props.yarnPartyList);
-const yarnPayment = ref(page.props.yarnPayments || {});
 const searchField = ref("name");
 const searchItem = ref("");
-const selectedParty = ref([]);
-
-const modal = ref(false);
 
 // Handle party deletion
 function deleteYarnParty(id) {
     if (confirm("Are you sure you want to delete this yarn party?")) {
         router.visit(`/yarn-party-delete?yarn_party_id=${id}`);
     }
-}
-
-// Show yarn party details in modal
-function yarnPartyDetails(id) {
-    selectedParty.value = items.value.find((item) => item.id === id);
-    modal.value = true;
 }
 
 // Show flash messages if present
@@ -49,12 +37,6 @@ if (page.props.flash.status === true) {
 </script>
 
 <template>
-    <!-- Details and Payment Modals -->
-    <YarnPartyDetails
-        :selectedParty="selectedParty"
-        v-model:modal="modal"
-        :yarnPayment="yarnPayment"
-    />
 
     <!-- Page Title -->
     <p class="text-2xl font-bold">Yarn Party List</p>
@@ -104,12 +86,7 @@ if (page.props.flash.status === true) {
             >
                 Delete
             </button>
-            <button
-                @click="yarnPartyDetails(id)"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
-            >
-                Details
-            </button>
+            <Link :href="`/yarn-party-detail-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Go to Details</Link>
             <Link :href="`/yarn-payment-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Payment History</Link>
         </template>
     </EasyDataTable>
