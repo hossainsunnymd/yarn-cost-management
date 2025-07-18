@@ -5,7 +5,7 @@ import { createToaster } from "@meforma/vue-toaster";
 
 // Import modals
 import KnittingPartyDetails from "./KnittingPartyDetails.vue";
-import KnittingPayment from "./KnittingPayment.vue";
+
 
 // Toast setup
 const toaster = createToaster();
@@ -22,6 +22,7 @@ const headers = [
 
 // Data
 const items = ref(page.props.knittingPartyList);
+console.log(items.value);
 const knittingPayment = ref(page.props.knittingPayment || {});
 
 // Search functionality
@@ -30,11 +31,9 @@ const searchItem = ref("");
 
 // Modal states
 const modal = ref(false);
-const paymentModal = ref(false);
 
 // Selected values for modals
 const selectedItem = ref({});
-const paymentId = ref(0);
 
 // Show toaster based on flash messages
 if (page.props.flash.status === true) {
@@ -47,12 +46,6 @@ if (page.props.flash.status === true) {
 function knittingPartyDetails(id) {
   selectedItem.value = items.value.find(item => item.id == id);
   modal.value = true;
-}
-
-// Open Payment Modal
-function openPaymentModal(id) {
-  paymentId.value = id;
-  paymentModal.value = true;
 }
 
 // Delete Party with confirmation
@@ -70,10 +63,7 @@ function deleteKnittingParty(id) {
     v-model:modal="modal"
     :knittingPayment="knittingPayment"
   />
-  <KnittingPayment
-    :paymentId="paymentId"
-    v-model:paymentModal="paymentModal"
-  />
+
 
   <!-- Header -->
   <p class="text-2xl font-bold mb-4">Knitting Party List</p>
@@ -115,7 +105,7 @@ function deleteKnittingParty(id) {
         Edit
       </Link>
 
-      <button v-if="page.props.user.can['delete-knitting-party']"
+      <button v-if="page.props.user.can['knitting-party-delete']"
         @click="deleteKnittingParty(id)"
         class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
       >
@@ -129,12 +119,12 @@ function deleteKnittingParty(id) {
         Details
       </button>
 
-      <button
-        @click="openPaymentModal(id)"
+      <Link
+        :href="`/knitting-payment-list?knitting_party_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
       >
-        Payment
-      </button>
+        Payment History
+      </Link>
     </template>
   </EasyDataTable>
 </template>

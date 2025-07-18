@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import YarnPartyDetails from "./YarnPartyDetails.vue";
-import YarnPayment from "./YarnPayment.vue";
+
 
 // Initialize toaster and page data
 const toaster = createToaster({});
@@ -26,8 +26,6 @@ const searchItem = ref("");
 const selectedParty = ref([]);
 
 const modal = ref(false);
-const paymentModal = ref(false);
-const paymentId = ref(0);
 
 // Handle party deletion
 function deleteYarnParty(id) {
@@ -39,14 +37,7 @@ function deleteYarnParty(id) {
 // Show yarn party details in modal
 function yarnPartyDetails(id) {
     selectedParty.value = items.value.find((item) => item.id === id);
-    console.log(selectedParty.value);
     modal.value = true;
-}
-
-// Open payment modal
-function openPaymentModal(id) {
-    paymentId.value = id;
-    paymentModal.value = true;
 }
 
 // Show flash messages if present
@@ -64,7 +55,6 @@ if (page.props.flash.status === true) {
         v-model:modal="modal"
         :yarnPayment="yarnPayment"
     />
-    <YarnPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
 
     <!-- Page Title -->
     <p class="text-2xl font-bold">Yarn Party List</p>
@@ -120,12 +110,7 @@ if (page.props.flash.status === true) {
             >
                 Details
             </button>
-            <button
-                @click="openPaymentModal(id)"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
-            >
-                Payment
-            </button>
+            <Link :href="`/yarn-payment-list?yarn_party_id=${id}`" class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1">Payment History</Link>
         </template>
     </EasyDataTable>
 </template>

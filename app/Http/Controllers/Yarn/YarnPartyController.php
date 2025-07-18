@@ -82,6 +82,14 @@ class YarnPartyController extends Controller
         return redirect()->back()->with(['status' => true, 'message' => 'Yarn Party Updated Successfully', 'error' => '']);
     }
 
+    //yarn payment list
+    public function yarnPaymentList(Request $request)
+    {
+        $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->with('yarnParty')->get();
+        $totalPayment = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->sum('amount');
+        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $yarnPayments, 'totalPayment' => $totalPayment]);
+    }
+
     //yarn payment
     public function saveYarnPayment(Request $request)
     {
@@ -94,7 +102,7 @@ class YarnPartyController extends Controller
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/yarn-party-list')->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

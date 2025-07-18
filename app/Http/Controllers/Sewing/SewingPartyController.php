@@ -77,6 +77,14 @@ class SewingPartyController extends Controller
         }
     }
 
+    //sewing payment list
+    public function sewingPaymentList(Request $request)
+    {
+        $sewingPayment = SewingPayment::where('sewing_party_id', $request->sewing_party_id)->with('sewingParty')->with('sewingParty')->get();
+        $totalPayment = SewingPayment::where('sewing_party_id', $request->sewing_party_id)->sum('amount');
+        return Inertia::render('Sewings/SewingParty/SewingPaymentListPage', ['sewingPayment' => $sewingPayment, 'totalPayment' => $totalPayment]);
+    }
+
     //sewing payment
     public function saveSewingPayment(Request $request)
     {

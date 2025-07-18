@@ -30,3 +30,4 @@ Route::get('/knitting-sale-list', [KnittingSaleController::class, 'knittingSaleL
 
 // Knitting Payment
 Route::post('/save-knitting-payment', [KnittingPartyController::class, 'saveKnittingPayment'])->name('save-knitting-payment')->middleware('permission:save-knitting-payment');
+Route::get('/knitting-payment-list', [KnittingPartyController::class, 'knittingPaymentList'])->name('knitting-payment-list');

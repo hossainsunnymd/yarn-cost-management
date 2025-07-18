@@ -9,7 +9,7 @@ const page = usePage();
 // Props received from parent component
 const props = defineProps({
     paymentModal: Boolean,
-    paymentId: Number,
+    paymentId: String,
 });
 
 // Form state
@@ -35,7 +35,7 @@ function confirmPayment() {
                 toaster.error(flash.message);
             } else if (flash.status === true) {
                 toaster.success(flash.message);
-                router.visit("/yarn-party-list");
+                router.visit(`/yarn-payment-list?yarn_party_id=${props.paymentId}`);
             }
         },
     });

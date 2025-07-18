@@ -5,7 +5,7 @@ import { createToaster } from "@meforma/vue-toaster";
 
 // Child Components
 import CuttingPartyDetails from "./CuttingPartyDetails.vue";
-import CuttingPayment from "./CuttingPayment.vue";
+
 
 // Initialize toaster
 const toaster = createToaster();
@@ -29,8 +29,7 @@ const selectedParty = ref([]);
 
 // Modal states
 const modal = ref(false);
-const paymentModal = ref(false);
-const paymentId = ref(0);
+
 
 // Delete action with confirmation
 function deleteCuttingParty(id) {
@@ -43,12 +42,6 @@ function deleteCuttingParty(id) {
 function cuttingPartyDetails(id) {
     selectedParty.value = items.value.find((item) => item.id === id);
     modal.value = true;
-}
-
-// Open payment modal with selected party ID
-function openPaymentModal(id) {
-    paymentId.value = id;
-    paymentModal.value = true;
 }
 
 // Flash message toast
@@ -66,7 +59,7 @@ if (page.props.flash.status === true) {
         v-model:modal="modal"
         :cuttingPayment="cuttingPayment"
     />
-    <CuttingPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
+
 
     <!-- Header -->
     <p class="text-2xl font-bold mb-4">Cutting Party List</p>
@@ -107,7 +100,7 @@ if (page.props.flash.status === true) {
                 >
                     Edit
                 </Link>
-                <button v-if="page.props.user.can['delete-cutting-party']"
+                <button v-if="page.props.user.can['cutting-party-delete']"
                     @click="deleteCuttingParty(id)"
                     class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
@@ -119,12 +112,12 @@ if (page.props.flash.status === true) {
                 >
                     Details
                 </button>
-                <button
-                    @click="openPaymentModal(id)"
+                <Link
+                    :href="`/cutting-payment-list?cutting_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >
-                    Payment
-                </button>
+                    Payment History
+                </Link>
             </div>
         </template>
     </EasyDataTable>

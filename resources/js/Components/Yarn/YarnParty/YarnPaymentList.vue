@@ -2,25 +2,23 @@
 import { ref } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import KnittingPayment from "./KnittingPayment.vue";
+import YarnPayment from "./YarnPayment.vue";
 
 // Initialize toaster and page data
 const toaster = createToaster({});
 const page = usePage();
 const paymentModal = ref(false);
-const paymentId = ref(
-    new URLSearchParams(window.location.search).get("knitting_party_id")
-);
+const paymentId = ref(new URLSearchParams(window.location.search).get("yarn_party_id"));
 
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
-    { text: "Party Name", value: "knitting_party.name" },
+    { text: "Party Name", value: "yarn_party.name" },
     { text: "Amount", value: "amount" },
 ];
 
 // Reactive data
-const items = ref(page.props.knittingPayment);
+const items = ref(page.props.yarnPayments);
 const searchField = ref("name");
 const searchItem = ref("");
 
@@ -31,12 +29,9 @@ function openPaymentModal() {
 </script>
 
 <template>
-    <KnittingPayment
-        :paymentId="paymentId"
-        v-model:paymentModal="paymentModal"
-    />
+      <YarnPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
     <!-- Page Title -->
-    <p class="text-2xl font-bold">Knitting Payment List</p>
+    <p class="text-2xl font-bold">Yarn Party List</p>
 
     <!-- Search and Add Buttons -->
     <div
@@ -51,7 +46,7 @@ function openPaymentModal() {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.knittingPayment[0]?.knitting_party.due_amount }} Tk
+                {{ page.props.yarnPayments[0]?.yarn_party.due_amount }} Tk
             </p>
             <p class="mt-4 font-bold">
                 Total Payments: {{ page.props.totalPayment }} Tk

@@ -4,7 +4,7 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const props = defineProps({
     paymentModal: Boolean,
-    paymentId: Number,
+    paymentId: String,
 });
 
 // Emits Allows parent to control modal visibility
@@ -30,7 +30,7 @@ function confirmPayment() {
             const flash = page.props.flash;
             if (flash.status) {
                 toaster.success(flash.message);
-                router.visit("/cutting-party-list");
+                router.visit(`cutting-payment-list?cutting_party_id=${props.paymentId}`);
             } else {
                 toaster.error(flash.message);
             }

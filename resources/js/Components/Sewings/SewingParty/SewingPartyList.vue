@@ -5,7 +5,7 @@ import { createToaster } from "@meforma/vue-toaster";
 
 // Child Components
 import SewingPartyDetails from "./SewingPartyDetails.vue";
-import SewingPayment from "./SewingPayment.vue";
+
 
 // Initialize toaster
 const toaster = createToaster();
@@ -29,8 +29,7 @@ const selectedParty = ref([]);
 
 // Modal states
 const modal = ref(false);
-const paymentModal = ref(false);
-const paymentId = ref(0);
+
 
 // Delete action with confirmation
 function deleteSewingParty(id) {
@@ -42,15 +41,10 @@ function deleteSewingParty(id) {
 // Show details modal (currently opens without specific data filtering)
 function sewingPartyDetails(id) {
     selectedParty.value = items.value.find((item) => item.id === id);
-    console.log(selectedParty.value);   
+    console.log(selectedParty.value);
     modal.value = true;
 }
 
-// Open payment modal with selected party ID
-function openPaymentModal(id) {
-    paymentId.value = id;
-    paymentModal.value = true;
-}
 
 // Flash message toast
 if (page.props.flash.status === true) {
@@ -67,7 +61,6 @@ if (page.props.flash.status === true) {
         v-model:modal="modal"
         :sewingPayment="sewingPayment"
     />
-    <SewingPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
 
     <!-- Header -->
     <p class="text-2xl font-bold mb-4">Sewing Party List</p>
@@ -120,12 +113,12 @@ if (page.props.flash.status === true) {
                 >
                     Details
                 </button>
-                <button
-                    @click="openPaymentModal(id)"
+                <Link
+                    :href="`/sewing-payment-list?sewing_party_id=${id}`"
                     class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs"
                 >
-                    Payment
-                </button>
+                    Payment History fff
+                </Link>
             </div>
         </template>
     </EasyDataTable>

@@ -78,6 +78,14 @@ class DyeingPartyController extends Controller
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Party Updated Successfully', 'error' => '']);
     }
 
+    //dyeing payment list
+    public function dyeingPaymentList(Request $request)
+    {
+        $dyeingPayment = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)->with('dyeingParty')->get();
+        $totalPayment = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)->sum('amount');
+        return Inertia::render('Dyeings/DyeingParty/DyeingPaymentListPage', ['dyeingPayment' => $dyeingPayment, 'totalPayment' => $totalPayment]);
+    }
+
     //save dyeing payment
     public function saveDyeingPayment(Request $request)
     {
@@ -90,7 +98,7 @@ class DyeingPartyController extends Controller
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/dyeing-party-list')->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

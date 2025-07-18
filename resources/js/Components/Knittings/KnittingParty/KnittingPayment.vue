@@ -9,7 +9,7 @@ const page = usePage();
 // Props received from parent
 const props = defineProps({
     paymentModal: Boolean,
-    paymentId: Number,
+    paymentId: String,
 });
 
 // Emit to close modal
@@ -35,7 +35,7 @@ function confirmPayment() {
                 toaster.error(flash.message);
             } else if (flash.status === true) {
                 toaster.success(flash.message);
-                router.visit("/knitting-party-list");
+                router.visit(`/knitting-payment-list?knitting_party_id=${props.paymentId}`);
             }
         },
     });

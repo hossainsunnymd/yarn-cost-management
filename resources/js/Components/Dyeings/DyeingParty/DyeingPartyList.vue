@@ -5,19 +5,16 @@ import { createToaster } from "@meforma/vue-toaster";
 
 // Components
 import DyeingPartyDetails from "./DyeingPartyDetails.vue";
-import DyeingPayment from "./DyeingPayment.vue";
 
 // Setup
 const toaster = createToaster({});
 const page = usePage();
 
 // State variables
-const items = ref(page.props.dyeingPartyList); // Dyeing party list
+const items = ref(page.props.dyeingPartyList);
 const dyeingPayment = ref(page.props.dyeingPayment || {}); // Latest payment
 const selectedParty = ref([]);
-const paymentId = ref(0);
 const modal = ref(false);
-const paymentModal = ref(false);
 const searchItem = ref();
 const searchField = ref("name");
 
@@ -43,12 +40,6 @@ function dyeingPartyDetails(id) {
     modal.value = true;
 }
 
-// Open payment modal for a specific dyeing party
-function openPaymentModal(id) {
-    paymentId.value = id;
-    paymentModal.value = true;
-}
-
 // Display toast message if any flash message exists
 if (page.props.flash.status === true) {
     toaster.success(page.props.flash.message);
@@ -64,7 +55,6 @@ if (page.props.flash.status === true) {
         v-model:modal="modal"
         :dyeingPayment="dyeingPayment"
     />
-    <DyeingPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
 
     <!-- Title -->
     <p class="text-2xl font-bold mb-4">Dyeing Party List</p>
@@ -112,7 +102,7 @@ if (page.props.flash.status === true) {
                 Edit
             </Link>
 
-            <button v-if="page.props.user.can['delete-dyeing-party']"
+            <button v-if="page.props.user.can['dyeing-party-delete']"
                 @click="deleteDyeingParty(id)"
                 class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
             >
@@ -126,12 +116,12 @@ if (page.props.flash.status === true) {
                 Details
             </button>
 
-            <button
-                @click="openPaymentModal(id)"
+            <Link
+                :href="`/dyeing-payment-list?dyeing_party_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
             >
-                Payment
-            </button>
+                Payment History
+            </Link>
         </template>
     </EasyDataTable>
 </template>

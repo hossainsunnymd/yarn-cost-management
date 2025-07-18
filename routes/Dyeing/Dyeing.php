@@ -20,3 +20,4 @@ Route::post('/create-dyeing-receive', [DyeingController::class, 'createDyeingRec
 
 // Dyeing Payment
 Route::post('/save-dyeing-payment', [DyeingPartyController::class, 'saveDyeingPayment'])->name('save-dyeing-payment')->middleware('permission:save-dyeing-payment');
+Route::get('/dyeing-payment-list', [DyeingPartyController::class, 'dyeingPaymentList'])->name('dyeing-payment-list');

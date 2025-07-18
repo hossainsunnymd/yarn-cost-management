@@ -78,6 +78,14 @@ class KnittingPartyController extends Controller
         return redirect()->back()->with(['status' => true, 'message' => 'Knitting Party Updated Successfully', 'error' => '']);
     }
 
+    //knitting payment list
+    public function knittingPaymentList(Request $request)
+    {
+        $knittingPayment = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->with('knittingParty')->get();
+        $totalPayment = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->sum('amount');
+        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $knittingPayment, 'totalPayment' => $totalPayment]);
+    }
+
     //save knitting payment
     public function saveKnittingPayment(Request $request)
     {
@@ -90,7 +98,7 @@ class KnittingPartyController extends Controller
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/knitting-party-list')->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

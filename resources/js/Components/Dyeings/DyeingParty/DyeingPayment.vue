@@ -9,7 +9,7 @@ const page = usePage();
 // Props received from parent
 const props = defineProps({
   paymentModal: Boolean,
-  paymentId: Number,
+  paymentId: String,
 });
 
 
@@ -35,7 +35,7 @@ function confirmPayment() {
         toaster.error(page.props.flash.message);
       } else if (page.props.flash.status === true) {
         toaster.success(page.props.flash.message);
-        router.visit("/dyeing-party-list");
+        router.visit(`/dyeing-payment-list?dyeing_party_id=${props.paymentId}`);
       }
     },
   });

@@ -4,7 +4,7 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const props = defineProps({
     paymentModal: Boolean,
-    paymentId: Number,
+    paymentId: String,
 });
 
 // Emits Allows parent to control modal visibility

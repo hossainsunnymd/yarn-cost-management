@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CuttingPartyController extends Controller
 {
-     public function CuttingPartyList()
+    public function CuttingPartyList()
     {
 
         $cuttingParties = CuttingParty::all();
@@ -76,7 +76,16 @@ class CuttingPartyController extends Controller
         }
     }
 
-    //sewing payment
+    //cutting payment list
+    public function CuttingPaymentList(Request $request)
+    {
+
+        $cuttingPayment = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->with('cuttingParty')->get();
+        $totalPayment = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->sum('amount');
+        return Inertia::render('Cuttings/CuttingParty/CuttingPaymentListPage', ['cuttingPayment' => $cuttingPayment, 'totalPayment' => $totalPayment]);
+    }
+
+    //cutting payment
     public function saveCuttingPayment(Request $request)
     {
         DB::beginTransaction();
@@ -88,7 +97,7 @@ class CuttingPartyController extends Controller
                 'amount' => $request->amount
             ]);
             DB::commit();
-            return redirect('/cutting-party-list')->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

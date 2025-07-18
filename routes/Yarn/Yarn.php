@@ -30,3 +30,4 @@ Route::post('/create-yarn-sale', [YarnSaleController::class, 'createYarnSale'])-
 
 // Yarn Payment
 Route::post('/save-yarn-payment', [YarnPartyController::class, 'saveYarnPayment'])->name('save-yarn-payment')->middleware('permission:save-yarn-payment');
+Route::get('/yarn-payment-list', [YarnPartyController::class, 'yarnPaymentList'])->name('yarn-payment-list');
