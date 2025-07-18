@@ -130,7 +130,7 @@ function submitForm() {
 
       <!-- Submit Button -->
       <div class="pt-3">
-        <button
+        <button v-if="page.props.user.can['create-cutting']"
           type="submit"
           class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer"
         >

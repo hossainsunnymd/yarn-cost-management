@@ -55,7 +55,7 @@ if (page.props.flash.status === true) {
         </div>
 
         <!-- Sale Button -->
-        <Link
+        <Link v-if="page.props.user.can['fabric-sale-page']"
             href="/fabric-sale-page"
             class="bg-blue-500 text-white font-bold py-1 px-6 rounded text-center md:inline-block"
         >
@@ -74,7 +74,7 @@ if (page.props.flash.status === true) {
     >
         <!-- Action Column -->
         <template #item-action="{ id }">
-            <Link
+            <Link v-if="page.props.user.can['cutting-save-page']"
                 :href="`/cutting-save-page?dyeing_receive_id=${id}`"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
             >

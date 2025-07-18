@@ -81,7 +81,7 @@ if (page.props.flash.status === true) {
             v-model="searchItem"
             placeholder="Search by name"
         />
-        <Link
+        <Link v-if="page.props.user.can['cutting-party-save-page']"
             :href="`/cutting-party-save-page?cutting_party_id=0`"
             class="bg-green-500 text-white py-2 px-4 rounded block text-center md:inline-block w-full md:w-auto"
         >
@@ -101,13 +101,13 @@ if (page.props.flash.status === true) {
         <!-- Action Buttons -->
         <template #item-action="{ id }">
             <div class="flex flex-wrap gap-1">
-                <Link
+                <Link v-if="page.props.user.can['cutting-party-save-page']"
                     :href="`/cutting-party-save-page?cutting_party_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >
                     Edit
                 </Link>
-                <button
+                <button v-if="page.props.user.can['delete-cutting-party']"
                     @click="deleteCuttingParty(id)"
                     class="bg-red-500 text-white font-bold py-1 px-3 rounded text-xs"
                 >

@@ -89,7 +89,7 @@ function deleteKnittingParty(id) {
     />
 
     <!-- Add Button -->
-    <Link
+    <Link v-if="page.props.user.can['knitting-party-save-page']"
       :href="`/knitting-party-save-page?knitting_party_id=0`"
       class="bg-green-500 text-white py-2 px-4 rounded text-center block md:inline-block w-full md:w-auto"
     >
@@ -108,14 +108,14 @@ function deleteKnittingParty(id) {
   >
     <!-- Action Column -->
     <template #item-action="{ id }">
-      <Link
+      <Link v-if="page.props.user.can['knitting-party-save-page']"
         :href="`/knitting-party-save-page?knitting_party_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
       >
         Edit
       </Link>
 
-      <button
+      <button v-if="page.props.user.can['delete-knitting-party']"
         @click="deleteKnittingParty(id)"
         class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1"
       >

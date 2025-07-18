@@ -58,7 +58,7 @@ const searchItem = ref("");
         >
             <!-- Action button in each row -->
             <template #item-action="{ id }">
-                <Link
+                <Link v-if="page.props.user.can['sewing-receive-page']"
                     :href="`/sewing-receive-page?sewing_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition"
                 >

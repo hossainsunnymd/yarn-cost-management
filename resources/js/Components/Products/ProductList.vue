@@ -71,7 +71,7 @@ if (page.props.flash.status === true) {
             <!-- Action column with edit link -->
             <template #item-action="{ id }">
                 <div class="flex gap-1">
-                    <Link
+                    <Link v-if="page.props.user.can['product-update-page']"
                         :href="`/product-update-page?sewing_receive_id=${id}`"
                         class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded text-xs flex items-center justify-center transition duration-300"
                         aria-label="Edit product"

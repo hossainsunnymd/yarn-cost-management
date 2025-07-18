@@ -50,7 +50,7 @@ const searchItem = ref();
   >
     <!-- Action Button Column -->
     <template #item-action="{ id }">
-      <Link
+      <Link v-if="page.props.user.can['dyeing-receive-page']"
         :href="`/dyeing-receive-page?dyeing_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
       >

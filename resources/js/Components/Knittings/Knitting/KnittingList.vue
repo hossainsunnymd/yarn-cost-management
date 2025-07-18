@@ -67,7 +67,7 @@ function showModal(id) {
         </div>
 
         <!-- Add Knitting Button -->
-        <Link
+        <Link v-if="page.props.user.can['knitting-save-page']"
             :href="`/knitting-save-page`"
             class="bg-blue-500 text-white font-bold py-1 px-4 rounded"
         >
@@ -97,7 +97,7 @@ function showModal(id) {
                 </button>
 
                 <!-- Receive Button -->
-                <Link
+                <Link v-if="page.props.user.can['knitting-receive-page']"
                     :href="`/knitting-receive-page?knitting_id=${id}`"
                     class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
                 >

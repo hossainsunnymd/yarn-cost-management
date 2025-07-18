@@ -52,7 +52,7 @@ if (page.props.flash.status === true) {
       />
 
       <div>
-        <Link
+        <Link v-if="page.props.user.can['customer-save-page']"
           :href="`/customer-save-page?customer_id=${0}`"
           class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-md transition"
         >
@@ -75,7 +75,7 @@ if (page.props.flash.status === true) {
       <template #item-action="{ id }">
         <div class="flex space-x-2">
           <!-- Edit button -->
-          <Link
+          <Link v-if="page.props.user.can['customer-save-page']"
             :href="`/customer-save-page?customer_id=${id}`"
             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition"
           >
@@ -83,7 +83,7 @@ if (page.props.flash.status === true) {
           </Link>
 
           <!-- Delete button -->
-          <button
+          <button v-if="page.props.user.can['delete-customer']"
             @click="deleteCustomer(id)"
             class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition"
           >

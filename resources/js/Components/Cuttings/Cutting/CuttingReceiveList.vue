@@ -24,7 +24,7 @@ const items = ref(page.props.cuttingReceives);
 
 // Search functionality
 const searchField = ref("name");
-const searchItem = ref();       
+const searchItem = ref();
 </script>
 
 <template>
@@ -54,7 +54,7 @@ const searchItem = ref();
     >
       <!-- Action Column Template -->
       <template #item-action="{ id }">
-        <Link
+        <Link v-if="page.props.user.can['sewing-save-page']"
           :href="`/sewing-save-page?cutting_receive_id=${id}`"
           class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition"
         >

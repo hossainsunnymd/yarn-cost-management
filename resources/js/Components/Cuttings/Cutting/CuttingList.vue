@@ -51,7 +51,7 @@ const searchItem = ref();
   >
     <!-- Custom template for Action column buttons -->
     <template #item-action="{ id }">
-      <Link
+      <Link v-if="page.props.user.can['cutting-receive-page']"
         :href="`/cutting-receive-page?cutting_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
       >

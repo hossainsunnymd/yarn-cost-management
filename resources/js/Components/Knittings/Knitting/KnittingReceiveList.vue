@@ -62,13 +62,13 @@ if (page.props.flash.status === true) {
   >
     <!-- Action Buttons for Each Row -->
     <template #item-action="{ id }">
-      <Link
+      <Link v-if="page.props.user.can['dyeing-save-page']"
         :href="`/dyeing-save-page?knitting_receive_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
       >
         Dyeing
       </Link>
-      <Link
+      <Link v-if="page.props.user.can['knitting-sale-page']"
         :href="`/knitting-sale-page?knitting_receive_id=${id}`"
         class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
       >
