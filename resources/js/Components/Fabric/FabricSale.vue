@@ -360,8 +360,9 @@ function addFabrics() {
         return;
     }
 
-    if (weight.value > selectedFabrics.available_weight) {
+    if (weight.value > parseFloat(selectedFabrics.available_weight)) {
         toaster.error("Quantity is not available");
+        
         return;
     }
 

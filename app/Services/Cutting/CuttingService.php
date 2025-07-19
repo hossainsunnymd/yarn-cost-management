@@ -37,6 +37,7 @@ class CuttingService {
             ]);
 
             $cutting->decrement('available_unit', $request->unit);
+            $cutting->decrement('roll', $request->roll);
 
             DB::commit();
             return true;

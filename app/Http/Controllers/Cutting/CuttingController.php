@@ -83,7 +83,7 @@ class CuttingController extends Controller
     public function createCuttingReceive(CuttingReceiveService $cuttingReceiveService, Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'per_unit_cutting_cost' => 'required|numeric|min:1',
+            'per_unit_cutting_cost' => 'required|numeric|min:0',
             'unit' => 'required|numeric|min:1',
         ], [
             'unit.required' => 'Pcs is required',

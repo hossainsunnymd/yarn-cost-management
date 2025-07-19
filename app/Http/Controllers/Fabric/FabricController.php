@@ -41,7 +41,7 @@ class FabricController extends Controller
     //fabric sale
     public function fabricSale(Request $request)
     {
-
+        
 
             DB::beginTransaction();
         try {
@@ -58,7 +58,7 @@ class FabricController extends Controller
                     'per_unit_cost' => $fabric['per_unit_cost'],
                     'total_cost' => $fabric['total_cost'],
                     'sale_price'=> $fabric['sale_price'],
-                    
+                    'role' => $fabric['roll'],
                     'unit' => $fabric['weight'],
                 ]);
                $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
