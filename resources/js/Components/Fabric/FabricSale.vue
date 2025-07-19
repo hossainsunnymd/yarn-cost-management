@@ -88,9 +88,9 @@
                         :headers="customerHeaders"
                         :rows-per-page="10"
                     >
-                        <template #item-action="{ name, phone, id }">
+                        <template #item-action="{ name, phone, id,due_amount }">
                             <button
-                                @click="addCustomer(name, phone, id)"
+                                @click="addCustomer(name, phone, id,due_amount)"
                                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
                             >
                                 Select
@@ -156,6 +156,7 @@
                 <h6 class="font-semibold mb-1">Fabric Sale For:</h6>
                 <p>Name: {{ customer.name }}</p>
                 <p>Mobile: {{ customer.phone }}</p>
+                <p>Due Amount: {{ customer.due_amount }}</p>
             </div>
 
             <!-- Invoice Table -->
@@ -304,7 +305,7 @@ const fabricHeaders = [
 ];
 
 // Selected customer info
-const customer = reactive({ name: "", phone: "", id: "" });
+const customer = reactive({ name: "", phone: "", id: "" ,due_amount:0});
 
 // Selected fabric list
 const fabrics = ref([]);
@@ -313,10 +314,11 @@ const fabrics = ref([]);
 const calculate = reactive({ total: 0, total_sale_price: 0 });
 
 // Add customer from table
-function addCustomer(name, phone, id) {
+function addCustomer(name, phone, id,due_amount) {
     customer.name = name;
     customer.phone = phone;
     customer.id = id;
+    customer.due_amount = due_amount;
 }
 
 // Open quantity modal
@@ -362,7 +364,7 @@ function addFabrics() {
 
     if (weight.value > parseFloat(selectedFabrics.available_weight)) {
         toaster.error("Quantity is not available");
-        
+
         return;
     }
 

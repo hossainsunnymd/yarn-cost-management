@@ -6,8 +6,10 @@ use Exception;
 use Inertia\Inertia;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\CustomerPayment;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -16,6 +18,15 @@ class CustomerController extends Controller
     {
         $customers = Customer::all();
         return Inertia::render('Customer/CustomerListPage', ['customers' => $customers]);
+    }
+
+    //customer payment list
+    public function customerPaymentList(Request $request)
+    {
+        $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)->with('customer')->get();
+        $latestPayment = CustomerPayment::latest()->first();
+        $totalPayment = CustomerPayment::where('customer_id', $request->customer_id)->sum('amount');
+        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'totalPayment' => $totalPayment]);
     }
 
     //customer save page
@@ -34,6 +45,7 @@ class CustomerController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'address' => 'required',
+
         ]);
 
         if ($validation->fails()) {
@@ -43,6 +55,7 @@ class CustomerController extends Controller
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'due_amount' => 0
             ];
             Customer::create($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Customer Created Successfully', 'error' => '']);
@@ -71,6 +84,35 @@ class CustomerController extends Controller
             Customer::where('id', $request->customer_id)->update($data);
             return redirect()->back()->with(['status' => true, 'message' => 'Customer Updated Successfully', 'error' => '']);
         }
+    }
+
+    //save customer payment
+    public function saveCustomerPayment(Request $request){
+
+        $validation = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        if ($validation->fails()) {
+            return redirect()->back()->with(['message' => 'Please Enter valid amount']);
+        }
+
+        DB::beginTransaction();
+        try{
+
+            $data = [
+                'customer_id' => $request->customer_id,
+                'amount' => $request->amount,
+            ];
+            CustomerPayment::create($data);
+            Customer::find($request->customer_id)->decrement('due_amount', $request->amount);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Customer Payment Successfully', 'error' => '']);
+        }catch(Exception $e){
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+
     }
 
     //delete customer

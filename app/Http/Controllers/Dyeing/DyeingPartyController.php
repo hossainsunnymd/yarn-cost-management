@@ -25,8 +25,8 @@ class DyeingPartyController extends Controller
     public function dyeingPartyDetailList(Request $request)
     {
         $dyeings = Dyeing::where('dyeing_party_id', $request->dyeing_party_id)->with('dyeingParty')->get();
-        $dyeingPayment = DyeingPayment::latest()->first();
-        return Inertia::render('Dyeings/DyeingParty/DyeingPartyDetailListPage', ['dyeings' => $dyeings, 'dyeingPayment' => $dyeingPayment]);
+        $dyeingPayments = DyeingPayment::latest()->first();
+        return Inertia::render('Dyeings/DyeingParty/DyeingPartyDetailListPage', ['dyeings' => $dyeings, 'dyeingPayments' => $dyeingPayments]);
     }
 
     //dyeing save page
@@ -104,7 +104,7 @@ class DyeingPartyController extends Controller
         if ($validation->fails()) {
             return redirect()->back()->with(['message' => 'Please Enter valid amount']);
         }
-        
+
         DB::beginTransaction();
         try {
             $dyeingParty = DyeingParty::find($request->dyeing_party_id);

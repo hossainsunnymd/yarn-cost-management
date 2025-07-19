@@ -37,11 +37,12 @@ function submitForm() {
     form.post(URL, {
         preserveScroll: true,
         onSuccess: () => {
-            if (page.props.flash.status === false) {
-                toaster.error(page.props.flash.message);
-            } else {
-                toaster.success(page.props.flash.message);
+            const flash=page.props.flash;
+            if (flash.status===true) {
+                toaster.success(flash.message);
                 router.visit("/sewing-list");
+            } else if (flash.status===false) {
+                toaster.error(flash.message);
             }
         },
     });
@@ -63,7 +64,7 @@ function submitForm() {
                     for="available_unit"
                     class="block text-sm font-medium text-gray-700 mb-1"
                 >
-                   Available Pcs
+                    Available Pcs
                 </label>
                 <input
                     :value="page.props.sewing.available_unit"
@@ -123,7 +124,7 @@ function submitForm() {
                 />
             </div>
 
-             <!--Extra Input -->
+            <!--Extra Input -->
             <div>
                 <label
                     for="extra_cost"

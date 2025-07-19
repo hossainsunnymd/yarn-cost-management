@@ -10,3 +10,8 @@ Route::get('/customer-save-page', [CustomerController::class, 'customerSavePage'
 Route::post('/create-customer', [CustomerController::class, 'createCustomer'])->name('create-customer')->middleware('permission:create-customer');
 Route::post('/update-customer', [CustomerController::class, 'updateCustomer'])->name('update-customer')->middleware('permission:update-customer');
 Route::get('/delete-customer', [CustomerController::class, 'deleteCustomer'])->name('delete-customer')->middleware('permission:delete-customer');
+
+
+//customer payments
+Route::get('/customer-payment-list', [CustomerController::class, 'customerPaymentList'])->name('customer-payment-list');
+Route::post('/save-customer-payment', [CustomerController::class, 'saveCustomerPayment'])->name('save-customer-payment'); 

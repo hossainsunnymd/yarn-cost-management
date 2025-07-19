@@ -1,54 +1,42 @@
 <script setup>
 import { ref } from "vue";
-import {  usePage } from "@inertiajs/vue3";
+import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-import DyeingPartyDetails from "./DyeingPartyDetails.vue";
+import CustomerPayment from "./CustomerPayment.vue";
 
 // Initialize toaster and page data
 const toaster = createToaster({});
 const page = usePage();
+const paymentModal = ref(false);
+const paymentId = ref(
+    new URLSearchParams(window.location.search).get("customer_id")
+);
 
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
-    { text: "Name", value: "dyeing_party.name" },
-    { text: "Weight", value: "unit" },
-    { text: "Available Weight", value: "available_unit" },
+    { text: "Party Name", value: "customer.name" },
+    { text: "Amount", value: "amount" },
 ];
 
 // Reactive data
-const items = ref(page.props.dyeings);
-const dyeingPayment = ref(page.props.dyeingPayments );
+const items = ref(page.props.customerPayment);
 const searchField = ref("name");
 const searchItem = ref("");
-const selectedParty = ref([]);
 
-const modal = ref(false);
-
-// Show  party details in modal
-function dyeingPartyDetails() {
-    selectedParty.value = items.value;
-    modal.value = true;
-}
-
-// Show flash messages if present
-if (page.props.flash.status === true) {
-    toaster.success(page.props.flash.message);
-} else if (page.props.flash.status === false) {
-    toaster.error(page.props.flash.message);
+// Open payment modal
+function openPaymentModal() {
+    paymentModal.value = true;
 }
 </script>
 
 <template>
-    <!-- Details and Payment Modals -->
-    <DyeingPartyDetails
-        :selectedParty="selectedParty"
-        v-model:modal="modal"
-        :dyeingPayment="dyeingPayment"
+    <CustomerPayment
+        :paymentId="paymentId"
+        v-model:paymentModal="paymentModal"
     />
-
     <!-- Page Title -->
-    <p class="text-2xl font-bold">Dyeing Party Detail List</p>
+    <p class="text-2xl font-bold">Customer Payment List</p>
 
     <!-- Search and Add Buttons -->
     <div
@@ -61,13 +49,20 @@ if (page.props.flash.status === true) {
                 placeholder="Search by name"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full md:w-[300px]"
             />
+            <p class="mt-4 font-bold">
+                Total Due:
+                {{ page.props.customerPayment[0]?.customer.due_amount }} Tk
+            </p>
+            <p class="mt-4 font-bold">
+                Total Payments: {{ page.props.totalPayment }} Tk
+            </p>
         </div>
-        <div class="w-full md:w-auto">
+        <div class="">
             <button
-                @click="dyeingPartyDetails()"
+                @click="openPaymentModal()"
                 class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
             >
-                Show Details
+                Payment
             </button>
         </div>
     </div>

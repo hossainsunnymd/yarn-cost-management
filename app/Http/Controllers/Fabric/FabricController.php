@@ -41,7 +41,7 @@ class FabricController extends Controller
     //fabric sale
     public function fabricSale(Request $request)
     {
-        
+
 
             DB::beginTransaction();
         try {
@@ -50,6 +50,9 @@ class FabricController extends Controller
                 'total_cost' => $request->total_cost,
                 'total_sale_price' => $request->total_sale_price
             ]);
+
+            $customer=Customer::findOrFail($request->customer_id);
+            $customer->increment('due_amount', $request->total_sale_price);
 
             foreach ($request->fabrics as $fabric) {
                 FabricSaleProduct::create([

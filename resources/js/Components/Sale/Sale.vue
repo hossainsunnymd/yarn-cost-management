@@ -72,9 +72,9 @@
             :headers="customerHeaders"
             :rows-per-page="10"
           >
-            <template #item-action="{ name, phone, id }">
+            <template #item-action="{ name, phone, id, due_amount }">
               <button
-                @click="addCustomer(name, phone, id)"
+                @click="addCustomer(name, phone, id, due_amount)"
                 type="button"
                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
               >
@@ -125,6 +125,7 @@
         <h6 class="font-semibold mb-1">Work Order For:</h6>
         <p>Name: {{ customer.name }}</p>
         <p>Mobile: {{ customer.phone }}</p>
+        <p>Mobile: {{ customer.due_amount }}</p>
       </div>
 
       <!-- Selected Products Table -->
@@ -194,7 +195,7 @@ const searchCustomer = ref("");
 const searchProduct = ref("");
 
 // Reactive customer object to store selected customer info
-const customer = reactive({ name: "", phone: "", id: "" });
+const customer = reactive({ name: "", phone: "", id: "" ,due_amount:0});
 
 // Reactive selected product info with available units
 const selectedProduct = reactive({ id: "", available_unit: 0 ,price:0});
@@ -231,10 +232,11 @@ const productHeaders = [
 const today = computed(() => new Date().toISOString().slice(0, 10));
 
 // Select customer from list
-function addCustomer(name, phone, id) {
+function addCustomer(name, phone, id,due_amount) {
   customer.name = name;
   customer.phone = phone;
   customer.id = id;
+  customer.due_amount = due_amount;
 }
 
 // Open modal for adding quantity of selected product
@@ -275,7 +277,7 @@ function addProduct() {
     id: selectedProduct.id,
     sale_price: parseFloat(selectedProduct.price) * parseFloat(weight.value),
     weight: weight.value,
-    
+
   });
    console.log(weight.value)
 
