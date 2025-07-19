@@ -10,6 +10,7 @@ const page = usePage();
 // Define table headers
 const headers = [
   { text: 'ID', value: 'id' },
+  { text: 'Fabric Name', value: 'knitting.fabric_name' },
   { text: 'Unit', value: 'unit' },
   { text: 'Knitting Cost', value: 'knitting_cost' },
   { text: 'Per Unit Cost', value: 'per_unit_cost' },

@@ -58,7 +58,7 @@ class FabricController extends Controller
                     'per_unit_cost' => $fabric['per_unit_cost'],
                     'total_cost' => $fabric['total_cost'],
                     'sale_price'=> $fabric['sale_price'],
-                    'role'=> $fabric['role'],
+                    
                     'unit' => $fabric['weight'],
                 ]);
                $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);

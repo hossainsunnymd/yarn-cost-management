@@ -26,7 +26,7 @@
       <!-- Modal Body -->
       <div class="px-6 py-4 space-y-4">
         <div>
-          <label for="weight" class="block font-semibold mb-1">Weight</label>
+          <label for="weight" class="block font-semibold mb-1">PCS</label>
           <input
             v-model="weight"
             type="number"
@@ -275,7 +275,9 @@ function addProduct() {
     id: selectedProduct.id,
     sale_price: parseFloat(selectedProduct.price) * parseFloat(weight.value),
     weight: weight.value,
+    
   });
+   console.log(weight.value)
 
   // Update total weight and close modal
   calculateTotal();

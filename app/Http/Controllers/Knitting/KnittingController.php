@@ -57,7 +57,7 @@ class KnittingController extends Controller
     //knitting receive list
     public function knittingReceiveList()
     {
-        $knittingReceiveList = KnittingReceive::get();
+        $knittingReceiveList = KnittingReceive::with('knitting')->get();
         return Inertia::render('Knittings/Knitting/KnittingReceiveListPage', ['knittingReceiveList' => $knittingReceiveList]);
     }
 

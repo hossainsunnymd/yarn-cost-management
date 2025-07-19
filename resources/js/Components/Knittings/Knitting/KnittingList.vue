@@ -18,6 +18,7 @@ const knittingYarn = ref({});
 const headers = [
     { text: "ID", value: "id" },
     { text: "Knitting Party Name", value: "knitting_party.name" },
+    { text: "Fabric Name", value: "fabric_name" },
     { text: "Weight", value: "total_unit" },
     { text: "Available Weight", value: "available_unit" },
     { text: "Per Unit Cost", value: "per_unit_cost" },

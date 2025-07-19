@@ -126,6 +126,19 @@
                 <p>Mobile: {{ yarnParty.phone }}</p>
             </div>
 
+            <!-- Fabir Name -->
+             
+            <div class="mb-4">
+                <label for="fabricName" class="block font-semibold mb-1">Fabric Name</label>
+                <input
+                    v-model="form.fabric_name"
+                    type="text"
+                    id="fabricName"
+                    class="w-full border px-3 py-2 rounded"
+                />
+            </div>
+
+
             <!-- Yarn Table -->
             <div class="overflow-x-auto">
                 <table class="min-w-full border border-gray-300 table-auto">
@@ -306,11 +319,15 @@ const form = useForm({
     yarns: [],
     total: "",
     total_weight: "",
+    fabric_name: "",
 });
 
 function createInvoice() {
     if (!yarnParty.name) return toaster.error("Yarn Party is required");
     if (yarnList.value.length === 0) return toaster.error("Yarn is required");
+    
+    if (form.fabric_name === "") return toaster.error("Fabric name is required");
+
 
     form.knitting_party_id = yarnParty.id;
     form.yarns = yarnList.value;

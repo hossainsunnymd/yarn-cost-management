@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('available_unit', 8, 2);
             $table->decimal('total_cost', 8, 2);
             $table->decimal('per_unit_cost', 8, 2);
+            $table->string('fabric_name', 255); // Corrected the string length to 255
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

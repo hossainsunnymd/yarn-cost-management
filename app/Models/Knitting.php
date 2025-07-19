@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Knitting extends Model
 {
-    protected $fillable=['knitting_party_id','yarn_purchase_id','total_unit','available_unit','total_cost','per_unit_cost'];
+    protected $fillable=['knitting_party_id','yarn_purchase_id','total_unit','available_unit','total_cost','per_unit_cost','fabric_name'];
 
     public function knittingParty()
     {
