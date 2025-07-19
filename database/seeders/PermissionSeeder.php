@@ -159,6 +159,8 @@ class PermissionSeeder extends Seeder
     'create-customer',
     'update-customer',
     'delete-customer',
+    'customer-payment-list',
+    'save-customer-payment',
 
     // Invoices
     'invoice-list',

@@ -13,5 +13,5 @@ Route::get('/delete-customer', [CustomerController::class, 'deleteCustomer'])->n
 
 
 //customer payments
-Route::get('/customer-payment-list', [CustomerController::class, 'customerPaymentList'])->name('customer-payment-list');
-Route::post('/save-customer-payment', [CustomerController::class, 'saveCustomerPayment'])->name('save-customer-payment'); 
+Route::get('/customer-payment-list', [CustomerController::class, 'customerPaymentList'])->name('customer-payment-list')->middleware('permission:customer-payment-list');
+Route::post('/save-customer-payment', [CustomerController::class, 'saveCustomerPayment'])->name('save-customer-payment')->middleware('permission:save-customer-payment');

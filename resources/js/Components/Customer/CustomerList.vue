@@ -89,7 +89,7 @@ if (page.props.flash.status === true) {
                         Edit
                     </Link>
                     <Link
-
+                        v-if="page.props.user.can['customer-payment-list']"
                         :href="`/customer-payment-list?customer_id=${id}`"
                         class="bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs flex items-center"
                     >
