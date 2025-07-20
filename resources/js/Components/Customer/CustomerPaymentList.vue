@@ -12,12 +12,18 @@ const paymentId = ref(
     new URLSearchParams(window.location.search).get("customer_id")
 );
 
+
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
     { text: "Party Name", value: "customer.name" },
     { text: "Amount", value: "amount" },
+    { text: "Payment date", value: "created_at" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Reactive data
 const items = ref(page.props.customerPayment);
@@ -51,7 +57,7 @@ function openPaymentModal() {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.customerPayment[0]?.customer.due_amount }} Tk
+                {{ page.props.dueAmount }} Tk
             </p>
             <p class="mt-4 font-bold">
                 Total Payments: {{ page.props.totalPayment }} Tk
@@ -76,5 +82,11 @@ function openPaymentModal() {
         :search-field="searchField"
         :search-value="searchItem"
     >
+
+        <!-- Date Format -->
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+        </template>
+
     </EasyDataTable>
 </template>

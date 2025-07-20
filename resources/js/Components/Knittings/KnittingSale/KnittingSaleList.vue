@@ -12,7 +12,12 @@ const headers = [
   { text: 'No', value: 'id' },
   { text: 'Unit', value: 'unit' },
   { text: 'Price', value: 'total_amount' },
+  { text: "Knitting Sale date", value: "created_at" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // handle props for data table
 const items = ref(page.props.knittingSaleList);
@@ -51,7 +56,14 @@ const searchItem = ref();
         :rows-per-page="5"
         :search-field="searchField"
         :search-value="searchItem"
-    />
+    >
+
+        <!-- Date Format -->
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+        </template>
+
+    </EasyDataTable>
 </template>
 
 

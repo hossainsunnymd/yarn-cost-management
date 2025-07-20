@@ -16,8 +16,13 @@ const headers = [
   { text: 'Per Unit Cost', value: 'per_unit_cost' },
   { text: 'Total Cost', value: 'total_cost' },
   { text: 'Available Pcs', value: 'available_unit' },
+  { text: "Cutting Receive date", value: "created_at" },
   { text: 'Action', value: 'action' },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Cutting receive data from backend (passed from controller)
 const items = ref(page.props.cuttingReceives);
@@ -61,6 +66,13 @@ const searchItem = ref();
           Sewing
         </Link>
       </template>
+
+      <!-- Date Format -->
+      <template #item-created_at="{ created_at }">
+          {{ formatDate(created_at) }}
+      </template>
+
+
     </EasyDataTable>
   </div>
 </template>

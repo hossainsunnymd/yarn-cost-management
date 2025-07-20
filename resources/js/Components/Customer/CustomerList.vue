@@ -13,7 +13,10 @@ const headers = [
     { text: "Name", value: "name" },
     { text: "Phone", value: "phone" },
     { text: "Address", value: "address" },
+    
+    
     { text: "Action", value: "action" },
+
 ];
 
 //  list of customers
@@ -75,7 +78,7 @@ if (page.props.flash.status === true) {
             class="shadow-md rounded-lg bg-white"
         >
             <!-- Actions column template -->
-            <template #item-action="{ id }">
+            <template #item-action="{ id, due_amount }">
                 <div class="flex space-x-2">
                     <!-- Edit button -->
                     <Link

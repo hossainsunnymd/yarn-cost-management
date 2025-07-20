@@ -23,10 +23,11 @@ class CustomerController extends Controller
     //customer payment list
     public function customerPaymentList(Request $request)
     {
+        $dueAmount = Customer::find($request->customer_id)->due_amount;
         $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)->with('customer')->get();
         $latestPayment = CustomerPayment::latest()->first();
         $totalPayment = CustomerPayment::where('customer_id', $request->customer_id)->sum('amount');
-        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'totalPayment' => $totalPayment]);
+        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'totalPayment' => $totalPayment, 'dueAmount' => $dueAmount]);
     }
 
     //customer save page

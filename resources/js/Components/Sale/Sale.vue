@@ -26,7 +26,7 @@
       <!-- Modal Body -->
       <div class="px-6 py-4 space-y-4">
         <div>
-          <label for="weight" class="block font-semibold mb-1">PCS</label>
+          <label for="weight" class="block font-semibold mb-1">Quantity (PCS)</label>
           <input
             v-model="weight"
             type="number"
@@ -125,7 +125,7 @@
         <h6 class="font-semibold mb-1">Work Order For:</h6>
         <p>Name: {{ customer.name }}</p>
         <p>Mobile: {{ customer.phone }}</p>
-        <p>Mobile: {{ customer.due_amount }}</p>
+        <p>Due Amount: {{ customer.due_amount }}</p>
       </div>
 
       <!-- Selected Products Table -->
@@ -134,14 +134,22 @@
           <thead class="bg-gray-100">
             <tr>
               <th class="border px-2 py-1 text-left text-sm font-semibold">No</th>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">Weight</th>
+              <th class="border px-2 py-1 text-left text-sm font-semibold">Product</th>
+              <th class="border px-2 py-1 text-left text-sm font-semibold">PCS</th>
+              <th class="border px-2 py-1 text-left text-sm font-semibold">Price</th>
               <th class="border px-2 py-1 text-left text-sm font-semibold">Action</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-if="selectedProductList.length" v-for="(product, index) in selectedProductList" :key="index">
+            <tr
+              v-if="selectedProductList.length"
+              v-for="(product, index) in selectedProductList"
+              :key="index"
+            >
               <td class="border px-2 py-1 text-xs">{{ index + 1 }}</td>
+              <td class="border px-2 py-1 text-xs">{{ product.name }}</td>
               <td class="border px-2 py-1 text-xs">{{ product.weight }}</td>
+              <td class="border px-2 py-1 text-xs">{{ product.sale_price }}</td>
               <td class="border px-2 py-1 text-xs">
                 <button
                   @click="removeProduct(index)"
@@ -152,13 +160,16 @@
               </td>
             </tr>
             <tr v-else>
-              <td colspan="3" class="text-center py-3 text-gray-600 text-sm">No product added yet</td>
+              <td colspan="5" class="text-center py-3 text-gray-600 text-sm">
+                No product added yet
+              </td>
             </tr>
           </tbody>
           <tfoot>
             <tr class="font-semibold">
-              <td colspan="2" class="border px-2 py-1 text-sm text-right">Total</td>
-              <td class="border px-2 py-1 text-sm">{{ totalWeight }}</td>
+              <td colspan="3" class="border px-2 py-1 text-sm text-right">Total</td>
+              <td class="border px-2 py-1 text-sm">{{ totalAmount }}</td>
+              <td class="border px-2 py-1"></td>
             </tr>
           </tfoot>
         </table>
@@ -195,10 +206,15 @@ const searchCustomer = ref("");
 const searchProduct = ref("");
 
 // Reactive customer object to store selected customer info
-const customer = reactive({ name: "", phone: "", id: "" ,due_amount:0});
+const customer = reactive({ name: "", phone: "", id: "", due_amount: 0 });
 
 // Reactive selected product info with available units
-const selectedProduct = reactive({ id: "", available_unit: 0 ,price:0});
+const selectedProduct = reactive({
+  id: "",
+  name: "",
+  available_unit: 0,
+  price: 0,
+});
 
 // Lists for customers and products fetched from backend props
 const customerItem = ref(page.props.customer || []);
@@ -207,10 +223,10 @@ const productList = ref(page.props.sewingReceive || []);
 // List of selected products for invoice
 const selectedProductList = ref([]);
 
-// Total weight computed from selected products
-const totalWeight = ref(0);
+// Total amount computed from selected products
+const totalAmount = ref(0);
 
-// Table headers for customers and products
+// Table headers
 const customerHeaders = [
   { text: "No", value: "id" },
   { text: "Name", value: "name", sortable: true },
@@ -218,11 +234,10 @@ const customerHeaders = [
   { text: "Action", value: "action" },
 ];
 
-
 const productHeaders = [
   { text: "No", value: "id" },
-  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name"},
-  { text: "Price", value: "sewing.cutting_receive.cutting.category.price"},
+  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name" },
+  { text: "Price", value: "sewing.cutting_receive.cutting.category.price" },
   { text: "Per Pcs Cost", value: "per_unit_cost", sortable: true },
   { text: "Available Pcs", value: "available_unit", sortable: true },
   { text: "Action", value: "action" },
@@ -232,14 +247,14 @@ const productHeaders = [
 const today = computed(() => new Date().toISOString().slice(0, 10));
 
 // Select customer from list
-function addCustomer(name, phone, id,due_amount) {
+function addCustomer(name, phone, id, due_amount) {
   customer.name = name;
   customer.phone = phone;
   customer.id = id;
   customer.due_amount = due_amount;
 }
 
-// Open modal for adding quantity of selected product
+// Open modal for adding quantity
 function openQtyModal(id) {
   const product = productList.value.find((p) => p.id === id);
   if (!product) return;
@@ -247,6 +262,7 @@ function openQtyModal(id) {
   selectedProduct.id = product.id;
   selectedProduct.available_unit = product.available_unit;
   selectedProduct.price = product.sewing.cutting_receive.cutting.category.price;
+  selectedProduct.name = product.sewing.cutting_receive.cutting.category.name;
   weight.value = 0;
   showModal.value = true;
 }
@@ -256,14 +272,12 @@ function closeModal() {
   showModal.value = false;
 }
 
-// Add product with weight to selected product list after validation
+// Add product to invoice
 function addProduct() {
-  // Check if product already added
   if (selectedProductList.value.find((p) => p.id === selectedProduct.id)) {
     return toaster.error("Product already added");
   }
 
-  // Validate weight input
   if (weight.value <= 0) {
     return toaster.error("Minimum quantity is 1");
   }
@@ -272,55 +286,52 @@ function addProduct() {
     return toaster.error("Quantity is not available");
   }
 
-  // Add product to the list
   selectedProductList.value.push({
     id: selectedProduct.id,
+    name: selectedProduct.name,
     sale_price: parseFloat(selectedProduct.price) * parseFloat(weight.value),
     weight: weight.value,
-
   });
-   console.log(weight.value)
 
-  // Update total weight and close modal
   calculateTotal();
   closeModal();
 }
 
-// Remove product from selected list by index
+// Remove product from list
 function removeProduct(index) {
   selectedProductList.value.splice(index, 1);
   calculateTotal();
 }
 
-// Calculate total weight from selected products
+// Calculate total amount
 function calculateTotal() {
-  totalWeight.value = selectedProductList.value
+  totalAmount.value = selectedProductList.value
     .reduce((sum, item) => sum + parseFloat(item.sale_price), 0)
     .toFixed(2);
 }
 
-// Form for sending invoice data
+// Invoice form
 const form = useForm({
   customer_id: "",
   products: [],
-  total_weight: "",
+  total_amount: "",
 });
 
-// Submit invoice creation request after validation
+// Create invoice
 function createInvoice() {
   if (!customer.name) return toaster.error("Customer is required");
   if (selectedProductList.value.length === 0) return toaster.error("Product is required");
 
   form.customer_id = customer.id;
   form.products = selectedProductList.value;
-  form.total_weight = totalWeight.value;
+  form.total_amount = totalAmount.value;
 
   form.post("/create-invoice", {
     onSuccess: () => {
       if (page.props.flash.status === true) {
         form.reset();
         selectedProductList.value = [];
-        totalWeight.value = 0;
+        totalAmount.value = 0;
         toaster.success(page.props.flash.message);
         setTimeout(() => router.get("/invoice-list"), 500);
       } else {

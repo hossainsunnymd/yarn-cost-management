@@ -16,8 +16,13 @@ const headers = [
     { text: "Sewing Party", value: "sewing_party.name" },
     { text: "Category", value: "cutting_receive.cutting.category.name" },
     { text: "Available Pcs", value: "available_unit" },
+    { text: "Created date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 //  sewing list
 const items = ref(page.props.sewings);
@@ -64,6 +69,11 @@ const searchItem = ref("");
                 >
                     Receive Product
                 </Link>
+            </template>
+
+            <!-- Date Format -->
+            <template #item-created_at="{ created_at }">
+                {{ formatDate(created_at) }}
             </template>
         </EasyDataTable>
     </div>

@@ -23,8 +23,13 @@ const headers = [
     { text: "Available Weight", value: "available_unit" },
     { text: "Per Unit Cost", value: "per_unit_cost" },
     { text: "Total Cost", value: "total_cost" },
+    { text: "Created date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Table items from backend
 const items = ref(page.props.knittingList);
@@ -106,6 +111,13 @@ function showModal(id) {
                 </Link>
             </div>
         </template>
+
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+            
+        </template>
+
+        
     </EasyDataTable>
 </template>
 

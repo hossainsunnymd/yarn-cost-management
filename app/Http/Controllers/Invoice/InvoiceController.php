@@ -11,6 +11,7 @@ use App\Models\SewingReceive;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerPayment;
 
 class InvoiceController extends Controller
 {
@@ -33,14 +34,19 @@ class InvoiceController extends Controller
     //create invoice
     public function createInvoice(Request $request)
     {
+        
 
         DB::beginTransaction();
         try {
 
             $invoice = Invoice::create([
                 'customer_id' => $request->customer_id,
-                'total' => $request->total_weight,
+                'total' => $request->total_amount,
             ]);
+            
+
+            Customer::find($request->customer_id)->increment('due_amount', $request->total_amount);
+
 
             foreach ($request->products as $product) {
                 InvoiceProduct::create([
@@ -52,6 +58,7 @@ class InvoiceController extends Controller
 
                 //update available unit
                 SewingReceive::find($product['id'])->decrement('available_unit', $product['weight']);
+                
             }
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Created Successfully', 'error' => '']);
