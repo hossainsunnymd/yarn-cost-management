@@ -18,8 +18,13 @@ const headers = [
     { text: "Total Cost", value: "total_cost" },
     { text: "Available Unit", value: "available_unit" },
     { text: "Roll", value: "roll" },
+    { text: "Created date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Table data from server
 const items = ref(page.props.fabrics);
@@ -81,6 +86,13 @@ if (page.props.flash.status === true) {
                 Add Cutting
             </Link>
         </template>
+
+        <!-- Date Format -->
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+        </template>
+
+        
     </EasyDataTable>
 </template>
 

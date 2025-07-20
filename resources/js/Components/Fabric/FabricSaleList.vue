@@ -20,8 +20,13 @@ const headers = [
     { text: "Customer", value: "customer.name" },
     { text: "Total Cost", value: "total_cost" },
     { text: "Total Sale Price", value: "total_sale_price" },
+    { text: "Fabric Sale date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Data items to display in the table
 const items = ref(page.props.fabricSaleList);
@@ -93,6 +98,13 @@ function showModal(id) {
                     </button>
                 </div>
             </template>
+
+            <!-- Date Format -->
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+        </template>
+
+        
         </EasyDataTable>
     </div>
 </template>

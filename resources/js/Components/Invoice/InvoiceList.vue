@@ -19,8 +19,13 @@ const headers = [
   { text: "ID", value: "id" },
   { text: "Customer Name", value: "customer.name" },
   { text: "Total", value: "total" },
+  { text: "Created date", value: "created_at" },
   { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Data source for invoices and search fields
 const items = ref(page.props.invoices);
@@ -95,6 +100,13 @@ function showInvoiceDetailsModal(id) {
           </button>
         </div>
       </template>
+
+      <!-- Date Format -->
+      <template #item-created_at="{ created_at }">
+          {{ formatDate(created_at) }}
+      </template>
+
+
     </EasyDataTable>
   </div>
 </template>

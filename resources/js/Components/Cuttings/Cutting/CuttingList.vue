@@ -13,8 +13,13 @@ const headers = [
   { text: 'Category', value: 'category.name' },
   { text: 'Roll', value: 'roll' },
   { text: 'Available Unit', value: 'available_unit' },
+  { text: "Created date", value: "created_at" },
   { text: 'Action', value: 'action' },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // cutting list
 const items = ref(page.props.cuttings);
@@ -58,6 +63,12 @@ const searchItem = ref();
         Receive Cutting
       </Link>
     </template>
+
+    <!-- Date Format -->
+    <template #item-created_at="{ created_at }">
+        {{ formatDate(created_at) }}
+    </template>
+
   </EasyDataTable>
 </template>
 

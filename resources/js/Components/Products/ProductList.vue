@@ -14,8 +14,14 @@ const headers = [
     { text: "Image", value: "image" },
     { text: "Category", value: "sewing.cutting_receive.cutting.category.name" },
     { text: "Per Pcs Cost", value: "per_unit_cost" },
+    { text: "Available Pcs", value: "available_unit", sortable: true },
+    { text: "Created date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Reactive products list from page props
 const items = ref(page.props.products);
@@ -80,6 +86,13 @@ if (page.props.flash.status === true) {
                     </Link>
                 </div>
             </template>
+
+            <!-- Date Format -->
+            <template #item-created_at="{ created_at }">
+                {{ formatDate(created_at) }}
+            </template>
+
+
         </EasyDataTable>
     </div>
 </template>

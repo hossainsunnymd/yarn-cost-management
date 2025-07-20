@@ -12,8 +12,13 @@ const headers = [
   { text: 'Unit', value: 'unit' },
   { text: 'Available Unit', value: 'available_unit' },
   { text: 'Roll', value: 'roll' },
+  { text: "Created date", value: "created_at" },
   { text: 'Action', value: 'action' },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 //  dyeing list
 const items = ref(page.props.dyeingList);
@@ -57,6 +62,11 @@ const searchItem = ref();
         Dyeing Receive
       </Link>
     </template>
+
+    <!-- Date Format -->
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+        </template>
   </EasyDataTable>
 </template>
 

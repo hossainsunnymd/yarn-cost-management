@@ -17,8 +17,13 @@ const headers = [
   { text: 'Roll', value: 'roll' },
   { text: 'Total Cost', value: 'total_cost' },
   { text: 'Available Unit', value: 'available_unit' },
+  { text: "Receive date", value: "created_at" },
   { text: 'Action', value: 'action' },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Table data from props
 const items = ref(page.props.knittingReceiveList);
@@ -76,6 +81,13 @@ if (page.props.flash.status === true) {
         Knitting Sale
       </Link>
     </template>
+
+    <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+            
+    </template>
+
+
   </EasyDataTable>
 </template>
 

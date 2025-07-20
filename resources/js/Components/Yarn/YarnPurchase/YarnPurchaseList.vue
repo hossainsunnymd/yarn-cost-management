@@ -13,7 +13,7 @@ const headers = [
     { text: "Name", value: "name" },
     { text: "Description", value: "description" },
     { text: "Weight", value: "unit" },
-    { text: "Available Weight", value: "available_unit" },
+    { text: "Available W.", value: "available_unit" },
     { text: "Bag", value: "bags" },
     { text: "Yarn Rate", value: "yarn_rate" },
     { text: "Bill Amount", value: "bill_amount" },
@@ -21,8 +21,13 @@ const headers = [
     { text: "Total Amount", value: "total_amount" },
     { text: "Per Unit Cost", value: "per_unit_cost" },
     { text: "Current Total Amount", value: "current_total_amount" },
+    { text: "Purchase date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Yarn purchase items fetched from backend props
 const items = ref(page.props.yarnPurchaseList);
@@ -101,6 +106,11 @@ if (page.props.flash.status === true) {
             >
                 Yarn Sale
             </Link>
+        </template>
+
+        <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+            
         </template>
     </EasyDataTable>
 </template>
