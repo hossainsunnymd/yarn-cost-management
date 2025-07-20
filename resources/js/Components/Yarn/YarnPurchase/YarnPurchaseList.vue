@@ -53,7 +53,7 @@ if (page.props.flash.status === true) {
 
 <template>
 
-    <p class="text-2xl font-bold mb-4">Yarn Purchase List</p>
+    <p class="text-2xl font-bold mb-4">Yarn Purchase List Shifkat</p>
 
 
     <!-- Search input and Add button -->
