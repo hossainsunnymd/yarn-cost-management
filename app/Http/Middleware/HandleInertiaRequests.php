@@ -56,7 +56,8 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'user'=>[
-                'can'=>$can
+                'can'=>$can,
+                'name'=>$user ? $user->name : null
             ]
         ];
     }

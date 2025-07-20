@@ -37,7 +37,7 @@ const toggleSidebar = () => {
             class="flex flex-col"
         >
             <div class="p-6 border-b border-gray-700">
-                <h1 class="text-2xl font-bold text-white">My Dashboard</h1>
+                <h1 class="text-2xl font-semibold text-white">Hi, {{ page.props.user.name }}</h1>
             </div>
 
             <nav class="p-4 flex-1 overflow-y-auto">
