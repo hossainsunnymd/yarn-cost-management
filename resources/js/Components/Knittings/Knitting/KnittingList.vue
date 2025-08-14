@@ -51,6 +51,13 @@ function showModal(id) {
     knittingYarn.value = items.value.find((item) => item.id == id);
     modal.value = true;
 }
+
+//delete knitting
+function deleteKnitting(id) {
+    if (confirm("Are you sure you want to delete this knitting?")) {
+        router.visit(`/knitting-delete?knitting_id=${id}`);
+    }
+}
 </script>
 
 <template>
@@ -109,15 +116,16 @@ function showModal(id) {
                 >
                     Receive Knitting
                 </Link>
+                <button @click="deleteKnitting(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded">Delete</button>
             </div>
         </template>
 
         <template #item-created_at="{ created_at }">
             {{ formatDate(created_at) }}
-            
+
         </template>
 
-        
+
     </EasyDataTable>
 </template>
 
