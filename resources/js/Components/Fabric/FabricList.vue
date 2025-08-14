@@ -39,6 +39,13 @@ if (page.props.flash.status === true) {
 } else if (page.props.flash.status === false) {
     toaster.error(page.props.flash.message);
 }
+
+// Delete Fabric
+function deleteFabric(id) {
+    if (confirm("Are you sure you want to delete this fabric?")) {
+        router.get(`/dyeing-receive-delete?dyeing_receive_id=${id}`);
+    }
+}
 </script>
 
 <template>
@@ -85,6 +92,7 @@ if (page.props.flash.status === true) {
             >
                 Add Cutting
             </Link>
+            <button @click="deleteFabric(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
         </template>
 
         <!-- Date Format -->
@@ -92,7 +100,7 @@ if (page.props.flash.status === true) {
             {{ formatDate(created_at) }}
         </template>
 
-        
+
     </EasyDataTable>
 </template>
 

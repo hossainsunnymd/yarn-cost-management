@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Models\Dyeing;
 use App\Models\DyeingParty;
 use Illuminate\Http\Request;
+use App\Models\DyeingReceive;
 use App\Models\KnittingReceive;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Services\Dyeing\DyeingService;
 use Illuminate\Support\Facades\Validator;
@@ -53,6 +55,26 @@ class DyeingController extends Controller
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
+
+    //delete dyeing
+    public function dyeingDelete(Request $request)
+    {
+       DB::beginTransaction();
+        try {
+            $dyeing=Dyeing::find($request->dyeing_id);
+            KnittingReceive::where('id', $dyeing->knitting_receive_id)->increment('available_unit', $dyeing->available_unit);
+            KnittingReceive::where('id', $dyeing->knitting_receive_id)->increment('roll', $dyeing->roll);
+            $dyeing->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
+
+
     //dyeing receive page
     public function dyeingReceivePage(Request $request)
     {
@@ -77,6 +99,23 @@ class DyeingController extends Controller
             $dyeingReceiveService->createDyeingReceive($request);
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
+    //delete dyeing receive
+    public function dyeingReceiveDelete(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $dyeingReceive=DyeingReceive::findOrFail($request->dyeing_receive_id);
+            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('available_unit', $dyeingReceive->available_unit);
+            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('roll', $dyeingReceive->roll);
+            $dyeingReceive->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }

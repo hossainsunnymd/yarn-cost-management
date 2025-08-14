@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link, usePage,router } from '@inertiajs/vue3';
 
 const page = usePage();
 //  data table headers
@@ -26,6 +26,13 @@ const items = ref(page.props.dyeingList);
 // Define search parameters
 const searchField = ref("name");
 const searchItem = ref();
+
+//delete dyeing
+const dyeingDelete = (id) => {
+  if (confirm("Are you sure you want to delete this dyeing?")) {
+    router.visit(`/dyeing-delete?dyeing_id=${id}`);
+  }
+}
 </script>
 
 <template>
@@ -61,6 +68,7 @@ const searchItem = ref();
       >
         Dyeing Receive
       </Link>
+      <button @click="dyeingDelete(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded m-1">Delete</button>
     </template>
 
     <!-- Date Format -->

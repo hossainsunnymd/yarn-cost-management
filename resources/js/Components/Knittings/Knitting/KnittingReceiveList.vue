@@ -39,6 +39,13 @@ if (page.props.flash.status === true) {
 } else if (page.props.flash.status === false) {
   toaster.error(page.props.flash.message);
 }
+
+//delete knitting receive
+function deleteKnittingReceive(id) {
+    if (confirm("Are you sure you want to delete this knitting receive?")) {
+        router.get(`/delete-knitting-receive?knitting_receive_id=${id}`);
+    }
+}
 </script>
 
 <template>
@@ -80,11 +87,12 @@ if (page.props.flash.status === true) {
       >
         Knitting Sale
       </Link>
+      <button @click="deleteKnittingReceive(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
     </template>
 
     <template #item-created_at="{ created_at }">
             {{ formatDate(created_at) }}
-            
+
     </template>
 
 

@@ -18,6 +18,11 @@ Route::get('/dyeing-save-page', [DyeingController::class, 'dyeingSavePage'])->na
 Route::post('/create-dyeing', [DyeingController::class, 'createDyeing'])->name('create-dyeing')->middleware('permission:create-dyeing');
 Route::get('/dyeing-receive-page', [DyeingController::class, 'dyeingReceivePage'])->name('dyeing-receive-page')->middleware('permission:dyeing-receive-page');
 Route::post('/create-dyeing-receive', [DyeingController::class, 'createDyeingReceive'])->name('create-dyeing-receive')->middleware('permission:create-dyeing-receive');
+Route::get('/dyeing-delete', [DyeingController::class, 'dyeingDelete'])->name('dyeing-delete');
+
+//delete dyeing receive
+Route::get('/dyeing-receive-delete', [DyeingController::class, 'dyeingReceiveDelete'])->name('dyeing-receive-delete');
+
 
 // Dyeing Payment
 Route::post('/save-dyeing-payment', [DyeingPartyController::class, 'saveDyeingPayment'])->name('save-dyeing-payment')->middleware('permission:save-dyeing-payment');

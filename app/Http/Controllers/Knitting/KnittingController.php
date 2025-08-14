@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Knitting;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Knitting;
+use App\Models\KnittingYarn;
 use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use App\Models\KnittingParty;
 use App\Models\KnittingReceive;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Knitting\KnittingService;
@@ -55,6 +57,31 @@ class KnittingController extends Controller
         }
     }
 
+    //delete knitting
+    public function knittingDelete(Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $knittingYarn = KnittingYarn::where('knitting_id', $request->knitting_id)->get();
+            foreach ($knittingYarn as $yarn) {
+                $yarnPurchase = YarnPurchase::find($yarn->yarn_purchase_id);
+                $yarnPurchase->increment('available_unit', $yarn->unit);
+                $currentTotalAmount = $yarnPurchase->unit * $yarnPurchase->per_unit_cost;
+                $yarnPurchase->update(['current_total_amount' => $currentTotalAmount]);
+
+            }
+
+            KnittingYarn::where('knitting_id', $request->knitting_id)->delete();
+            Knitting::find($request->knitting_id)->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting deleted successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
     //knitting receive list
     public function knittingReceiveList()
     {
@@ -65,8 +92,8 @@ class KnittingController extends Controller
     //knitting receive page
     public function knittingReceivePage(Request $request)
     {
-        $knitting=Knitting::find($request->knitting_id);
-        return Inertia::render('Knittings/Knitting/KnittingReceivePage',['knitting'=>$knitting]);
+        $knitting = Knitting::find($request->knitting_id);
+        return Inertia::render('Knittings/Knitting/KnittingReceivePage', ['knitting' => $knitting]);
     }
 
     //create knitting receive
@@ -86,6 +113,22 @@ class KnittingController extends Controller
             $knittingReceiveService->createKnittingReceive($request);
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
+    //delete knitting receive
+    public function deleteKnittingReceive(Request $request)
+    {
+        DB::beginTransaction();
+         try {
+            $knittingReceive=KnittingReceive::find($request->knitting_receive_id);
+            Knitting::increment('available_unit', $knittingReceive->available_unit);
+            $knittingReceive->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
