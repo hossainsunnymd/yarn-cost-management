@@ -16,7 +16,12 @@ const headers = [
     { text: "Bag", value: "bags" },
     { text: "Weight", value: "unit" },
     { text: "Available Weight", value: "available_unit" },
+    { text: "Purchase date", value: "created_at" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Reactive data
 const items = ref(page.props.yarnPurchases);
@@ -83,5 +88,12 @@ if (page.props.flash.status === true) {
         :search-field="searchField"
         :search-value="searchItem"
     >
+
+    <template #item-created_at="{ created_at }">
+            {{ formatDate(created_at) }}
+            
+        </template>
     </EasyDataTable>
+
+    
 </template>

@@ -35,6 +35,7 @@ class KnittingController extends Controller
     //create knitting
     public function createKnitting(KnittingService $knittingService, Request $request)
     {
+    
 
         $validator = Validator::make($request->all(), [
             'knitting_party_id' => 'required',

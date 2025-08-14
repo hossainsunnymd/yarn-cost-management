@@ -50,7 +50,9 @@ class YarnPurchaseController extends Controller
         try {
             $bill_amount = $request->unit * $request->yarn_rate;
             $total_amount = $bill_amount + $request->labour_cost;
-            $per_unit_cost = $total_amount / $request->unit;
+            $per_unit_cost = (float)($total_amount / $request->unit);
+
+            
 
             $data = [
                 'yarn_party_id' => $request->yarn_party_id,
