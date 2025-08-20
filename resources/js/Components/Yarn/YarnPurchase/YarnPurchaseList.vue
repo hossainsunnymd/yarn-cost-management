@@ -53,7 +53,7 @@ if (page.props.flash.status === true) {
 
 <template>
 
-    <p class="text-2xl font-bold mb-4">Yarn Purchase List Shifkat</p>
+    <p class="text-2xl font-bold mb-4">Yarn Purchase List</p>
 
 
     <!-- Search input and Add button -->
@@ -83,7 +83,7 @@ if (page.props.flash.status === true) {
         :headers="headers"
         :items="items"
         alternating
-        :rows-per-page="5"
+        :rows-per-page="100"
         :search-field="searchField"
         :search-value="searchItem"
     >

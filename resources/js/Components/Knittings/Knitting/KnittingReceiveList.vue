@@ -68,7 +68,7 @@ function deleteKnittingReceive(id) {
   <EasyDataTable
     :headers="headers"
     :items="items"
-    :rows-per-page="5"
+    :rows-per-page="50"
     :search-field="searchField"
     :search-value="searchItem"
     alternating

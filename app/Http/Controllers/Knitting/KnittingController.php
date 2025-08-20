@@ -123,7 +123,7 @@ class KnittingController extends Controller
         DB::beginTransaction();
          try {
             $knittingReceive=KnittingReceive::find($request->knitting_receive_id);
-            Knitting::increment('available_unit', $knittingReceive->available_unit);
+            Knitting::where('id', $knittingReceive->knitting_id)->increment('available_unit', $knittingReceive->available_unit);
             $knittingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);

@@ -56,7 +56,7 @@ const dyeingDelete = (id) => {
     :headers="headers"
     :items="items"
     alternating
-    :rows-per-page="5"
+    :rows-per-page="50"
     :search-field="searchField"
     :search-value="searchItem"
   >
