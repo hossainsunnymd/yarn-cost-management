@@ -16,6 +16,8 @@ const paymentId = ref(
 const headers = [
     { text: "ID", value: "id" },
     { text: "Party Name", value: "cutting_party.name" },
+    { text: "Debit", value: "debit" },
+    { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
 ];
 
@@ -52,9 +54,6 @@ function openPaymentModal() {
             <p class="mt-4 font-bold">
                 Total Due:
                 {{ page.props.cuttingPayment[0]?.cutting_party.due_amount }} Tk
-            </p>
-            <p class="mt-4 font-bold">
-                Total Payments: {{ page.props.totalPayment }} Tk
             </p>
         </div>
         <div class="">

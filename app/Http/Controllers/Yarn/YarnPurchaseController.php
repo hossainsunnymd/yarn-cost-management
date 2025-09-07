@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Yarn;
 
+use App\Models\YarnPayment;
 use Exception;
 use Inertia\Inertia;
 use App\Models\YarnParty;
@@ -32,14 +33,15 @@ class YarnPurchaseController extends Controller
     public function createYarnPurchase(Request $request)
     {
 
+
         $validation = Validator::make($request->all(), [
             'yarn_party_id' => 'required',
             'name' => 'required',
             'description' => 'required',
-            'unit' => 'required|numeric',
-            'bags' => 'required|numeric',
-            'yarn_rate' => 'required|numeric',
-            'labour_cost' => 'required|numeric',
+            'unit' => 'required|numeric|min:1',
+            'bags' => 'required|numeric|min:1',
+            'yarn_rate' => 'required|numeric|min:1',
+            'labour_cost' => 'required|numeric|min:1',
         ]);
 
         if ($validation->fails()) {
@@ -68,11 +70,18 @@ class YarnPurchaseController extends Controller
             ];
 
             YarnPurchase::create($data);
-            YarnParty::find($request->yarn_party_id)->increment('due_amount', $bill_amount);
+            $yarnParty=YarnParty::find($request->yarn_party_id);
+            $yarnParty->increment('due_amount', $total_amount);
+            YarnPayment::create([
+                'yarn_party_id' => $request->yarn_party_id,
+                'amount' => $yarnParty->due_amount,
+                'debit'=> $bill_amount,
+            ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Created Successfully', 'error' => '']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
 
@@ -84,10 +93,10 @@ class YarnPurchaseController extends Controller
             'yarn_party_id' => 'required',
             'name' => 'required',
             'description' => 'required',
-            'unit' => 'required|numeric',
-            'bags' => 'required|numeric',
-            'yarn_rate' => 'required|numeric',
-            'labour_cost' => 'required|numeric',
+            'unit' => 'required|numeric|min:1',
+            'bags' => 'required|numeric|min:1',
+            'yarn_rate' => 'required|numeric|min:1',
+            'labour_cost' => 'required|numeric|min:1',
         ]);
 
         if ($validation->fails()) {
@@ -114,7 +123,14 @@ class YarnPurchaseController extends Controller
                 'current_total_amount' => $total_amount
             ];
             YarnPurchase::find($request->id)->update($data);
-            YarnParty::find($request->yarn_party_id)->increment('due_amount', $bill_amount);
+            $yarnParty = YarnParty::find($request->yarn_party_id);
+            $yarnParty->increment('due_amount', $bill_amount);
+            YarnPayment::create([
+                'yarn_party_id' => $request->yarn_party_id,
+                'amount' => $yarnParty->total_amount,
+                'debit' => $bill_amount,
+                'credit' => ''
+            ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully', 'error' => '']);
         } catch (Exception $e) {

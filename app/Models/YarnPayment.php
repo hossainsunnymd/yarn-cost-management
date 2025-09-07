@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class YarnPayment extends Model
 {
-    protected $fillable=['yarn_party_id','amount'];
+    protected $fillable=['yarn_party_id','amount','debit','credit'];
 
     public function yarnParty()
     {

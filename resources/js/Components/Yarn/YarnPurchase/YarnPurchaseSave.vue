@@ -9,7 +9,7 @@ const page = usePage();
 // Get yarn purchase ID from URL query parameter
 const yarnPurchaseId = new URLSearchParams(window.location.search).get("id");
 
-// Get yarn purchase data passed from backend 
+// Get yarn purchase data passed from backend
 const yarnPurchase = page.props.yarnPurchase;
 
 // Computed errors object from flash messages
@@ -51,7 +51,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
-                router.get("/yarn-purchase-list"); // Redirect to list page on success
+                router.get("/yarn-purchase-list"); 
             }
         },
     });

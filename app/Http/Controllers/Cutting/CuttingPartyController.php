@@ -111,7 +111,8 @@ class CuttingPartyController extends Controller
             $cuttingParty->decrement('due_amount', $request->amount);
             CuttingPayment::create([
                 'cutting_party_id' => $request->cutting_party_id,
-                'amount' => $request->amount
+                'amount' => $cuttingParty->due_amount,
+                'credit'=>$request->amount,
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);

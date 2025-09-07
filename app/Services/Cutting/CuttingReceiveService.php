@@ -5,6 +5,7 @@ namespace App\Services\Cutting;
 use Exception;
 use App\Models\Cutting;
 use App\Models\CuttingParty;
+use App\Models\CuttingPayment;
 use App\Models\DyeingReceive;
 use App\Models\CuttingReceive;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +43,13 @@ class CuttingReceiveService
             CuttingReceive::create($data);
             $receive = Cutting::findOrFail($request->cutting_id);
             $receive->decrement('available_unit', $cutting->unit);
-            CuttingParty::find($cuttingPartyId)->increment('due_amount', $totalCuttingCost);
+            $cuttingParty=CuttingParty::find($cuttingPartyId);
+            $cuttingParty->increment('due_amount', $totalCuttingCost);
+            CuttingPayment::create([
+                'cutting_party_id' => $cuttingPartyId,
+                'amount' => $cuttingParty->due_amount,
+                'debit'=>$totalCuttingCost,
+            ]);
 
             DB::commit();
 
