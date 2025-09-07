@@ -109,7 +109,8 @@ class SewingPartyController extends Controller
             $sweingParty->decrement('due_amount', $request->amount);
             SewingPayment::create([
                 'sewing_party_id' => $request->sewing_party_id,
-                'amount' => $request->amount
+                'amount' =>$sweingParty->due_amount,
+                'credit'=>$request->amount
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);

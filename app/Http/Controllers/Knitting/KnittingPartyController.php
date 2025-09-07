@@ -54,9 +54,7 @@ class KnittingPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'total_amount' => 0,
             'due_amount' => 0,
-            'last_payment' => 0
         ];
 
         KnittingParty::create($data);
@@ -80,6 +78,7 @@ class KnittingPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
+            'due_amount' => 0
         ];
 
         KnittingParty::where('id', $request->knitting_party_id)->update($data);
@@ -90,8 +89,7 @@ class KnittingPartyController extends Controller
     public function knittingPaymentList(Request $request)
     {
         $knittingPayment = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->with('knittingParty')->get();
-        $totalPayment = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->sum('amount');
-        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $knittingPayment, 'totalPayment' => $totalPayment]);
+        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $knittingPayment]);
     }
 
     //save knitting payment
@@ -110,7 +108,8 @@ class KnittingPartyController extends Controller
             $knittingParty->decrement('due_amount', $request->amount);
             KnittingPayment::create([
                 'knitting_party_id' => $request->knitting_party_id,
-                'amount' => $request->amount
+                'amount' => $knittingParty->due_amount,
+                'credit' => $request->amount
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);

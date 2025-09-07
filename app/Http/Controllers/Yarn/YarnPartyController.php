@@ -55,9 +55,7 @@ class YarnPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'total_amount' => 0,
             'due_amount' => 0,
-            'last_payment' => 0
 
         ];
 
@@ -83,7 +81,6 @@ class YarnPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'total_amount' => 0,
             'due_amount' => 0
         ];
         YarnParty::find($request->yarn_party_id)->update($data);
@@ -94,8 +91,7 @@ class YarnPartyController extends Controller
     public function yarnPaymentList(Request $request)
     {
         $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->with('yarnParty')->get();
-        $totalPayment = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->sum('amount');
-        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $yarnPayments, 'totalPayment' => $totalPayment]);
+        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $yarnPayments]);
     }
 
     //yarn payment
@@ -115,7 +111,9 @@ class YarnPartyController extends Controller
             $yarnParty->decrement('due_amount', $request->amount);
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
-                'amount' => $request->amount
+                'amount' => $yarnParty->due_amount,
+                'credit' => $request->amount
+
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully', 'error' => '']);

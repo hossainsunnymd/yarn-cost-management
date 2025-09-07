@@ -53,9 +53,7 @@ class DyeingPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'total_amount' => 0,
             'due_amount' => 0,
-            'last_payment' => 0
         ];
         DyeingParty::create($data);
         return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Party Created Successfully', 'error' => '']);
@@ -79,7 +77,6 @@ class DyeingPartyController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'total_amount' => 0,
             'due_amount' => 0
         ];
         DyeingParty::find($request->dyeing_party_id)->update($data);
@@ -111,7 +108,8 @@ class DyeingPartyController extends Controller
             $dyeingParty->decrement('due_amount', $request->amount);
             DyeingPayment::create([
                 'dyeing_party_id' => $request->dyeing_party_id,
-                'amount' => $request->amount
+                'amount' =>$dyeingParty->due_amount,
+                'credit'=>$request->amount,
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);

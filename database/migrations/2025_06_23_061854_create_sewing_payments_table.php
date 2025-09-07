@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('sewing_party_id')->references('id')->on('sewing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('amount', 8, 2);
+            $table->decimal('debit', 8, 2)->nullable();
+            $table->decimal('credit', 8, 2)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -7,6 +7,7 @@ use App\Models\Sewing;
 use App\Models\SewingParty;
 use App\Models\SewingReceive;
 use App\Models\CuttingReceive;
+use App\Models\SewingPayment;
 use Illuminate\Support\Facades\DB;
 
 
@@ -66,7 +67,14 @@ class SewingReceiveService{
             SewingReceive::create($data);
             $receive = Sewing::findOrFail($request->sewing_id);
             $receive->decrement('available_unit', $request->unit);
-            SewingParty::find($sewingPartyId)->increment('due_amount', $totalSewingCost);
+            $sewingParty=SewingParty::find($sewingPartyId);
+            $sewingParty->increment('due_amount', $totalSewingCost);
+
+            SewingPayment::create([
+                'sewing_party_id' => $sewingPartyId,
+                'amount' => $sewingParty->due_amount,
+                'debit' => $totalSewingCost,
+            ]);
 
             DB::commit();
             return true;

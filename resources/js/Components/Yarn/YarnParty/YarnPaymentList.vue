@@ -14,6 +14,8 @@ const paymentId = ref(new URLSearchParams(window.location.search).get("yarn_part
 const headers = [
     { text: "ID", value: "id" },
     { text: "Party Name", value: "yarn_party.name" },
+    { text: "Debit", value: "debit" },
+    { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
 ];
 
@@ -47,9 +49,6 @@ function openPaymentModal() {
             <p class="mt-4 font-bold">
                 Total Due:
                 {{ page.props.yarnPayments[0]?.yarn_party.due_amount }} Tk
-            </p>
-            <p class="mt-4 font-bold">
-                Total Payments: {{ page.props.totalPayment }} Tk
             </p>
         </div>
         <div class="">

@@ -5,6 +5,7 @@ namespace App\Services\Dyeing;
 use Exception;
 use App\Models\Dyeing;
 use App\Models\DyeingParty;
+use App\Models\DyeingPayment;
 use App\Models\DyeingReceive;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +63,12 @@ class DyeingReceiveService
             $dyeing->decrement('available_unit', $request->unit);
             $dyeing->decrement('roll', $request->roll);
             DyeingParty::find($dyeingPartyId)->increment('due_amount', $totalDyeingCost);
+
+            DyeingPayment::create([
+                'dyeing_party_id' => $dyeingPartyId,
+                'amount' => $totalDyeingCost,
+                'debit' => $totalDyeingCost,
+            ]);
 
             DB::commit();
             return true;

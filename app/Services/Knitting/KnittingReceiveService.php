@@ -5,6 +5,7 @@ namespace App\Services\Knitting;
 use Exception;
 use App\Models\Knitting;
 use App\Models\KnittingParty;
+use App\Models\KnittingPayment;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
 
@@ -53,7 +54,13 @@ class KnittingReceiveService{
             KnittingReceive::create($data);
             $knitting = Knitting::where('id', $request->knitting_id);
             $knitting->decrement('available_unit', $request->unit + $request->wastage ?? 0);
-            KnittingParty::find($knittingPartyId)->increment('due_amount', $totalKnittingCost);
+            $knittingParty=KnittingParty::find($knittingPartyId);
+            $knittingParty->increment('due_amount', $totalKnittingCost);
+            KnittingPayment::create([
+                'knitting_party_id' => $knittingPartyId,
+                'amount' => $knittingParty->due_amount,
+                'debit' => $totalKnittingCost,
+            ]);
 
             DB::commit();
             return true;
