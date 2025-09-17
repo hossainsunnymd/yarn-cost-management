@@ -18,7 +18,7 @@ return new class extends Migration
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
-            $table->decimal('wastage', 8, 2)->nullable();
+            $table->decimal('wastage', 8, 2)->default(0);
             $table->decimal('knitting_cost', 8, 2);
             $table->decimal('per_unit_cost', 8, 2);
             $table->decimal('roll', 8, 2);
