@@ -109,7 +109,7 @@ class DyeingController extends Controller
         DB::beginTransaction();
         try {
             $dyeingReceive=DyeingReceive::findOrFail($request->dyeing_receive_id);
-            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('available_unit', $dyeingReceive->available_unit);
+            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('available_unit', $dyeingReceive->available_unit+$dyeingReceive->wastage);
             Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('roll', $dyeingReceive->roll);
             $dyeingReceive->delete();
             DB::commit();
