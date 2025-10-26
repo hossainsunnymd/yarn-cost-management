@@ -9,6 +9,8 @@ class CustomerPayment extends Model
     protected $fillable = [
         'customer_id',
         'amount',
+        'credit',
+        'debit',
     ];
 
     public function customer()

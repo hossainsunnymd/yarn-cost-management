@@ -12,6 +12,7 @@ use App\Models\DyeingReceive;
 use App\Models\FabricSaleProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CustomerPayment;
 
 class FabricController extends Controller
 {
@@ -41,9 +42,9 @@ class FabricController extends Controller
     //fabric sale
     public function fabricSale(Request $request)
     {
+      
 
-
-            DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $fabricSale = FabricSale::create([
                 'customer_id' => $request->customer_id,
@@ -51,23 +52,30 @@ class FabricController extends Controller
                 'total_sale_price' => $request->total_sale_price
             ]);
 
-            $customer=Customer::findOrFail($request->customer_id);
-            $customer->increment('due_amount', $request->total_sale_price);
-
             foreach ($request->fabrics as $fabric) {
                 FabricSaleProduct::create([
-                    'fabric_sale_id' =>$fabricSale->id,
+                    'fabric_sale_id' => $fabricSale->id,
                     'dyeing_receive_id' => $fabric['id'],
                     'per_unit_cost' => $fabric['per_unit_cost'],
                     'total_cost' => $fabric['total_cost'],
-                    'sale_price'=> $fabric['sale_price'],
+                    'sale_price' => $fabric['sale_price'],
                     'role' => $fabric['roll'],
                     'unit' => $fabric['weight'],
                 ]);
-               $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
-               $dyeingReceive->decrement('available_unit', $fabric['weight']);
-               $dyeingReceive->decrement('roll', $fabric['roll']);
+                $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
+                $dyeingReceive->decrement('available_unit', $fabric['weight']);
+                $dyeingReceive->decrement('roll', $fabric['roll']);
             }
+
+
+            $customer = Customer::findOrFail($request->customer_id);
+            $customer->increment('due_amount', $request->total_sale_price);
+            CustomerPayment::create([
+                'customer_id' => $request->customer_id,
+                'amount' => $customer->due_amount,
+                'debit' => $request->total_sale_price,
+
+            ]);
 
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully', 'error' => '']);

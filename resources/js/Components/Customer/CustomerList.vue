@@ -13,8 +13,6 @@ const headers = [
     { text: "Name", value: "name" },
     { text: "Phone", value: "phone" },
     { text: "Address", value: "address" },
-    
-    
     { text: "Action", value: "action" },
 
 ];

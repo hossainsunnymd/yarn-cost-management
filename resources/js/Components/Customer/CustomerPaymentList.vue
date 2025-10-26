@@ -17,7 +17,9 @@ const paymentId = ref(
 const headers = [
     { text: "ID", value: "id" },
     { text: "Party Name", value: "customer.name" },
-    { text: "Amount", value: "amount" },
+    { text: "Debit", value: "debit" },
+    { text: "Credit", value: "credit" },
+    { text: "Balance", value: "amount" },
     { text: "Payment date", value: "created_at" },
 ];
 
