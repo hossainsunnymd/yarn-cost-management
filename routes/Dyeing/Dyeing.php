@@ -27,3 +27,4 @@ Route::get('/dyeing-receive-delete', [DyeingController::class, 'dyeingReceiveDel
 // Dyeing Payment
 Route::post('/save-dyeing-payment', [DyeingPartyController::class, 'saveDyeingPayment'])->name('save-dyeing-payment')->middleware('permission:save-dyeing-payment');
 Route::get('/dyeing-payment-list', [DyeingPartyController::class, 'dyeingPaymentList'])->name('dyeing-payment-list')->middleware('permission:dyeing-payment-list');
+Route::get('/dyeing-payment-delete/{id}', [DyeingPartyController::class, 'dyeingPaymentDelete'])->name('dyeing-payment-delete')->middleware('permission:dyeing-payment-delete');

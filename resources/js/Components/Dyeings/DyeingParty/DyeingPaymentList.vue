@@ -19,6 +19,8 @@ const headers = [
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
+    { text: "Date", value: "created_at" },
+    { text: "Action", value: "action" },
 ];
 
 // Reactive data
@@ -29,6 +31,20 @@ const searchItem = ref("");
 // Open payment modal
 function openPaymentModal() {
     paymentModal.value = true;
+}
+
+function deleteDyeingPayment(id) {
+    if (confirm("Are you sure you want to delete this payment?")) {
+        router.get(`/dyeing-payment-delete/${id}`, {
+            onSuccess: () => {
+                if (page.props.flash.status === false) {
+                    toaster.error(page.props.flash.message);
+                } else {
+                    toaster.success(page.props.flash.message);
+                }
+            },
+        });
+    }
 }
 </script>
 
@@ -75,5 +91,11 @@ function openPaymentModal() {
         :search-field="searchField"
         :search-value="searchItem"
     >
+    <template #item-created_at="{created_at}">
+        {{ new Date(created_at).toLocaleDateString() }}
+    </template>
+    <template #item-action="{ id }">
+        <button @click="deleteDyeingPayment(id)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition">Delete</button>
+    </template>
     </EasyDataTable>
 </template>

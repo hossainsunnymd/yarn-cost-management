@@ -53,7 +53,7 @@ if (page.props.flash.status === true) {
 
 <template>
 
-    <p class="text-2xl font-bold mb-4">Yarn Purchase List Shifkat</p>
+    <p class="text-2xl font-bold mb-4">Yarn Purchase List</p>
 
 
     <!-- Search input and Add button -->
@@ -110,7 +110,7 @@ if (page.props.flash.status === true) {
 
         <template #item-created_at="{ created_at }">
             {{ formatDate(created_at) }}
-            
+
         </template>
     </EasyDataTable>
 </template>

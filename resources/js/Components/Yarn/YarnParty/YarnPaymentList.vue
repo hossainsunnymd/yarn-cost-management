@@ -8,7 +8,9 @@ import YarnPayment from "./YarnPayment.vue";
 const toaster = createToaster({});
 const page = usePage();
 const paymentModal = ref(false);
-const paymentId = ref(new URLSearchParams(window.location.search).get("yarn_party_id"));
+const paymentId = ref(
+    new URLSearchParams(window.location.search).get("yarn_party_id")
+);
 
 // Table headers for EasyDataTable
 const headers = [
@@ -17,6 +19,8 @@ const headers = [
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
+    { text: "Date", value: "created_at" },
+    { text: "Action", value: "action" },
 ];
 
 // Reactive data
@@ -28,10 +32,24 @@ const searchItem = ref("");
 function openPaymentModal() {
     paymentModal.value = true;
 }
+
+function deleteKnittingPayment(id) {
+    if (confirm("Are you sure you want to delete this payment?")) {
+        router.get(`/yarn-payment-delete/${id}`, {
+            onSuccess: () => {
+                if (page.props.flash.status === false) {
+                    toaster.error(page.props.flash.message);
+                } else {
+                    toaster.success(page.props.flash.message);
+                }
+            },
+        });
+    }
+}
 </script>
 
 <template>
-      <YarnPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
+    <YarnPayment v-model:paymentModal="paymentModal" :paymentId="paymentId" />
     <!-- Page Title -->
     <p class="text-2xl font-bold">Yarn Payment List</p>
 
@@ -70,5 +88,16 @@ function openPaymentModal() {
         :search-field="searchField"
         :search-value="searchItem"
     >
+        <template #item-created_at="{ created_at }">
+            {{ new Date(created_at).toLocaleDateString() }}
+        </template>
+        <template #item-action="{ id }">
+            <button
+                @click="deleteKnittingPayment(id)"
+                class="bg-red-500 px-2 py-1 rounded text-white"
+            >
+                Delete
+            </button>
+        </template>
     </EasyDataTable>
 </template>

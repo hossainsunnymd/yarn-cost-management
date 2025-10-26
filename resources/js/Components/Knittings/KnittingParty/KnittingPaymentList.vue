@@ -19,6 +19,8 @@ const headers = [
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
+    { text: "Date", value: "created_at" },
+    { text: "Action", value: "action" },
 ];
 
 // Reactive data
@@ -29,6 +31,21 @@ const searchItem = ref("");
 // Open payment modal
 function openPaymentModal() {
     paymentModal.value = true;
+}
+
+//delete knitting payment
+function deleteKnittingPayment(id) {
+    if (confirm("Are you sure you want to delete this payment?")) {
+        router.get(`/knitting-payment-delete/${id}`, {
+            onSuccess: () => {
+                if (page.props.flash.status === false) {
+                    toaster.error(page.props.flash.message);
+                } else {
+                    toaster.success(page.props.flash.message);
+                }
+            },
+        });
+    }
 }
 </script>
 
@@ -53,7 +70,10 @@ function openPaymentModal() {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.knittingPayment[0]?.knitting_party.due_amount }} Tk
+                {{
+                    page.props.knittingPayment[0]?.knitting_party.due_amount
+                }}
+                Tk
             </p>
         </div>
         <div class="">
@@ -75,5 +95,16 @@ function openPaymentModal() {
         :search-field="searchField"
         :search-value="searchItem"
     >
+        <template #item-created_at="{ created_at }">
+            {{ new Date(created_at).toLocaleDateString() }}
+        </template>
+        <template #item-action="{ id }">
+            <button
+                @click="deleteKnittingPayment(id)"
+                class="bg-red-500 px-2 py-1 rounded text-white"
+            >
+                Delete
+            </button>
+        </template>
     </EasyDataTable>
 </template>
