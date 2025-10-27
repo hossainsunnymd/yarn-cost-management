@@ -17,7 +17,12 @@ const headers = [
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
+    { text: "Payment date", value: "created_at" },
 ];
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB");
+};
 
 // Reactive data
 const items = ref(page.props.yarnPayments);
