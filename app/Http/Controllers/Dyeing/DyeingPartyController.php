@@ -108,11 +108,35 @@ class DyeingPartyController extends Controller
             $dyeingParty->decrement('due_amount', $request->amount);
             DyeingPayment::create([
                 'dyeing_party_id' => $request->dyeing_party_id,
-                'amount' =>$dyeingParty->due_amount,
-                'credit'=>$request->amount,
+                'amount' => $dyeingParty->due_amount,
+                'credit' => $request->amount,
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+    }
+
+    //dyeing payment delete
+    public function dyeingPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $dyeingPayment = DyeingPayment::findOrFail($id);
+            $dyeingParty = DyeingParty::findOrFail($dyeingPayment->dyeing_party_id);
+            $debit = $dyeingPayment->debit;
+            $credit = $dyeingPayment->credit;
+            if ($debit) {
+                $dyeingParty->decrement('due_amount', $debit);
+            }
+            if ($credit) {
+                $dyeingParty->increment('due_amount', $credit);
+            }
+            $dyeingPayment->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

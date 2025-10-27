@@ -119,6 +119,30 @@ class KnittingPartyController extends Controller
         }
     }
 
+    //delete payment
+    public function knittingPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $knittingPayment = KnittingPayment::findOrFail($id);
+            $knittingParty = KnittingParty::find($knittingPayment->knitting_party_id);
+            $debit = $knittingPayment->debit;
+            $credit = $knittingPayment->credit;
+            if ($debit) {
+                $knittingParty->decrement('due_amount', $debit);
+            }
+            if ($credit) {
+                $knittingParty->increment('due_amount', $credit);
+            }
+            $knittingPayment->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+    }
+
     //delete knitting party
     public function knittingPartyDelete(Request $request)
     {

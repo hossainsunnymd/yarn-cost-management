@@ -73,7 +73,7 @@ class YarnPurchaseController extends Controller
 
             YarnPurchase::create($data);
             $yarnParty=YarnParty::find($request->yarn_party_id);
-            $yarnParty->increment('due_amount', $total_amount);
+            $yarnParty->increment('due_amount', $bill_amount);
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
                 'amount' => $yarnParty->due_amount,

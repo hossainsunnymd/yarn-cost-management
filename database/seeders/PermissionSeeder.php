@@ -44,6 +44,7 @@ class PermissionSeeder extends Seeder
     // Yarn Payment
     'save-yarn-payment',
     'yarn-payment-list',
+    'yarn-payment-delete',
 
     // Knitting Party
     'knitting-party-list',
@@ -71,6 +72,7 @@ class PermissionSeeder extends Seeder
     // Knitting Payment
     'save-knitting-payment',
     'knitting-payment-list',
+    'knitting-payment-delete',
 
     // Dyeing Party
     'dyeing-party-list',
@@ -90,6 +92,7 @@ class PermissionSeeder extends Seeder
     // Dyeing Payment
     'save-dyeing-payment',
     'dyeing-payment-list',
+    'dyeing-payment-delete',
 
     // Fabric
     'fabric-list',

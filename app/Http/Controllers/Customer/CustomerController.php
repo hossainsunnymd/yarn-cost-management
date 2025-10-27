@@ -88,7 +88,8 @@ class CustomerController extends Controller
     }
 
     //save customer payment
-    public function saveCustomerPayment(Request $request){
+    public function saveCustomerPayment(Request $request)
+    {
 
         $validation = Validator::make($request->all(), [
             'amount' => 'required|numeric|min:1',
@@ -99,17 +100,20 @@ class CustomerController extends Controller
         }
 
         DB::beginTransaction();
-        try{
-
-            $data = [
+        try {
+            $customer = Customer::find($request->customer_id);
+            $customer->decrement('due_amount', $request->amount);
+            
+            CustomerPayment::create([
                 'customer_id' => $request->customer_id,
-                'amount' => $request->amount,
-            ];
-            CustomerPayment::create($data);
-            Customer::find($request->customer_id)->decrement('due_amount', $request->amount);
+                'amount' => $customer->due_amount,
+                'credit' => $request->amount,
+            ]);
+
+
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Customer Payment Successfully', 'error' => '']);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
         }

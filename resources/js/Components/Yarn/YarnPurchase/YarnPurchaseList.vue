@@ -110,7 +110,7 @@ if (page.props.flash.status === true) {
 
         <template #item-created_at="{ created_at }">
             {{ formatDate(created_at) }}
-            
+
         </template>
     </EasyDataTable>
 </template>

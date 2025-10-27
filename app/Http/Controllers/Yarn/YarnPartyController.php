@@ -123,6 +123,31 @@ class YarnPartyController extends Controller
         }
     }
 
+    //delete yarn payment
+    public function yarnPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $yarnPayment = YarnPayment::findOrFail($id);
+            $yarnParty = YarnParty::findOrFail($yarnPayment->yarn_party_id);
+            $debit = $yarnPayment->debit;
+            $credit = $yarnPayment->credit;
+            if ($debit) {
+                $yarnParty->decrement('due_amount', $debit);
+            }
+            if ($credit) {
+                $yarnParty->increment('due_amount', $credit);
+            }
+            $yarnPayment->delete();
+            DB::commit();
+
+            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+    }
+
     //delete yarn party
     public function yarnPartyDelete(Request $request)
     {
