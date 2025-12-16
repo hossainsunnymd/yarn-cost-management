@@ -15,10 +15,12 @@ const paymentId = ref(
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Date", value: "created_at" },
     { text: "Party Name", value: "cutting_party.name" },
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
+    { text: "Action", value: "action" },
 ];
 
 // Reactive data
@@ -29,6 +31,20 @@ const searchItem = ref("");
 // Open payment modal
 function openPaymentModal() {
     paymentModal.value = true;
+}
+
+function deleteCuttingPayment(id) {
+    if (confirm("Are you sure you want to delete this payment?")) {
+        router.get(`/cutting-payment-delete/${id}`, {
+            onSuccess: () => {
+                if (page.props.flash.status === false) {
+                    toaster.error(page.props.flash.message);
+                } else {
+                    toaster.success(page.props.flash.message);
+                }
+            },
+        });
+    }
 }
 </script>
 
@@ -75,5 +91,16 @@ function openPaymentModal() {
         :search-field="searchField"
         :search-value="searchItem"
     >
+        <template #item-created_at="{ created_at }">
+            {{ new Date(created_at).toLocaleDateString() }}
+        </template>
+        <template #item-action="{ id }">
+            <button
+                @click="deleteCuttingPayment(id)"
+                class="bg-red-500 px-2 py-1 rounded text-white"
+            >
+                Delete
+            </button>
+        </template>
     </EasyDataTable>
 </template>

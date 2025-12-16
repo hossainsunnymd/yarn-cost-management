@@ -11,6 +11,7 @@ use App\Models\SewingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateSewingPaymentService;
 
 class SewingPartyController extends Controller
 {
@@ -114,6 +115,22 @@ class SewingPartyController extends Controller
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+    }
+
+    //sewing payment delete
+    public function sewingPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $sewingPayment = SewingPayment::findOrFail($id);
+            $sewingPayment->delete();
+            RecalculateSewingPaymentService::recalculateSewingPayment($sewingPayment->sewing_party_id);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

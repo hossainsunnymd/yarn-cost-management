@@ -15,11 +15,11 @@ const paymentId = ref(
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Date", value: "created_at" },
     { text: "Party Name", value: "dyeing_party.name" },
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },
-    { text: "Date", value: "created_at" },
     { text: "Action", value: "action" },
 ];
 

@@ -24,3 +24,4 @@ Route::post('/create-cutting-receive', [CuttingController::class, 'createCutting
 //cutting payment
 Route::post('/save-cutting-payment', [CuttingPartyController::class, 'saveCuttingPayment'])->name('save-cutting-payment')->middleware('permission:save-cutting-payment');
 Route::get('/cutting-payment-list', [CuttingPartyController::class, 'cuttingPaymentList'])->name('cutting-payment-list')->middleware('permission:cutting-payment-list');
+Route::get('/cutting-payment-delete/{id}', [CuttingPartyController::class, 'cuttingPaymentDelete'])->name('cutting-payment-delete')->middleware('permission:cutting-payment-delete');

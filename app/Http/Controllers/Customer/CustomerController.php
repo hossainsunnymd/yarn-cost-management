@@ -10,6 +10,7 @@ use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 
 class CustomerController extends Controller
 {
@@ -117,6 +118,22 @@ class CustomerController extends Controller
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
         }
 
+    }
+
+    //customer payment delete
+    public function customerPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $customerPayment = CustomerPayment::findOrFail($id);
+            $customerPayment->delete();
+            RecalculateCustomerPaymentService::recalculateCustomerPayment($customerPayment->customer_id);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
     }
 
     //delete customer
