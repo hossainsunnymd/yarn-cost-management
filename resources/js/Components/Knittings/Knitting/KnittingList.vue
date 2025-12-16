@@ -17,6 +17,7 @@ const knittingYarn = ref({});
 // Table headers
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Challan No", value: "challan_no" },
     { text: "Knitting Party Name", value: "knitting_party.name" },
     { text: "Fabric Name", value: "fabric_name" },
     { text: "Weight", value: "total_unit" },

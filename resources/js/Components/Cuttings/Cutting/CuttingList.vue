@@ -62,13 +62,13 @@ const searchItem = ref();
       >
         Receive Cutting
       </Link>
+        <button @click="deleteCutting(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
     </template>
 
     <!-- Date Format -->
     <template #item-created_at="{ created_at }">
         {{ formatDate(created_at) }}
     </template>
-
   </EasyDataTable>
 </template>
 
