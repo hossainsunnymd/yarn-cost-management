@@ -16,6 +16,8 @@ const paymentId = ref(
 const headers = [
     { text: "ID", value: "id" },
     { text: "Party Name", value: "knitting_party.name" },
+    { text: "Challan_no", value: "challan_no" },
+    { text: "Particulars", value: "particulars" },
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Amount", value: "amount" },

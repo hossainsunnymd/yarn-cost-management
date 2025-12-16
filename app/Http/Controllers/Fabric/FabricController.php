@@ -42,7 +42,7 @@ class FabricController extends Controller
     //fabric sale
     public function fabricSale(Request $request)
     {
-      
+
 
         DB::beginTransaction();
         try {
@@ -79,6 +79,30 @@ class FabricController extends Controller
 
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
+    //delete fabric sale
+    public function deleteFabricSale(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $fabricSaleProducts = FabricSaleProduct::where('fabric_sale_id', $request->fabric_sale_id)->get();
+            foreach ($fabricSaleProducts as $fabricSaleProduct) {
+                $dyeingReceive = DyeingReceive::findOrFail($fabricSaleProduct->dyeing_receive_id);
+                $dyeingReceive->increment('available_unit', $fabricSaleProduct->unit);
+                $dyeingReceive->increment('roll', $fabricSaleProduct->role);
+                $fabricSaleProduct->delete();
+
+            }
+            $fabricSale = FabricSale::find($request->fabric_sale_id)->get();
+            Customer::findOrFail($fabricSale->customer_id)->decrement('due_amount', $fabricSale->total_sale_price);
+            $fabricSale->delete();
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);

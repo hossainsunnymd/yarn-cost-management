@@ -11,8 +11,12 @@
             aria-labelledby="modal-title"
         >
             <!-- Modal Header -->
-            <div class="flex justify-between items-center px-4 py-2 rounded-t-lg">
-                <h1 id="modal-title" class="text-xl font-bold text-black">Add Quantity</h1>
+            <div
+                class="flex justify-between items-center px-4 py-2 rounded-t-lg"
+            >
+                <h1 id="modal-title" class="text-xl font-bold text-black">
+                    Add Quantity
+                </h1>
                 <button
                     type="button"
                     class="text-white text-2xl font-bold bg-red-500 hover:bg-red-600 rounded-sm w-8 h-8 flex items-center justify-center"
@@ -26,7 +30,9 @@
             <!-- Modal Body -->
             <div class="px-6 py-4 space-y-4">
                 <div>
-                    <label for="Weight" class="block font-semibold mb-1">Weight</label>
+                    <label for="Weight" class="block font-semibold mb-1"
+                        >Weight</label
+                    >
                     <input
                         v-model="weight"
                         type="text"
@@ -99,9 +105,17 @@
                         :headers="yarnPurchaseHeaders"
                         :rows-per-page="10"
                     >
-                        <template #item-action="{ id, per_unit_cost, available_unit }">
+                        <template
+                            #item-action="{ id, per_unit_cost, available_unit }"
+                        >
                             <button
-                                @click="openQtyModal(id, per_unit_cost, available_unit)"
+                                @click="
+                                    openQtyModal(
+                                        id,
+                                        per_unit_cost,
+                                        available_unit
+                                    )
+                                "
                                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
                             >
                                 Select
@@ -116,7 +130,12 @@
         <div class="mt-10 border rounded p-6 shadow-sm">
             <h5 class="text-right text-lg font-semibold mb-1">Invoice</h5>
             <h6 class="text-right text-sm text-gray-600 mb-4">
-                {{ new Date().toISOString().slice(0, 10) }}
+                <span class="text-right text-lg font-semibold m-1">Date:</span>
+                <input v-model="form.send_date" class="border px-3 py-2 rounded-sm" type="date" />
+            </h6>
+            <h6 class="text-right text-sm text-gray-600 mb-4">
+                <span class="text-right text-lg font-semibold m-1">Challan no:</span>
+                <input v-model="form.challan_no" class="border px-3 py-2 rounded-sm" type="text" />
             </h6>
 
             <!-- Selected Party -->
@@ -127,9 +146,11 @@
             </div>
 
             <!-- Fabir Name -->
-             
+
             <div class="mb-4">
-                <label for="fabricName" class="block font-semibold mb-1">Fabric Name</label>
+                <label for="fabricName" class="block font-semibold mb-1"
+                    >Fabric Name</label
+                >
                 <input
                     v-model="form.fabric_name"
                     type="text"
@@ -138,17 +159,36 @@
                 />
             </div>
 
-
             <!-- Yarn Table -->
             <div class="overflow-x-auto">
                 <table class="min-w-full border border-gray-300 table-auto">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">No</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Weight</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Per Unit Cost</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Total</th>
-                            <th class="border px-2 py-1 text-left text-sm font-semibold">Action</th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                No
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Weight
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Per Unit Cost
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Total
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -158,10 +198,18 @@
                             :key="index"
                             class="odd:bg-gray-50"
                         >
-                            <td class="border px-2 py-1 text-xs">{{ index + 1 }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.weight }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.per_unit_cost }}</td>
-                            <td class="border px-2 py-1 text-xs">{{ yarn.total_cost }}</td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ index + 1 }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.weight }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.per_unit_cost }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ yarn.total_cost }}
+                            </td>
                             <td class="border px-2 py-1 text-xs">
                                 <button
                                     @click="removeYarns(index)"
@@ -172,22 +220,34 @@
                             </td>
                         </tr>
                         <tr v-else>
-                            <td colspan="5" class="text-center py-3 text-gray-600 text-sm">
+                            <td
+                                colspan="5"
+                                class="text-center py-3 text-gray-600 text-sm"
+                            >
                                 No product added yet
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="font-semibold">
-                            <td colspan="3" class="border px-2 py-1 text-sm text-right">Total</td>
-                            <td colspan="2" class="border px-2 py-1 text-sm">{{ calculate.total }}</td>
+                            <td
+                                colspan="3"
+                                class="border px-2 py-1 text-sm text-right"
+                            >
+                                Total
+                            </td>
+                            <td colspan="2" class="border px-2 py-1 text-sm">
+                                {{ calculate.total }}
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
             <!-- Confirm Button -->
-            <div class="mt-6 flex flex-col 2xl:flex-row 2xl:justify-between space-y-3 2xl:space-y-0">
+            <div
+                class="mt-6 flex flex-col 2xl:flex-row 2xl:justify-between space-y-3 2xl:space-y-0"
+            >
                 <button
                     @click="createInvoice"
                     class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded w-full md:w-auto"
@@ -228,7 +288,6 @@ const selectedYarns = reactive({
 // Props Data
 const knittingPartyList = ref(page.props.knittingPartyList || []);
 const yarnPurchaseList = ref(page.props.yarnPurchaseList || []);
-
 
 // Table Headers
 const knittingPartyHeaders = [
@@ -276,9 +335,12 @@ function closeModal() {
 function addYarns() {
     const ifExist = yarnList.value.find((yarn) => yarn.id === selectedYarns.id);
     if (ifExist) return toaster.error("Yarn already added");
-    if (weight.value <= 0) return toaster.error("Enter quantity greater than zero.");
+    if (weight.value <= 0)
+        return toaster.error("Enter quantity greater than zero.");
     if (parseFloat(weight.value) > parseFloat(selectedYarns.available_weight)) {
-        return toaster.error("Only " + selectedYarns.available_weight + " available.");
+        return toaster.error(
+            "Only " + selectedYarns.available_weight + " available."
+        );
     }
 
     yarnList.value.push({
@@ -320,14 +382,21 @@ const form = useForm({
     total: "",
     total_weight: "",
     fabric_name: "",
+    send_date:"",
+    challan_no:""
 });
 
 function createInvoice() {
     if (!yarnParty.name) return toaster.error("Yarn Party is required");
-    if (yarnList.value.length === 0) return toaster.error("Yarn is required");
-    
-    if (form.fabric_name === "") return toaster.error("Fabric name is required");
 
+    if(!form.send_date) return toaster.error("Date is required");
+
+    if(!form.challan_no) return toaster.error("Challan No is required");
+
+    if (yarnList.value.length === 0) return toaster.error("Yarn is required");
+
+    if (form.fabric_name === "")
+        return toaster.error("Fabric name is required");
 
     form.knitting_party_id = yarnParty.id;
     form.yarns = yarnList.value;

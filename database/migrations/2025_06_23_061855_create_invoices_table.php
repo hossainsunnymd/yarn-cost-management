@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('challan_no')->unique();
+            $table->date('invoice_date');
             $table->decimal('total', 10, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

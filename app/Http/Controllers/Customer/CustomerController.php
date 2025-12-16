@@ -26,8 +26,7 @@ class CustomerController extends Controller
         $dueAmount = Customer::find($request->customer_id)->due_amount;
         $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)->with('customer')->get();
         $latestPayment = CustomerPayment::latest()->first();
-        $totalPayment = CustomerPayment::where('customer_id', $request->customer_id)->sum('amount');
-        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'totalPayment' => $totalPayment, 'dueAmount' => $dueAmount]);
+        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'dueAmount' => $dueAmount]);
     }
 
     //customer save page
@@ -103,7 +102,7 @@ class CustomerController extends Controller
         try {
             $customer = Customer::find($request->customer_id);
             $customer->decrement('due_amount', $request->amount);
-            
+
             CustomerPayment::create([
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,

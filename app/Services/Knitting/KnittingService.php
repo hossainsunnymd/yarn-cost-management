@@ -24,6 +24,8 @@ class KnittingService{
                 'total_cost' => $request->total,
                 'per_unit_cost' => $perUnitCost,
                 'fabric_name' => $request->fabric_name,
+                'send_date' => $request->send_date,
+                'challan_no' => $request->challan_no
             ]);
 
             foreach ($request->yarns as $yarn) {

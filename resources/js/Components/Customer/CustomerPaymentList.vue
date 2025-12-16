@@ -61,9 +61,6 @@ function openPaymentModal() {
                 Total Due:
                 {{ page.props.dueAmount }} Tk
             </p>
-            <p class="mt-4 font-bold">
-                Total Payments: {{ page.props.totalPayment }} Tk
-            </p>
         </div>
         <div class="">
             <button

@@ -10,6 +10,7 @@ use App\Models\KnittingParty;
 use App\Models\KnittingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Services\RecalculationPayments\RecalculateKnittingPaymentService;
 use Illuminate\Support\Facades\Validator;
 
 class KnittingPartyController extends Controller
@@ -109,7 +110,8 @@ class KnittingPartyController extends Controller
             KnittingPayment::create([
                 'knitting_party_id' => $request->knitting_party_id,
                 'amount' => $knittingParty->due_amount,
-                'credit' => $request->amount
+                'credit' => $request->amount,
+                'particulars' => $request->particulars
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);
@@ -125,16 +127,9 @@ class KnittingPartyController extends Controller
         DB::beginTransaction();
         try {
             $knittingPayment = KnittingPayment::findOrFail($id);
-            $knittingParty = KnittingParty::find($knittingPayment->knitting_party_id);
-            $debit = $knittingPayment->debit;
-            $credit = $knittingPayment->credit;
-            if ($debit) {
-                $knittingParty->decrement('due_amount', $debit);
-            }
-            if ($credit) {
-                $knittingParty->increment('due_amount', $credit);
-            }
+
             $knittingPayment->delete();
+            RecalculateKnittingPaymentService::recalculateKnittingPayment($knittingPayment->knitting_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
