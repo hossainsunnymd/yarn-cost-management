@@ -11,6 +11,7 @@ use App\Models\CuttingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateCuttingPaymentService;
 
 class CuttingPartyController extends Controller
 {
@@ -122,7 +123,23 @@ class CuttingPartyController extends Controller
         }
     }
 
-    //sewing party delete
+  //dyeing cutting delete
+    public function cuttingPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $cuttingPayment = CuttingPayment::findOrFail($id);
+            $cuttingPayment->delete();
+            RecalculateCuttingPaymentService::recalculateCuttingPayment($cuttingPayment->cutting_party_id);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
+    }
+
+    //cutting party delete
     public function cuttingPartyDelete(Request $request)
     {
         try {

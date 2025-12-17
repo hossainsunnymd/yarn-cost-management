@@ -9,12 +9,14 @@ use App\Models\KnittingYarn;
 use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use App\Models\KnittingParty;
+use App\Models\KnittingPayment;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Knitting\KnittingService;
 use App\Services\Knitting\KnittingReceiveService;
+use App\Services\RecalculationPayments\RecalculateKnittingPaymentService;
 
 class KnittingController extends Controller
 {
@@ -122,8 +124,10 @@ class KnittingController extends Controller
     {
         DB::beginTransaction();
          try {
-            $knittingReceive=KnittingReceive::find($request->knitting_receive_id);
-            Knitting::where('id', $knittingReceive->knitting_id)->increment('available_unit', $knittingReceive->available_unit);
+            $knittingReceive=KnittingReceive::find($request->knitting_receive_id)->with('knitting')->first();
+            Knitting::increment('available_unit', $knittingReceive->available_unit);
+            KnittingPayment::where('challan_no', $knittingReceive->knitting->challan_no)->delete();
+            RecalculateKnittingPaymentService::recalculateKnittingPayment($knittingReceive->knitting->knitting_party_id);
             $knittingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);

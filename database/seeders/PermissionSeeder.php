@@ -127,6 +127,7 @@ class PermissionSeeder extends Seeder
     // Cutting Payment
     'save-cutting-payment',
     'cutting-payment-list',
+    'cutting-payment-delete',
 
     // Sewing Party
     'sewing-party-list',
@@ -147,6 +148,7 @@ class PermissionSeeder extends Seeder
     // Sewing Payment
     'save-sewing-payment',
     'sewing-payment-list',
+    'sewing-payment-delete',
 
     // Products
     'product-list',
@@ -164,6 +166,7 @@ class PermissionSeeder extends Seeder
     'delete-customer',
     'customer-payment-list',
     'save-customer-payment',
+    'customer-payment-delete',
 
     // Invoices
     'invoice-list',

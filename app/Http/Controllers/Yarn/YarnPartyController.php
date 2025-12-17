@@ -6,11 +6,12 @@ use Exception;
 use Inertia\Inertia;
 use App\Models\YarnParty;
 use App\Models\YarnPayment;
+use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Models\YarnPurchase;
+use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateYarnPaymentService;
 
 class YarnPartyController extends Controller
 {
@@ -129,16 +130,9 @@ class YarnPartyController extends Controller
         DB::beginTransaction();
         try {
             $yarnPayment = YarnPayment::findOrFail($id);
-            $yarnParty = YarnParty::findOrFail($yarnPayment->yarn_party_id);
-            $debit = $yarnPayment->debit;
-            $credit = $yarnPayment->credit;
-            if ($debit) {
-                $yarnParty->decrement('due_amount', $debit);
-            }
-            if ($credit) {
-                $yarnParty->increment('due_amount', $credit);
-            }
             $yarnPayment->delete();
+
+            RecalculateYarnPaymentService::recalculateYarnPayment($yarnPayment->yarn_party_id);
             DB::commit();
 
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Deleted Successfully', 'error' => '']);

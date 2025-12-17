@@ -11,6 +11,7 @@ use App\Models\DyeingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateDyeingPaymentService;
 
 class DyeingPartyController extends Controller
 {
@@ -125,16 +126,8 @@ class DyeingPartyController extends Controller
         DB::beginTransaction();
         try {
             $dyeingPayment = DyeingPayment::findOrFail($id);
-            $dyeingParty = DyeingParty::findOrFail($dyeingPayment->dyeing_party_id);
-            $debit = $dyeingPayment->debit;
-            $credit = $dyeingPayment->credit;
-            if ($debit) {
-                $dyeingParty->decrement('due_amount', $debit);
-            }
-            if ($credit) {
-                $dyeingParty->increment('due_amount', $credit);
-            }
             $dyeingPayment->delete();
+            RecalculateDyeingPaymentService::recalculateDyeingPayment($dyeingPayment->dyeing_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

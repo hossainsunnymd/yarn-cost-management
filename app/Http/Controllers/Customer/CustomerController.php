@@ -10,6 +10,7 @@ use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 
 class CustomerController extends Controller
 {
@@ -26,8 +27,7 @@ class CustomerController extends Controller
         $dueAmount = Customer::find($request->customer_id)->due_amount;
         $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)->with('customer')->get();
         $latestPayment = CustomerPayment::latest()->first();
-        $totalPayment = CustomerPayment::where('customer_id', $request->customer_id)->sum('amount');
-        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'totalPayment' => $totalPayment, 'dueAmount' => $dueAmount]);
+        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'dueAmount' => $dueAmount]);
     }
 
     //customer save page
@@ -103,7 +103,7 @@ class CustomerController extends Controller
         try {
             $customer = Customer::find($request->customer_id);
             $customer->decrement('due_amount', $request->amount);
-            
+
             CustomerPayment::create([
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
@@ -118,6 +118,22 @@ class CustomerController extends Controller
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
         }
 
+    }
+
+    //customer payment delete
+    public function customerPaymentDelete(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $customerPayment = CustomerPayment::findOrFail($id);
+            $customerPayment->delete();
+            RecalculateCustomerPaymentService::recalculateCustomerPayment($customerPayment->customer_id);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+        }
     }
 
     //delete customer

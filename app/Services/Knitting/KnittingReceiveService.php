@@ -14,15 +14,15 @@ class KnittingReceiveService{
     {
 
         //check is knitting unit available
-        $knittingUnit = Knitting::findOrFail($request->knitting_id);
-        if ($knittingUnit->available_unit < $request->unit) {
+         $knitting = Knitting::findOrFail($request->knitting_id);
+        if ($knitting->available_unit < $request->unit) {
             throw new Exception('You cannot receive more unit than available unit');
         }
 
 
         DB::beginTransaction();
         try {
-            $knitting = Knitting::findOrFail($request->knitting_id);
+
             $knittingPartyId = $knitting->knitting_party_id;
             $perUnitKnittingCost = $knitting->per_unit_cost;
 
@@ -52,7 +52,6 @@ class KnittingReceiveService{
             ];
 
             KnittingReceive::create($data);
-            $knitting = Knitting::where('id', $request->knitting_id);
             $knitting->decrement('available_unit', $request->unit + $request->wastage ?? 0);
             $knittingParty=KnittingParty::find($knittingPartyId);
             $knittingParty->increment('due_amount', $totalKnittingCost);
@@ -60,13 +59,15 @@ class KnittingReceiveService{
                 'knitting_party_id' => $knittingPartyId,
                 'amount' => $knittingParty->due_amount,
                 'debit' => $totalKnittingCost,
+                'particulars'=>'Knitting Receive',
+                'challan_no'=>$knitting->challan_no
             ]);
 
             DB::commit();
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception("Something went wrong");
+            throw new Exception($e->getMessage());
         }
     }
 }

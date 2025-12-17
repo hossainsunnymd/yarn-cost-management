@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('credit', 10, 2)->nullable();
+            $table->string('particulars')->nullable();
+            $table->string('challan_no')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

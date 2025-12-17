@@ -16,11 +16,13 @@ const paymentId = ref(
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Payment date", value: "created_at" },
     { text: "Party Name", value: "customer.name" },
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
     { text: "Balance", value: "amount" },
-    { text: "Payment date", value: "created_at" },
+    { text: "Action", value: "action" },
+
 ];
 
 const formatDate = (date) => {
@@ -35,6 +37,20 @@ const searchItem = ref("");
 // Open payment modal
 function openPaymentModal() {
     paymentModal.value = true;
+}
+
+function deleteCustomerPayment(id) {
+    if (confirm("Are you sure you want to delete this payment?")) {
+        router.get(`/customer-payment-delete/${id}`, {
+            onSuccess: () => {
+                if (page.props.flash.status === false) {
+                    toaster.error(page.props.flash.message);
+                } else {
+                    toaster.success(page.props.flash.message);
+                }
+            },
+        });
+    }
 }
 </script>
 
@@ -61,9 +77,6 @@ function openPaymentModal() {
                 Total Due:
                 {{ page.props.dueAmount }} Tk
             </p>
-            <p class="mt-4 font-bold">
-                Total Payments: {{ page.props.totalPayment }} Tk
-            </p>
         </div>
         <div class="">
             <button
@@ -88,6 +101,12 @@ function openPaymentModal() {
         <!-- Date Format -->
         <template #item-created_at="{ created_at }">
             {{ formatDate(created_at) }}
+        </template>
+
+        <template #item-action="{ id }">
+            <button @click="deleteCustomerPayment(id)" class="bg-red-500 px-2 py-1 rounded text-white">
+                Delete
+            </button>
         </template>
 
     </EasyDataTable>
