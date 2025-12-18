@@ -66,6 +66,7 @@ class DyeingReceiveService
 
             DyeingPayment::create([
                 'challan_no' => $dyeing->challan_no,
+                'particulars' => 'Dyeing Receive',
                 'dyeing_party_id' => $dyeingPartyId,
                 'amount' => $totalDyeingCost,
                 'debit' => $totalDyeingCost,

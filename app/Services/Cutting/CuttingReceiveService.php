@@ -46,6 +46,7 @@ class CuttingReceiveService
             $cuttingParty->increment('due_amount', $totalCuttingCost);
             CuttingPayment::create([
                 'challan_no' => $cutting->challan_no,
+                'particulars'=>'Cutting Receive',
                 'cutting_party_id' => $cuttingPartyId,
                 'amount' => $cuttingParty->due_amount,
                 'debit'=>$totalCuttingCost,

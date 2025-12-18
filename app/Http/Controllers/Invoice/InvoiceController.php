@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CustomerPayment;
+use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 
 class InvoiceController extends Controller
 {
@@ -34,7 +35,7 @@ class InvoiceController extends Controller
     //create invoice
     public function createInvoice(Request $request)
     {
-        
+
 
         DB::beginTransaction();
         try {
@@ -42,8 +43,12 @@ class InvoiceController extends Controller
             $invoice = Invoice::create([
                 'customer_id' => $request->customer_id,
                 'total' => $request->total_amount,
+                'invoice_date' => $request->invoice_date,
+                'challan_no' => $request->challan_no,
+                'challan_type'=>'product',
+                'particulars' => 'Product Sale'
             ]);
-            
+
 
             Customer::find($request->customer_id)->increment('due_amount', $request->total_amount);
 
@@ -53,12 +58,12 @@ class InvoiceController extends Controller
                     'invoice_id' => $invoice->id,
                     'sewing_receive_id' => $product['id'],
                     'unit' => $product['weight'],
-                    'sale_price'=>$product['sale_price']
+                    'sale_price' => $product['sale_price']
                 ]);
 
                 //update available unit
                 SewingReceive::find($product['id'])->decrement('available_unit', $product['weight']);
-                
+
             }
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Created Successfully', 'error' => '']);
@@ -71,10 +76,17 @@ class InvoiceController extends Controller
     //delete invoice
     public function deleteInvoice(Request $request)
     {
-            DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            InvoiceProduct::where('invoice_id', $request->invoice_id)->delete();
-            Invoice::find($request->invoice_id)->delete();
+            $invoiceProducts = InvoiceProduct::where('invoice_id', $request->invoice_id)->get();
+            foreach ($invoiceProducts as $product) {
+                SewingReceive::find($product->sewing_receive_id)->increment('available_unit', $product->unit);
+                $product->delete();
+            }
+            $invoice = Invoice::find($request->invoice_id);
+            CustomerPayment::where('challan_no', $invoice->challan_no)->where('challan_type','product')->delete();
+            RecalculateCustomerPaymentService::recalculateCustomerPayment($invoice->customer_id);
+            $invoice->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

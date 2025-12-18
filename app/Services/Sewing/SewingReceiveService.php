@@ -72,6 +72,7 @@ class SewingReceiveService{
 
             SewingPayment::create([
                 'challan_no' => $sewingParty->challan_no,
+                'particulars'=>'Sewing Receive',
                 'sewing_party_id' => $sewingPartyId,
                 'amount' => $sewingParty->due_amount,
                 'debit' => $totalSewingCost,

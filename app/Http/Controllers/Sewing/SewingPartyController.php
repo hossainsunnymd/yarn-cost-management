@@ -109,6 +109,7 @@ class SewingPartyController extends Controller
             $sweingParty = SewingParty::find($request->sewing_party_id);
             $sweingParty->decrement('due_amount', $request->amount);
             SewingPayment::create([
+                'particulars' => $request->particulars,
                 'sewing_party_id' => $request->sewing_party_id,
                 'amount' =>$sweingParty->due_amount,
                 'credit'=>$request->amount

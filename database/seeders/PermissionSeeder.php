@@ -146,6 +146,8 @@ class PermissionSeeder extends Seeder
     'sewing-receive-list',
     'sewing-receive-page',
     'create-sewing-receive',
+    'sewing-delete',
+    'sewing-receive-delete',
 
     // Sewing Payment
     'save-sewing-payment',

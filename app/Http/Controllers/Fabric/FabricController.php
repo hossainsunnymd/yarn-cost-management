@@ -82,9 +82,12 @@ class FabricController extends Controller
             $customer->increment('due_amount', $request->total_sale_price);
             CustomerPayment::create([
                 'challan_no' => $request->challan_no,
+                'challan_type'=>'fabric',
+                'particulars' => 'Fabric Sale',
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
                 'debit' => $request->total_sale_price,
+
             ]);
 
             DB::commit();
@@ -109,7 +112,7 @@ class FabricController extends Controller
 
             }
             $fabricSale = FabricSale::find($request->fabric_sale_id)->first();
-            CustomerPayment::where('challan_no', $fabricSale->challan_no)->delete();
+            CustomerPayment::where('challan_no', $fabricSale->challan_no)->where('challan_type','fabric')->delete();
             $fabricSale->delete();
             RecalculateCustomerPaymentService::recalculateCustomerPayment($fabricSale->customer_id);
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('challan_no')->nullable();
             $table->foreign('challan_no')->references('challan_no')->on('dyeings')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('particulars');
             $table->decimal('amount');
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();

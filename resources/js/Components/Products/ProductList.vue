@@ -32,6 +32,12 @@ const searchField = ref(["id", "sewing.cutting_receive.cutting.category.name"]);
 // User search input
 const searchItem = ref("");
 
+const deleteProduct = (id) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+        router.visit(`/sewing-receive-delete?sewing_receive_id=${id}`);
+    }
+};
+
 // Show success or error message based on flash status
 if (page.props.flash.status === true) {
     toaster.success(page.props.flash.message);
@@ -85,6 +91,7 @@ if (page.props.flash.status === true) {
                         <span class="material-icons text-sm">edit</span>
                     </Link>
                 </div>
+                <button @click="deleteProduct(id)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition">Delete</button>
             </template>
 
             <!-- Date Format -->

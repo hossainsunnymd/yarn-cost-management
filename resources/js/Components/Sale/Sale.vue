@@ -1,191 +1,258 @@
 <template>
-  <!-- Modal for adding product quantity -->
-  <div
-    v-if="showModal"
-    class="fixed inset-0 z-50 flex items-start justify-center overflow-auto bg-black/15 bg-opacity-40 pt-20"
-  >
+    <!-- Modal for adding product quantity -->
     <div
-      class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+        v-if="showModal"
+        class="fixed inset-0 z-50 flex items-start justify-center overflow-auto bg-black/15 bg-opacity-40 pt-20"
     >
-      <!-- Modal Header -->
-      <div class="flex justify-between items-center px-4 py-2 rounded-t-lg">
-        <h1 id="modal-title" class="text-xl font-bold text-black">Add Quantity</h1>
-        <button
-          type="button"
-          class="text-white text-2xl font-bold bg-red-500 hover:bg-red-600 rounded-sm w-8 h-8 flex items-center justify-center"
-          @click="closeModal"
-          aria-label="Close"
+        <div
+            class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
         >
-          &times;
-        </button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="px-6 py-4 space-y-4">
-        <div>
-          <label for="weight" class="block font-semibold mb-1">Quantity (PCS)</label>
-          <input
-            v-model="weight"
-            type="number"
-            id="weight"
-            class="w-full border px-3 py-2 rounded"
-            min="0"
-          />
-        </div>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="flex justify-end px-6 py-3 rounded-b-lg">
-        <button
-          @click="addProduct"
-          type="button"
-          class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
-        >
-          Add
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Container -->
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">Create Sale</h1>
-
-    <div class="flex flex-col md:flex-row md:space-x-6">
-      <!-- Customer Selection -->
-      <div class="md:w-1/2 mb-6 md:mb-0">
-        <div class="border rounded p-4 shadow-sm">
-          <p class="font-semibold mb-3">Select Customer</p>
-          <input
-            v-model="searchCustomer"
-            type="text"
-            placeholder="Search Party..."
-            class="w-full mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <EasyDataTable
-            buttons-paginations
-            alternating
-            :items="customerItem"
-            :headers="customerHeaders"
-            :rows-per-page="10"
-          >
-            <template #item-action="{ name, phone, id, due_amount }">
-              <button
-                @click="addCustomer(name, phone, id, due_amount)"
-                type="button"
-                class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
-              >
-                Select
-              </button>
-            </template>
-          </EasyDataTable>
-        </div>
-      </div>
-
-      <!-- Product Selection -->
-      <div class="md:w-1/2">
-        <div class="border rounded p-4 shadow-sm">
-          <p class="font-semibold mb-3">Select Product</p>
-          <input
-            v-model="searchProduct"
-            type="text"
-            placeholder="Search Products..."
-            class="w-full mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <EasyDataTable
-            buttons-paginations
-            alternating
-            :items="productList"
-            :headers="productHeaders"
-            :rows-per-page="10"
-          >
-            <template #item-action="{ id }">
-              <button
-                @click="openQtyModal(id)"
-                class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
-              >
-                Select
-              </button>
-            </template>
-          </EasyDataTable>
-        </div>
-      </div>
-    </div>
-
-    <!-- Invoice Summary -->
-    <div class="mt-10 border rounded p-6 shadow-sm">
-      <h5 class="text-right text-lg font-semibold mb-1">Invoice</h5>
-      <h6 class="text-right text-sm text-gray-600 mb-4">{{ today }}</h6>
-
-      <!-- Customer Info -->
-      <div class="mb-4">
-        <h6 class="font-semibold mb-1">Work Order For:</h6>
-        <p>Name: {{ customer.name }}</p>
-        <p>Mobile: {{ customer.phone }}</p>
-        <p>Due Amount: {{ customer.due_amount }}</p>
-      </div>
-
-      <!-- Selected Products Table -->
-      <div class="overflow-x-auto">
-        <table class="min-w-full border border-gray-300 table-auto">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">No</th>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">Product</th>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">PCS</th>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">Price</th>
-              <th class="border px-2 py-1 text-left text-sm font-semibold">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-if="selectedProductList.length"
-              v-for="(product, index) in selectedProductList"
-              :key="index"
+            <!-- Modal Header -->
+            <div
+                class="flex justify-between items-center px-4 py-2 rounded-t-lg"
             >
-              <td class="border px-2 py-1 text-xs">{{ index + 1 }}</td>
-              <td class="border px-2 py-1 text-xs">{{ product.name }}</td>
-              <td class="border px-2 py-1 text-xs">{{ product.weight }}</td>
-              <td class="border px-2 py-1 text-xs">{{ product.sale_price }}</td>
-              <td class="border px-2 py-1 text-xs">
+                <h1 id="modal-title" class="text-xl font-bold text-black">
+                    Add Quantity
+                </h1>
                 <button
-                  @click="removeProduct(index)"
-                  class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs"
+                    type="button"
+                    class="text-white text-2xl font-bold bg-red-500 hover:bg-red-600 rounded-sm w-8 h-8 flex items-center justify-center"
+                    @click="closeModal"
+                    aria-label="Close"
                 >
-                  Delete
+                    &times;
                 </button>
-              </td>
-            </tr>
-            <tr v-else>
-              <td colspan="5" class="text-center py-3 text-gray-600 text-sm">
-                No product added yet
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr class="font-semibold">
-              <td colspan="3" class="border px-2 py-1 text-sm text-right">Total</td>
-              <td class="border px-2 py-1 text-sm">{{ totalAmount }}</td>
-              <td class="border px-2 py-1"></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+            </div>
 
-      <!-- Confirm Button -->
-      <div class="mt-6 flex flex-col md:flex-row md:justify-between space-y-3 md:space-y-0">
-        <button
-          @click="createInvoice"
-          class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded w-full md:w-auto"
-        >
-          Confirm
-        </button>
-      </div>
+            <!-- Modal Body -->
+            <div class="px-6 py-4 space-y-4">
+                <div>
+                    <label for="weight" class="block font-semibold mb-1"
+                        >Quantity (PCS)</label
+                    >
+                    <input
+                        v-model="weight"
+                        type="number"
+                        id="weight"
+                        class="w-full border px-3 py-2 rounded"
+                        min="0"
+                    />
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex justify-end px-6 py-3 rounded-b-lg">
+                <button
+                    @click="addProduct"
+                    type="button"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
+                >
+                    Add
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">Create Sale</h1>
+
+        <div class="flex flex-col md:flex-row md:space-x-6">
+            <!-- Customer Selection -->
+            <div class="md:w-1/2 mb-6 md:mb-0">
+                <div class="border rounded p-4 shadow-sm">
+                    <p class="font-semibold mb-3">Select Customer</p>
+                    <input
+                        v-model="searchCustomer"
+                        type="text"
+                        placeholder="Search Party..."
+                        class="w-full mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <EasyDataTable
+                        buttons-paginations
+                        alternating
+                        :items="customerItem"
+                        :headers="customerHeaders"
+                        :rows-per-page="10"
+                    >
+                        <template
+                            #item-action="{ name, phone, id, due_amount }"
+                        >
+                            <button
+                                @click="
+                                    addCustomer(name, phone, id, due_amount)
+                                "
+                                type="button"
+                                class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
+                            >
+                                Select
+                            </button>
+                        </template>
+                    </EasyDataTable>
+                </div>
+            </div>
+
+            <!-- Product Selection -->
+            <div class="md:w-1/2">
+                <div class="border rounded p-4 shadow-sm">
+                    <p class="font-semibold mb-3">Select Product</p>
+                    <input
+                        v-model="searchProduct"
+                        type="text"
+                        placeholder="Search Products..."
+                        class="w-full mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <EasyDataTable
+                        buttons-paginations
+                        alternating
+                        :items="productList"
+                        :headers="productHeaders"
+                        :rows-per-page="10"
+                    >
+                        <template #item-action="{ id }">
+                            <button
+                                @click="openQtyModal(id)"
+                                class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
+                            >
+                                Select
+                            </button>
+                        </template>
+                    </EasyDataTable>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Summary -->
+        <div class="mt-10 border rounded p-6 shadow-sm">
+        <h5 class="text-right text-lg font-semibold mb-1">Invoice</h5>
+            <h6 class="text-right text-sm text-gray-600 mb-4">
+                <span class="text-right text-lg font-semibold m-1">Date:</span>
+                <input
+                    v-model="form.invoice_date"
+                    class="border px-3 py-2 rounded-sm"
+                    type="date"
+                />
+            </h6>
+            <h6 class="text-right text-sm text-gray-600 mb-4">
+                <span class="text-right text-lg font-semibold m-1"
+                    >Challan no:</span
+                >
+                <input
+                    v-model="form.challan_no"
+                    class="border px-3 py-2 rounded-sm"
+                    type="text"
+                />
+            </h6>
+
+            <!-- Customer Info -->
+            <div class="mb-4">
+                <h6 class="font-semibold mb-1">Invoice For:</h6>
+                <p>Name: {{ customer.name }}</p>
+                <p>Mobile: {{ customer.phone }}</p>
+                <p>Due Amount: {{ customer.due_amount }}</p>
+            </div>
+
+            <!-- Selected Products Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300 table-auto">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                No
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Product
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                PCS
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Price
+                            </th>
+                            <th
+                                class="border px-2 py-1 text-left text-sm font-semibold"
+                            >
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-if="selectedProductList.length"
+                            v-for="(product, index) in selectedProductList"
+                            :key="index"
+                        >
+                            <td class="border px-2 py-1 text-xs">
+                                {{ index + 1 }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ product.name }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ product.weight }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                {{ product.sale_price }}
+                            </td>
+                            <td class="border px-2 py-1 text-xs">
+                                <button
+                                    @click="removeProduct(index)"
+                                    class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr v-else>
+                            <td
+                                colspan="5"
+                                class="text-center py-3 text-gray-600 text-sm"
+                            >
+                                No product added yet
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-semibold">
+                            <td
+                                colspan="3"
+                                class="border px-2 py-1 text-sm text-right"
+                            >
+                                Total
+                            </td>
+                            <td class="border px-2 py-1 text-sm">
+                                {{ totalAmount }}
+                            </td>
+                            <td class="border px-2 py-1"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Confirm Button -->
+            <div
+                class="mt-6 flex flex-col md:flex-row md:justify-between space-y-3 md:space-y-0"
+            >
+                <button
+                    @click="createInvoice"
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2 rounded w-full md:w-auto"
+                >
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -210,10 +277,10 @@ const customer = reactive({ name: "", phone: "", id: "", due_amount: 0 });
 
 // Reactive selected product info with available units
 const selectedProduct = reactive({
-  id: "",
-  name: "",
-  available_unit: 0,
-  price: 0,
+    id: "",
+    name: "",
+    available_unit: 0,
+    price: 0,
 });
 
 // Lists for customers and products fetched from backend props
@@ -228,19 +295,22 @@ const totalAmount = ref(0);
 
 // Table headers
 const customerHeaders = [
-  { text: "No", value: "id" },
-  { text: "Name", value: "name", sortable: true },
-  { text: "Mobile", value: "phone" },
-  { text: "Action", value: "action" },
+    { text: "No", value: "id" },
+    { text: "Name", value: "name", sortable: true },
+    { text: "Mobile", value: "phone" },
+    { text: "Action", value: "action" },
 ];
 
 const productHeaders = [
-  { text: "No", value: "id" },
-  { text: "Product Name", value: "sewing.cutting_receive.cutting.category.name" },
-  { text: "Price", value: "sewing.cutting_receive.cutting.category.price" },
-  { text: "Per Pcs Cost", value: "per_unit_cost", sortable: true },
-  { text: "Available Pcs", value: "available_unit", sortable: true },
-  { text: "Action", value: "action" },
+    { text: "No", value: "id" },
+    {
+        text: "Product Name",
+        value: "sewing.cutting_receive.cutting.category.name",
+    },
+    { text: "Price", value: "sewing.cutting_receive.cutting.category.price" },
+    { text: "Per Pcs Cost", value: "per_unit_cost", sortable: true },
+    { text: "Available Pcs", value: "available_unit", sortable: true },
+    { text: "Action", value: "action" },
 ];
 
 // Computed today's date in YYYY-MM-DD format
@@ -248,96 +318,101 @@ const today = computed(() => new Date().toISOString().slice(0, 10));
 
 // Select customer from list
 function addCustomer(name, phone, id, due_amount) {
-  customer.name = name;
-  customer.phone = phone;
-  customer.id = id;
-  customer.due_amount = due_amount;
+    customer.name = name;
+    customer.phone = phone;
+    customer.id = id;
+    customer.due_amount = due_amount;
 }
 
 // Open modal for adding quantity
 function openQtyModal(id) {
-  const product = productList.value.find((p) => p.id === id);
-  if (!product) return;
+    const product = productList.value.find((p) => p.id === id);
+    if (!product) return;
 
-  selectedProduct.id = product.id;
-  selectedProduct.available_unit = product.available_unit;
-  selectedProduct.price = product.sewing.cutting_receive.cutting.category.price;
-  selectedProduct.name = product.sewing.cutting_receive.cutting.category.name;
-  weight.value = 0;
-  showModal.value = true;
+    selectedProduct.id = product.id;
+    selectedProduct.available_unit = product.available_unit;
+    selectedProduct.price =
+        product.sewing.cutting_receive.cutting.category.price;
+    selectedProduct.name = product.sewing.cutting_receive.cutting.category.name;
+    weight.value = 0;
+    showModal.value = true;
 }
 
 // Close modal
 function closeModal() {
-  showModal.value = false;
+    showModal.value = false;
 }
 
 // Add product to invoice
 function addProduct() {
-  if (selectedProductList.value.find((p) => p.id === selectedProduct.id)) {
-    return toaster.error("Product already added");
-  }
+    if (selectedProductList.value.find((p) => p.id === selectedProduct.id)) {
+        return toaster.error("Product already added");
+    }
 
-  if (weight.value <= 0) {
-    return toaster.error("Minimum quantity is 1");
-  }
+    if (weight.value <= 0) {
+        return toaster.error("Minimum quantity is 1");
+    }
 
-  if (weight.value > selectedProduct.available_unit) {
-    return toaster.error("Quantity is not available");
-  }
+    if (weight.value > selectedProduct.available_unit) {
+        return toaster.error("Quantity is not available");
+    }
 
-  selectedProductList.value.push({
-    id: selectedProduct.id,
-    name: selectedProduct.name,
-    sale_price: parseFloat(selectedProduct.price) * parseFloat(weight.value),
-    weight: weight.value,
-  });
+    selectedProductList.value.push({
+        id: selectedProduct.id,
+        name: selectedProduct.name,
+        sale_price:
+            parseFloat(selectedProduct.price) * parseFloat(weight.value),
+        weight: weight.value,
+    });
 
-  calculateTotal();
-  closeModal();
+    calculateTotal();
+    closeModal();
 }
 
 // Remove product from list
 function removeProduct(index) {
-  selectedProductList.value.splice(index, 1);
-  calculateTotal();
+    selectedProductList.value.splice(index, 1);
+    calculateTotal();
 }
 
 // Calculate total amount
 function calculateTotal() {
-  totalAmount.value = selectedProductList.value
-    .reduce((sum, item) => sum + parseFloat(item.sale_price), 0)
-    .toFixed(2);
+    totalAmount.value = selectedProductList.value
+        .reduce((sum, item) => sum + parseFloat(item.sale_price), 0)
+        .toFixed(2);
 }
 
 // Invoice form
 const form = useForm({
-  customer_id: "",
-  products: [],
-  total_amount: "",
+    customer_id: "",
+    products: [],
+    total_amount: "",
+    invoice_date: "",
+    challan_no: "",
 });
 
 // Create invoice
 function createInvoice() {
-  if (!customer.name) return toaster.error("Customer is required");
-  if (selectedProductList.value.length === 0) return toaster.error("Product is required");
+    if (!customer.name) return toaster.error("Customer is required");
+    if (selectedProductList.value.length === 0)
+        return toaster.error("Product is required");
 
-  form.customer_id = customer.id;
-  form.products = selectedProductList.value;
-  form.total_amount = totalAmount.value;
+    form.customer_id = customer.id;
+    form.products = selectedProductList.value;
+    form.total_amount = totalAmount.value;
 
-  form.post("/create-invoice", {
-    onSuccess: () => {
-      if (page.props.flash.status === true) {
-        form.reset();
-        selectedProductList.value = [];
-        totalAmount.value = 0;
-        toaster.success(page.props.flash.message);
-        setTimeout(() => router.get("/invoice-list"), 500);
-      } else {
-        toaster.error(page.props.flash.error);
-      }
-    },
-  });
+    form.post("/create-invoice", {
+        onSuccess: () => {
+            if (page.props.flash.status === true) {
+                form.reset();
+                selectedProductList.value = [];
+                totalAmount.value = 0;
+                toaster.success(page.props.flash.message);
+                setTimeout(() => router.get("/invoice-list"), 500);
+            } else {
+                toaster.error(page.props.flash.error);
+            }
+        },
+    });
 }
 </script>
