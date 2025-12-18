@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sewing_party_id');
             $table->foreign('sewing_party_id')->references('id')->on('sewing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->integer('challan_no')->unique();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
             $table->timestamp('created_at')->useCurrent();

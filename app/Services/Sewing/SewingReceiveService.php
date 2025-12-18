@@ -71,6 +71,8 @@ class SewingReceiveService{
             $sewingParty->increment('due_amount', $totalSewingCost);
 
             SewingPayment::create([
+                'challan_no' => $sewingParty->challan_no,
+                'particulars'=>'Sewing Receive',
                 'sewing_party_id' => $sewingPartyId,
                 'amount' => $sewingParty->due_amount,
                 'debit' => $totalSewingCost,

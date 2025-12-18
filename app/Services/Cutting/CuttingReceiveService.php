@@ -28,7 +28,7 @@ class CuttingReceiveService
             //calculate total unit cost
             $totalUnitCost = ($totalUnit * $perUnitCost) + $totalCuttingCost;
 
-            //convert total unit cost to per pc
+            //convert total unit cost to per pc cost
             $perPcCost = $totalUnitCost / $request->unit;
 
             $data = [
@@ -41,11 +41,12 @@ class CuttingReceiveService
             ];
 
             CuttingReceive::create($data);
-            $receive = Cutting::findOrFail($request->cutting_id);
-            $receive->decrement('available_unit', $cutting->unit);
+            $cutting->decrement('available_unit', $cutting->unit);
             $cuttingParty=CuttingParty::find($cuttingPartyId);
             $cuttingParty->increment('due_amount', $totalCuttingCost);
             CuttingPayment::create([
+                'challan_no' => $cutting->challan_no,
+                'particulars'=>'Cutting Receive',
                 'cutting_party_id' => $cuttingPartyId,
                 'amount' => $cuttingParty->due_amount,
                 'debit'=>$totalCuttingCost,

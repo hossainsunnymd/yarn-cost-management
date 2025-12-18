@@ -6,6 +6,7 @@ const page = usePage();
 //  data table headers
 const headers = [
   { text: 'ID', value: 'id' },
+  { text: 'Challan No', value: 'challan_no' },
   { text: 'Dyeing Party Name', value: 'dyeing_party.name' },
   { text: 'Design Name', value: 'design_name' },
   { text: 'Color Name', value: 'color' },

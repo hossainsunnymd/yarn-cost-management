@@ -16,6 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('sewing_party_id');
             $table->foreign('sewing_party_id')->references('id')->on('sewing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->integer('challan_no')->nullable();
+            $table->foreign('challan_no')->references('challan_no')->on('sewings')
+            ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('particulars');
             $table->decimal('amount', 8, 2);
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();

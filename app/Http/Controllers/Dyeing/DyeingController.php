@@ -11,9 +11,11 @@ use App\Models\DyeingReceive;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\DyeingPayment;
 use App\Services\Dyeing\DyeingService;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Dyeing\DyeingReceiveService;
+use App\Services\RecalculationPayments\RecalculateDyeingPaymentService;
 
 class DyeingController extends Controller
 {
@@ -30,15 +32,16 @@ class DyeingController extends Controller
     public function dyeingSavePage(Request $request)
     {
         $dyeingPartyList = DyeingParty::all();
-        $knittingReceive=KnittingReceive::find($request->knitting_receive_id);
-        return Inertia::render('Dyeings/Dyeing/DyeingSavePage', ['dyeingPartyList' => $dyeingPartyList,'knittingReceive'=>$knittingReceive]);
+        $knittingReceive = KnittingReceive::find($request->knitting_receive_id);
+        return Inertia::render('Dyeings/Dyeing/DyeingSavePage', ['dyeingPartyList' => $dyeingPartyList, 'knittingReceive' => $knittingReceive]);
     }
 
     //create dyeing
     public function createDyeing(DyeingService $dyeingService, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'dyeing_party_id' => 'required',
+            'dyeing_party_id' => 'required|exists:dyeing_parties,id',
+            'challan_no' => 'required|integer|unique:dyeings,challan_no',
             'unit' => 'required|numeric|min:1',
             'color' => 'required',
             'roll' => 'required|numeric|min:1',
@@ -59,11 +62,12 @@ class DyeingController extends Controller
     //delete dyeing
     public function dyeingDelete(Request $request)
     {
-       DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            $dyeing=Dyeing::find($request->dyeing_id);
-            KnittingReceive::where('id', $dyeing->knitting_receive_id)->increment('available_unit', $dyeing->available_unit);
-            KnittingReceive::where('id', $dyeing->knitting_receive_id)->increment('roll', $dyeing->roll);
+            $dyeing = Dyeing::find($request->dyeing_id);
+            $knittingReceive = KnittingReceive::where('id', $dyeing->knitting_receive_id)->first();
+            $knittingReceive->increment('available_unit', $dyeing->available_unit);
+            $knittingReceive->increment('roll', $dyeing->roll);
             $dyeing->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Deleted Successfully', 'error' => '']);
@@ -78,7 +82,7 @@ class DyeingController extends Controller
     //dyeing receive page
     public function dyeingReceivePage(Request $request)
     {
-        $dyeing=Dyeing::find($request->dyeing_id);
+        $dyeing = Dyeing::find($request->dyeing_id);
         return Inertia::render('Dyeings/Dyeing/DyeingReceivePage', ['dyeing' => $dyeing]);
     }
 
@@ -108,9 +112,12 @@ class DyeingController extends Controller
     {
         DB::beginTransaction();
         try {
-            $dyeingReceive=DyeingReceive::findOrFail($request->dyeing_receive_id);
-            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('available_unit', $dyeingReceive->available_unit+$dyeingReceive->wastage);
-            Dyeing::where('id', $dyeingReceive->dyeing_id)->increment('roll', $dyeingReceive->roll);
+            $dyeingReceive = DyeingReceive::findOrFail($request->dyeing_receive_id);
+            $dyeing = Dyeing::find($dyeingReceive->dyeing_id);
+            $dyeing->increment('available_unit', $dyeingReceive->unit);
+            $dyeing->increment('roll', $dyeingReceive->roll);
+            DyeingPayment::where('challan_no', $dyeingReceive->challan_no)->delete();
+            RecalculateDyeingPaymentService::recalculateDyeingPayment($dyeing->dyeing_party_id);
             $dyeingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Deleted Successfully', 'error' => '']);

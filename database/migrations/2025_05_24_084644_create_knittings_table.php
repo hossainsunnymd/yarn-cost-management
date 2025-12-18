@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('per_unit_cost', 8, 2);
             $table->string('fabric_name', 255);
             $table->date('send_date');
-            $table->string('challan_no')->unique();
+            $table->integer('challan_no')->unique();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

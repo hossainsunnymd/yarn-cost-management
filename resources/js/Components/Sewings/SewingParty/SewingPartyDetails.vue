@@ -49,7 +49,7 @@ const printModal = () => {
 
             <!-- Party Information -->
             <h1 class="text-2xl font-bold pb-2">
-                Party Name: {{ props.selectedParty[0].sewing_party.name || "-" }}
+                Party Name: {{ props.selectedParty[0]?.sewing_party.name || "-" }}
             </h1>
 
             <!-- Sewing Data Table -->
@@ -85,7 +85,7 @@ const printModal = () => {
 
                 <!-- Payment Summary -->
                 <div class="mt-4 space-y-1 font-bold">
-                    <p>Total Due: {{ props.selectedParty[0].sewing_party.due_amount || 0 }}</p>
+                    <p>Total Due: {{ props.selectedParty[0]?.sewing_party.due_amount || 0 }}</p>
                     <p>
                         Last Paid Amount: {{ props.sewingPayment?.amount || 0 }}
                     </p>

@@ -21,6 +21,8 @@ Route::post('/create-sewing', [SewingController::class, 'createSewing'])->name('
 Route::get('/sewing-receive-list', [SewingController::class, 'sewingReceiveList'])->name('sewing-receive-list')->middleware('permission:sewing-receive-list');
 Route::get('/sewing-receive-page', [SewingController::class, 'sewingReceivePage'])->name('sewing-receive-page')->middleware('permission:sewing-receive-page');
 Route::post('/create-sewing-receive', [SewingController::class, 'createSewingReceive'])->name('create-sewing-receive')->middleware('permission:create-sewing-receive');
+Route::get('/sewing-delete', [SewingController::class, 'sewingDelete'])->name('sewing-delete')->middleware('permission:sewing-delete');
+Route::get('/sewing-receive-delete', [SewingController::class, 'sewingReceiveDelete'])->name('sewing-receive-delete')->middleware('permission:sewing-receive-delete');
 
 // Sewing Payment
 Route::post('/save-sewing-payment', [SewingPartyController::class, 'saveSewingPayment'])->name('save-sewing-payment')->middleware('permission:save-sewing-payment');

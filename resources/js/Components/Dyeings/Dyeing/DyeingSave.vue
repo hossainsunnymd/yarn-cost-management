@@ -5,12 +5,12 @@ import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
-
 const page = usePage();
 
 // Get knitting_receive_id from URL query string
-const knittingReceiveId = new URLSearchParams(window.location.search).get("knitting_receive_id");
-
+const knittingReceiveId = new URLSearchParams(window.location.search).get(
+    "knitting_receive_id"
+);
 
 // Handle validation errors from flash messages
 const errors = computed(() => page.props.flash.error || {});
@@ -20,6 +20,7 @@ const toaster = createToaster({});
 
 // Initialize form with default values
 const form = useForm({
+    challan_no: "",
     dyeing_party_id: "",
     knitting_receive_id: knittingReceiveId,
     unit: "",
@@ -27,7 +28,6 @@ const form = useForm({
     roll: "",
     design_name: "",
 });
-
 
 const URL = "/create-dyeing";
 
@@ -48,7 +48,6 @@ function submitForm() {
 }
 </script>
 
-
 <template>
     <div class="p-6 max-w-2xl w-full mx-auto">
         <!-- Page Title -->
@@ -58,10 +57,27 @@ function submitForm() {
 
         <!-- Form Start -->
         <form @submit.prevent="submitForm" class="space-y-5">
+            <!--Challan no -->
+            <div>
+                <label
+                    for="challan_no"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Challan No
+                </label>
+                <input
+                    v-model="form.challan_no"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
 
             <!-- Dyeing Party Dropdown -->
             <div>
-                <label for="yarn_party" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="yarn_party"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Select Dyeing Party
                 </label>
                 <select
@@ -77,14 +93,20 @@ function submitForm() {
                         {{ party.name }}
                     </option>
                 </select>
-                <p v-if="errors.dyeing_party_id" class="text-red-500 text-md mt-1">
+                <p
+                    v-if="errors.dyeing_party_id"
+                    class="text-red-500 text-md mt-1"
+                >
                     {{ errors.dyeing_party_id[0] }}
                 </p>
             </div>
 
-                <!--Available Unit Field -->
+            <!--Available Unit Field -->
             <div>
-                <label for="available_unit" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="available_unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Available Knitting Unit
                 </label>
                 <input
@@ -95,9 +117,12 @@ function submitForm() {
                 />
             </div>
 
-                  <!--Available Roll Field -->
+            <!--Available Roll Field -->
             <div>
-                <label for="roll" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="roll"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Available Roll
                 </label>
                 <input
@@ -110,7 +135,10 @@ function submitForm() {
 
             <!-- Unit Field -->
             <div>
-                <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="unit"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Sending Unit
                 </label>
                 <input
@@ -125,7 +153,10 @@ function submitForm() {
 
             <!-- Design Name Field -->
             <div>
-                <label for="design_name" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="design_name"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Design Name
                 </label>
                 <input
@@ -137,7 +168,10 @@ function submitForm() {
 
             <!-- Roll Field -->
             <div>
-                <label for="roll" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="roll"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Roll
                 </label>
                 <input
@@ -152,7 +186,10 @@ function submitForm() {
 
             <!-- Color Field -->
             <div>
-                <label for="color" class="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                    for="color"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
                     Color
                 </label>
                 <input
@@ -167,7 +204,8 @@ function submitForm() {
 
             <!-- Submit Button -->
             <div class="pt-3">
-                <button v-if="page.props.user.can['create-dyeing']"
+                <button
+                    v-if="page.props.user.can['create-dyeing']"
                     type="submit"
                     class="w-full bg-green-600 text-white py-2 rounded-xl hover:bg-green-700 transition duration-300 cursor-pointer"
                 >
@@ -178,6 +216,3 @@ function submitForm() {
         <!-- Form End -->
     </div>
 </template>
-
-
-

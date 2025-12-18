@@ -11,6 +11,9 @@ class CustomerPayment extends Model
         'amount',
         'credit',
         'debit',
+        'challan_no',
+        'challan_type',
+        'particulars',
     ];
 
     public function customer()

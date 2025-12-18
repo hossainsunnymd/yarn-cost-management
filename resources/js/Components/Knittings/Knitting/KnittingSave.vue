@@ -411,8 +411,8 @@ function createInvoice() {
                 calculate.total = 0;
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/knitting-list"), 500);
-            } else {
-                toaster.error(page.props.flash.error);
+            } else if(page.props.flash.status === false) {
+                toaster.error(page.props.flash.message);
             }
         },
     });

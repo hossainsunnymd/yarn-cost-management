@@ -18,7 +18,7 @@ const headers = [
     { text: "Total Cost", value: "total_cost" },
     { text: "Available Unit", value: "available_unit" },
     { text: "Roll", value: "roll" },
-    { text: "Created date", value: "created_at" },
+    { text: "Sale Date", value: "sale_date" },
     { text: "Action", value: "action" },
 ];
 

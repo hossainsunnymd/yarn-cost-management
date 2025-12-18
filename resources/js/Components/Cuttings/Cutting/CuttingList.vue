@@ -9,6 +9,7 @@ const page = usePage();
 // Table headers
 const headers = [
   { text: 'ID', value: 'id' },
+  { text: 'Challan no', value: 'challan_no' },
   { text: 'Unit', value: 'unit' },
   { text: 'Category', value: 'category.name' },
   { text: 'Roll', value: 'roll' },
@@ -27,6 +28,12 @@ const items = ref(page.props.cuttings);
 // Search related reactive variables
 const searchField = ref("name");
 const searchItem = ref();
+
+const deleteCutting = (id) => {
+  if (confirm("Are you sure you want to delete this cutting?")) {
+    router.get(`/delete-cutting?cutting_id=${id}`);
+  }
+}
 
 </script>
 
@@ -62,6 +69,7 @@ const searchItem = ref();
       >
         Receive Cutting
       </Link>
+      <button @click="deleteCutting(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1">Delete</button>
     </template>
 
     <!-- Date Format -->

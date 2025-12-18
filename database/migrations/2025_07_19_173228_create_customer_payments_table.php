@@ -20,7 +20,8 @@ return new class extends Migration
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('credit', 10, 2)->nullable();
             $table->string('particulars')->nullable();
-            $table->string('challan_no')->nullable();
+            $table->integer('challan_no')->nullable();
+            $table->string('challan_type')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

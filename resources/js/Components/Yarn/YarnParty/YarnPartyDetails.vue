@@ -56,7 +56,7 @@ const printModal = () => {
 
             <!-- Title -->
             <h1 class="text-2xl font-bold text-left pb-2">
-                Party Name: {{ props.selectedParty[0].name }}
+                Party Name: {{ props.selectedParty[0]?.name }}
             </h1>
 
             <!-- Table: Yarn Purchases -->
@@ -99,14 +99,14 @@ const printModal = () => {
                 <!-- Payment Summary -->
                 <div class="mt-4 space-y-1">
                     <p class="font-bold">
-                        Due Amount: {{ props.selectedParty[0].yarn_party.due_amount }}
+                        Due Amount: {{ props.selectedParty[0]?.yarn_party.due_amount }}
                     </p>
                     <p class="font-bold">
-                        Last Paid Amount: {{ props.yarnPayment.amount || 0 }}
+                        Last Paid Amount: {{ props.yarnPayment?.amount || 0 }}
                     </p>
                     <p class="font-bold">
                         Last Paid Date:
-                        {{ props.yarnPayment.created_at || "-" }}
+                        {{ props.yarnPayment?.created_at || "-" }}
                     </p>
                 </div>
             </div>

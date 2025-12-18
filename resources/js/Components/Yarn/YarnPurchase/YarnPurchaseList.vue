@@ -10,6 +10,7 @@ const page = usePage();
 // Table headers definition for yarn purchase list
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Challan No", value: "challan_no" },
     { text: "Name", value: "name" },
     { text: "Description", value: "description" },
     { text: "Weight", value: "unit" },

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { usePage, Link } from "@inertiajs/vue3";
+import { usePage, Link,router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
 // Initialize toaster for notifications
@@ -12,6 +12,7 @@ const page = usePage();
 // Define table headers for EasyDataTable component
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Challan No", value: "challan_no" },
     { text: "Pcs", value: "unit" },
     { text: "Sewing Party", value: "sewing_party.name" },
     { text: "Category", value: "cutting_receive.cutting.category.name" },
@@ -33,6 +34,19 @@ const searchField = ref("name");
 
 // Search input
 const searchItem = ref("");
+
+const deleteSewing = (id) => {
+    if (confirm("Are you sure you want to delete this sewing?")) {
+        router.get(`/sewing-delete?sewing_id=${id}`);
+    }
+}
+
+if(page.props.flash.status === true){
+    toaster.success(page.props.flash.message);
+}else if(page.props.flash.status === false){
+    toaster.error(page.props.flash.message);
+
+}
 </script>
 
 <template>
@@ -69,6 +83,7 @@ const searchItem = ref("");
                 >
                     Receive Product
                 </Link>
+                <button @click="deleteSewing(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition">Delete</button>
             </template>
 
             <!-- Date Format -->

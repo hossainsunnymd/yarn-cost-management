@@ -9,6 +9,8 @@ class Invoice extends Model
     protected $fillable=[
         'customer_id',
         'total',
+        'challan_no',
+        'invoice_date',
     ];
 
     public function invoiceProducts(){

@@ -122,6 +122,8 @@ class PermissionSeeder extends Seeder
     'cutting-receive-list',
     'cutting-receive-page',
     'create-cutting-receive',
+    'delete-cutting',
+    'delete-cutting-receive',
 
 
     // Cutting Payment
@@ -144,6 +146,8 @@ class PermissionSeeder extends Seeder
     'sewing-receive-list',
     'sewing-receive-page',
     'create-sewing-receive',
+    'sewing-delete',
+    'sewing-receive-delete',
 
     // Sewing Payment
     'save-sewing-payment',

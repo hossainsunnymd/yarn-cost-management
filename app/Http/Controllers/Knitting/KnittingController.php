@@ -42,13 +42,11 @@ class KnittingController extends Controller
     
 
         $validator = Validator::make($request->all(), [
-            'knitting_party_id' => 'required',
-            'yarns' => 'required',
-            'total' => 'required',
+            'challan_no' => 'unique:knittings,challan_no',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with(['errors' => $validator->errors()]);
+            return redirect()->back()->with(['status'=>false,'message'=>'Challan no already exist']);
         }
 
         try {

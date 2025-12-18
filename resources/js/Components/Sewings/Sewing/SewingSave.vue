@@ -17,6 +17,7 @@ const cuttingReceiveId = new URLSearchParams(window.location.search).get(
 
 // Form setup
 const form = useForm({
+    challan_no: "",
     cutting_receive_id: cuttingReceiveId,
     sewing_party_id: "",
     unit: "",
@@ -50,6 +51,20 @@ function submitForm() {
 
         <!-- Sewing Form -->
         <form @submit.prevent="submitForm" class="space-y-5">
+            <!-- Challan no -->
+            <div>
+                <label
+                    for="challan_no"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                >
+                    Challan No
+                </label>
+                <input
+                    v-model="form.challan_no"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+            </div>
             <!-- Sewing Party Dropdown -->
             <div>
                 <label
@@ -88,7 +103,7 @@ function submitForm() {
                     Available Pcs
                 </label>
                 <input
-                    :value ="page.props.cuttingReceive.available_unit"
+                    :value="page.props.cuttingReceive.available_unit"
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
