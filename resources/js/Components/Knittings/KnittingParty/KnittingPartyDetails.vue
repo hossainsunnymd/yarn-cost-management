@@ -49,7 +49,7 @@ const printModal = () => {
 
       <!-- Party Name -->
       <h1 class="text-2xl font-bold text-left pb-2">
-        Party Name: {{ props.selectedParty[0].knitting_party.name }}
+        Party Name: {{ props.selectedParty[0]?.knitting_party.name }}
       </h1>
 
       <!-- Knitting Tables -->
@@ -77,12 +77,12 @@ const printModal = () => {
 
         <!-- Payment Summary -->
         <div class="mt-4 space-y-1 text-sm">
-          <p class="font-bold">Total Due: {{ props.selectedParty[0].knitting_party.due_amount }}</p>
+          <p class="font-bold">Total Due: {{ props.selectedParty[0]?.knitting_party.due_amount }}</p>
           <p class="font-bold">
-            Last Paid Amount: {{ props.knittingPayment.amount || 0 }}
+            Last Paid Amount: {{ props.knittingPayment?.amount || 0 }}
           </p>
           <p class="font-bold">
-            Last Paid Date: {{ props.knittingPayment.created_at || '-' }}
+            Last Paid Date: {{ props.knittingPayment?.created_at || '-' }}
           </p>
         </div>
       </div>
