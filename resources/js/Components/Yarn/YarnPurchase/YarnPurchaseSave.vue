@@ -20,6 +20,7 @@ let URL = "/create-yarn-purchase";
 
 // Initialize form with default or existing data
 const form = useForm({
+    challan_no: "",
     yarn_party_id: "",
     unit: 0,
     name: "",
@@ -32,6 +33,7 @@ const form = useForm({
 
 // If editing existing purchase, populate form and change URL to update endpoint
 if (yarnPurchaseId != 0 && yarnPurchase != null) {
+    form.challan_no = yarnPurchase.challan_no;
     form.yarn_party_id = yarnPurchase.yarn_party_id;
     form.unit = yarnPurchase.unit;
     form.name = yarnPurchase.name;
@@ -51,7 +53,7 @@ function submitForm() {
                 toaster.error(page.props.flash.message);
             } else if (page.props.flash.status == true) {
                 toaster.success(page.props.flash.message);
-                router.get("/yarn-purchase-list"); 
+                router.get("/yarn-purchase-list");
             }
         },
     });
@@ -92,6 +94,23 @@ function submitForm() {
                     class="text-red-500 text-md mt-1"
                 >
                     {{ errors.yarn_party_id[0] }}
+                </p>
+            </div>
+
+            <!-- Chalan no -->
+            <div>
+                <label
+                    for="challan_no"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Challan No</label
+                >
+                <input
+                    v-model="form.challan_no"
+                    type="text"
+                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+                <p v-if="errors.challan_no" class="text-red-500 text-md mt-1">
+                    {{ errors.challan_no[0] }}
                 </p>
             </div>
 

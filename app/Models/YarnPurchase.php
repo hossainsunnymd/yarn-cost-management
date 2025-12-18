@@ -18,7 +18,8 @@ class YarnPurchase extends Model
         'labour_cost',
         'total_amount',
         'current_total_amount',
-        'per_unit_cost'
+        'per_unit_cost',
+        'challan_no'
     ];
 
     public function yarnParty(){

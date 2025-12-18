@@ -17,10 +17,11 @@ const fabricProducts = ref({});
 // Table headers definition for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Challan No", value: "challan_no" },
     { text: "Customer", value: "customer.name" },
     { text: "Total Cost", value: "total_cost" },
     { text: "Total Sale Price", value: "total_sale_price" },
-    { text: "Fabric Sale date", value: "created_at" },
+    { text: "Fabric Sale date", value: "sale_date" },
     { text: "Action", value: "action" },
 ];
 
@@ -104,7 +105,7 @@ function showModal(id) {
             {{ formatDate(created_at) }}
         </template>
 
-        
+
         </EasyDataTable>
     </div>
 </template>

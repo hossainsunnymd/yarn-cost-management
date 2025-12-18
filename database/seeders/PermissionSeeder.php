@@ -122,6 +122,8 @@ class PermissionSeeder extends Seeder
     'cutting-receive-list',
     'cutting-receive-page',
     'create-cutting-receive',
+    'delete-cutting',
+    'delete-cutting-receive',
 
 
     // Cutting Payment

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('yarn_party_id');
             $table->foreign('yarn_party_id')->references('id')->on('yarn_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('challan_no')->unique();
             $table->string('name');
             $table->string('description');
             $table->string('bags');

@@ -65,6 +65,7 @@ class DyeingReceiveService
             DyeingParty::find($dyeingPartyId)->increment('due_amount', $totalDyeingCost);
 
             DyeingPayment::create([
+                'challan_no' => $dyeing->challan_no,
                 'dyeing_party_id' => $dyeingPartyId,
                 'amount' => $totalDyeingCost,
                 'debit' => $totalDyeingCost,

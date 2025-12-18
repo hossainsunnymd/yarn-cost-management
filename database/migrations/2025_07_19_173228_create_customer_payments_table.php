@@ -21,6 +21,8 @@ return new class extends Migration
             $table->decimal('credit', 10, 2)->nullable();
             $table->string('particulars')->nullable();
             $table->string('challan_no')->nullable();
+            $table->foreign('challan_no')->references('challan_no')->on('fabric_sales')
+            ->restrictOnDelete()->cascadeOnUpdate();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

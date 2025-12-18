@@ -88,9 +88,13 @@
                         :headers="customerHeaders"
                         :rows-per-page="10"
                     >
-                        <template #item-action="{ name, phone, id,due_amount }">
+                        <template
+                            #item-action="{ name, phone, id, due_amount }"
+                        >
                             <button
-                                @click="addCustomer(name, phone, id,due_amount)"
+                                @click="
+                                    addCustomer(name, phone, id, due_amount)
+                                "
                                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
                             >
                                 Select
@@ -148,7 +152,22 @@
         <div class="mt-10 border rounded p-6 shadow-sm">
             <h5 class="text-right text-lg font-semibold mb-1">Invoice</h5>
             <h6 class="text-right text-sm text-gray-600 mb-4">
-                {{ new Date().toISOString().slice(0, 10) }}
+                <span class="text-right text-lg font-semibold m-1">Date:</span>
+                <input
+                    v-model="form.sale_date"
+                    class="border px-3 py-2 rounded-sm"
+                    type="date"
+                />
+            </h6>
+            <h6 class="text-right text-sm text-gray-600 mb-4">
+                <span class="text-right text-lg font-semibold m-1"
+                    >Challan no:</span
+                >
+                <input
+                    v-model="form.challan_no"
+                    class="border px-3 py-2 rounded-sm"
+                    type="text"
+                />
             </h6>
 
             <!-- Customer Info -->
@@ -305,7 +324,7 @@ const fabricHeaders = [
 ];
 
 // Selected customer info
-const customer = reactive({ name: "", phone: "", id: "" ,due_amount:0});
+const customer = reactive({ name: "", phone: "", id: "", due_amount: 0 });
 
 // Selected fabric list
 const fabrics = ref([]);
@@ -314,7 +333,7 @@ const fabrics = ref([]);
 const calculate = reactive({ total: 0, total_sale_price: 0 });
 
 // Add customer from table
-function addCustomer(name, phone, id,due_amount) {
+function addCustomer(name, phone, id, due_amount) {
     customer.name = name;
     customer.phone = phone;
     customer.id = id;
@@ -408,18 +427,18 @@ const form = useForm({
     fabrics: [],
     total_cost: "",
     total_sale_price: "",
+    sale_date:'',
+    challan_no:'',
 });
 
 function createInvoice() {
-    if (!customer.name) {
-        toaster.error("Customer is required");
-        return;
-    }
+    if(!form.sale_date) return toaster.error("Date is required");
 
-    if (!fabrics.value.length) {
-        toaster.error("Fabric is required");
-        return;
-    }
+    if(!form.challan_no) return toaster.error("Challan No is required");
+
+    if (!customer.name) return toaster.error("Customer is required");
+
+    if (!fabrics.value.length) return toaster.error("Fabric is required");
 
     form.customer_id = customer.id;
     form.fabrics = fabrics.value;

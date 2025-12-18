@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Cutting;
 
-use App\Services\Cutting\CuttingReceiveService;
 use Exception;
 use Inertia\Inertia;
 use App\Models\Cutting;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Models\CuttingReceive;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
 use App\Models\CuttingParty;
+use Illuminate\Http\Request;
 use App\Models\DyeingReceive;
+use App\Models\CuttingPayment;
+use App\Models\CuttingReceive;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Services\Cutting\CuttingService;
+use Illuminate\Support\Facades\Validator;
+use App\Services\Cutting\CuttingReceiveService;
+use App\Services\RecalculationPayments\RecalculateCuttingPaymentService;
 
 class CuttingController extends Controller
 {
@@ -40,7 +43,8 @@ class CuttingController extends Controller
         $validation = Validator::make($request->all(), [
             'category_id' => 'required',
             'unit' => 'required|numeric|min:1',
-            'roll' => 'required|min:1'
+            'roll' => 'required|min:1',
+            'challan_no' => 'required|unique:cuttings,challan_no',
         ]);
 
         if ($validation->fails()) {
@@ -61,6 +65,20 @@ class CuttingController extends Controller
                 'message' => $e->getMessage(),
                 'error' => ''
             ]);
+        }
+    }
+
+    //cutting delete
+    public function deleteCutting(Request $request)
+    {
+        try {
+            $cutting = Cutting::find($request->cutting_id);
+            DyeingReceive::find($cutting->dyeing_receive_id)->increment('available_unit', $cutting->unit);
+            DyeingReceive::find($cutting->dyeing_receive_id)->increment('roll', $cutting->roll);
+            $cutting->delete();
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Deleted Successfully', 'error' => '']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
 
@@ -98,6 +116,26 @@ class CuttingController extends Controller
             $cuttingReceiveService->createCuttingReceive($request);
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+        }
+    }
+
+    //cutting receive delete
+    public function deleteCuttingReceive(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $cuttingReceive = CuttingReceive::find($request->cutting_receive_id);
+            $cutting = Cutting::find($cuttingReceive->cutting_id);
+            $cutting->increment('available_unit', $cutting->unit);
+            CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
+            $cuttingReceive->delete();
+            RecalculateCuttingPaymentService::recalculateCuttingPayment($cutting->cutting_party_id);
+            DB::commit();
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Deleted Successfully', 'error' => '']);
+
+        } catch (Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }

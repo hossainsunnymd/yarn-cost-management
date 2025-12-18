@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('dyeing_party_id');
             $table->foreign('dyeing_party_id')->references('id')->on('dyeing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('challan_no')->nullable();
+            $table->foreign('challan_no')->references('challan_no')->on('dyeings')
+            ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('amount');
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();

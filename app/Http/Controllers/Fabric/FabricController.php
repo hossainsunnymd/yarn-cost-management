@@ -9,10 +9,12 @@ use App\Models\Customer;
 use App\Models\FabricSale;
 use Illuminate\Http\Request;
 use App\Models\DyeingReceive;
+use App\Models\CustomerPayment;
 use App\Models\FabricSaleProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\CustomerPayment;
+use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
+use Illuminate\Support\Facades\Validator;
 
 class FabricController extends Controller
 {
@@ -42,11 +44,19 @@ class FabricController extends Controller
     //fabric sale
     public function fabricSale(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'challan_no' => 'required|string|unique:fabric_sales,challan_no',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Challan no Already Exist', 'error' => '']);
+        }
 
         DB::beginTransaction();
         try {
             $fabricSale = FabricSale::create([
+                'challan_no' => $request->challan_no,
+                'sale_date' => $request->sale_date,
                 'customer_id' => $request->customer_id,
                 'total_cost' => $request->total_cost,
                 'total_sale_price' => $request->total_sale_price
@@ -71,10 +81,10 @@ class FabricController extends Controller
             $customer = Customer::findOrFail($request->customer_id);
             $customer->increment('due_amount', $request->total_sale_price);
             CustomerPayment::create([
+                'challan_no' => $request->challan_no,
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
                 'debit' => $request->total_sale_price,
-
             ]);
 
             DB::commit();
@@ -98,9 +108,11 @@ class FabricController extends Controller
                 $fabricSaleProduct->delete();
 
             }
-            $fabricSale = FabricSale::find($request->fabric_sale_id)->get();
-            Customer::findOrFail($fabricSale->customer_id)->decrement('due_amount', $fabricSale->total_sale_price);
+            $fabricSale = FabricSale::find($request->fabric_sale_id)->first();
+            CustomerPayment::where('challan_no', $fabricSale->challan_no)->delete();
             $fabricSale->delete();
+            RecalculateCustomerPaymentService::recalculateCustomerPayment($fabricSale->customer_id);
+
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

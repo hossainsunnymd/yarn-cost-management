@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('yarn_party_id');
             $table->foreign('yarn_party_id')->references('id')->on('yarn_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
+            $table->string('challan_no')->nullable();
+            $table->foreign('challan_no')->references('challan_no')->on('yarn_purchases')
+            ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('amount', 8, 2);
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();

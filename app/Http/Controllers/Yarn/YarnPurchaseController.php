@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Yarn;
 
-use App\Models\YarnPayment;
 use Exception;
 use Inertia\Inertia;
 use App\Models\YarnParty;
+use App\Models\YarnPayment;
 use App\Models\YarnPurchase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use App\Services\RecalculationPayments\RecalculateYarnPaymentService;
 
 class YarnPurchaseController extends Controller
 {
@@ -35,9 +36,10 @@ class YarnPurchaseController extends Controller
 
 
         $validation = Validator::make($request->all(), [
-            'yarn_party_id' => 'required',
-            'name' => 'required',
-            'description' => 'required',
+            'challan_no' => 'required|string|unique:yarn_purchases,challan_no',
+            'yarn_party_id' => 'required|exists:yarn_parties,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'unit' => 'required|numeric|min:1',
             'bags' => 'required|numeric|min:1',
             'yarn_rate' => 'required|numeric|min:1',
@@ -55,6 +57,7 @@ class YarnPurchaseController extends Controller
             $per_unit_cost = $total_amount / $request->unit;
 
             $data = [
+                'challan_no' => $request->challan_no,
                 'yarn_party_id' => $request->yarn_party_id,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
@@ -70,12 +73,12 @@ class YarnPurchaseController extends Controller
             ];
 
             YarnPurchase::create($data);
-            $yarnParty=YarnParty::find($request->yarn_party_id);
+            $yarnParty = YarnParty::find($request->yarn_party_id);
             $yarnParty->increment('due_amount', $bill_amount);
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
                 'amount' => $yarnParty->due_amount,
-                'debit'=> $bill_amount,
+                'debit' => $bill_amount,
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Created Successfully', 'error' => '']);
@@ -90,9 +93,10 @@ class YarnPurchaseController extends Controller
     {
 
         $validation = Validator::make($request->all(), [
-            'yarn_party_id' => 'required',
-            'name' => 'required',
-            'description' => 'required',
+            'challan_no' => 'required|string|unique:yarn_purchases,challan_no',
+            'yarn_party_id' => 'required|exists:yarn_parties,id'.',' . $request->id,
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
             'unit' => 'required|numeric|min:1',
             'bags' => 'required|numeric|min:1',
             'yarn_rate' => 'required|numeric|min:1',
@@ -109,6 +113,7 @@ class YarnPurchaseController extends Controller
             $total_amount = $bill_amount + $request->labour_cost;
             $per_unit_cost = $total_amount / $request->unit;
             $data = [
+                'challan_no' => $request->challan_no,
                 'yarn_party_id' => $request->yarn_party_id,
                 'unit' => $request->unit,
                 'available_unit' => $request->unit,
@@ -126,10 +131,10 @@ class YarnPurchaseController extends Controller
             $yarnParty = YarnParty::find($request->yarn_party_id);
             $yarnParty->increment('due_amount', $bill_amount);
             YarnPayment::create([
+                'challan_no' => $request->challan_no,
                 'yarn_party_id' => $request->yarn_party_id,
                 'amount' => $yarnParty->total_amount,
                 'debit' => $bill_amount,
-                'credit' => ''
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully', 'error' => '']);
@@ -143,7 +148,11 @@ class YarnPurchaseController extends Controller
     public function yarnPurchaseDelete(Request $request)
     {
         try {
-            YarnPurchase::findOrFail($request->id)->delete();
+
+            $yarnPurchase=YarnPurchase::findOrFail($request->id)->first();
+            YarnPayment::where('challan_no', $yarnPurchase->challan_no)->delete();
+            RecalculateYarnPaymentService::recalculateYarnPayment($yarnPurchase->yarn_party_id);
+            $yarnPurchase->delete();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);

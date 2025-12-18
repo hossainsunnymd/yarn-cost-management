@@ -12,7 +12,8 @@ class Cutting extends Model
         'category_id',
         'unit',
         'available_unit',
-        'roll'
+        'roll',
+        'challan_no'
     ];
 
     public function category(){
