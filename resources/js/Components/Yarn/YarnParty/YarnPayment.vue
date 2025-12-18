@@ -15,6 +15,7 @@ const props = defineProps({
 // Form state
 const form = useForm({
     amount: "",
+    particulars: "",
 });
 
 // Emit event to update modal visibility
@@ -63,6 +64,17 @@ function confirmPayment() {
                 type="text"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 placeholder="Enter amount"
+            />
+
+            <!-- Particulars Input -->
+            <label for="particulars" class="block text-sm font-medium mb-1"
+                >Particulars</label
+            >
+            <input
+                v-model="form.particulars"
+                type="text"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full"
+                placeholder="Enter particulars"
             />
 
             <!-- Action Buttons -->

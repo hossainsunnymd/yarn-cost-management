@@ -16,6 +16,7 @@ const toaster = createToaster();
 // Payment form
 const form = useForm({
     amount: "",
+    particulars: "",
 });
 
 // Submit payment handler
@@ -30,7 +31,9 @@ function confirmPayment() {
             const flash = page.props.flash;
             if (flash.status) {
                 toaster.success(flash.message);
-                router.visit(`cutting-payment-list?cutting_party_id=${props.paymentId}`);
+                router.visit(
+                    `cutting-payment-list?cutting_party_id=${props.paymentId}`
+                );
             } else {
                 toaster.error(flash.message);
             }
@@ -56,6 +59,16 @@ function confirmPayment() {
             <input
                 v-model="form.amount"
                 id="amount"
+                type="text"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full"
+            />
+
+            <!-- Particulars Field -->
+            <label for="particulars" class="block mb-1 font-medium text-sm"
+                >Particulars</label
+            >
+            <input
+                v-model="form.particulars"
                 type="text"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
             />

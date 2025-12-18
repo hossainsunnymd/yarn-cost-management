@@ -12,6 +12,7 @@ const page = usePage();
 // Define table headers for EasyDataTable component
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Challan No", value: "challan_no" },
     { text: "Pcs", value: "unit" },
     { text: "Sewing Party", value: "sewing_party.name" },
     { text: "Category", value: "cutting_receive.cutting.category.name" },
