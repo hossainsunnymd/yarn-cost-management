@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cutting_party_id');
             $table->foreign('cutting_party_id')->references('id')->on('cutting_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->string('challan_no')->nullable();
+            $table->integer('challan_no')->nullable();
             $table->foreign('challan_no')->references('challan_no')->on('cuttings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('particulars');

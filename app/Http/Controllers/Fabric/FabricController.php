@@ -45,7 +45,7 @@ class FabricController extends Controller
     public function fabricSale(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'challan_no' => 'required|string|unique:fabric_sales,challan_no',
+            'challan_no' => 'unique:fabric_sales,challan_no',
         ]);
 
         if ($validator->fails()) {

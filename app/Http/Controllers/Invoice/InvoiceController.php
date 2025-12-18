@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Invoice;
 
+use Exception;
 use Inertia\Inertia;
 use App\Models\Invoice;
 use App\Models\Customer;
-use App\Models\InvoiceProduct;
 use Illuminate\Http\Request;
 use App\Models\SewingReceive;
-use Exception;
+use App\Models\InvoiceProduct;
+use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\CustomerPayment;
+use Illuminate\Support\Facades\Validator;
 use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 
 class InvoiceController extends Controller
@@ -35,8 +36,13 @@ class InvoiceController extends Controller
     //create invoice
     public function createInvoice(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'challan_no' => 'unique:invoices,challan_no',
+        ]);
 
-
+        if ($validator->fails()) {
+            return redirect()->back()->with(['status' => false, 'message' => 'Challan no Already Exist', 'error' => '']);
+        }
         DB::beginTransaction();
         try {
 
@@ -45,7 +51,7 @@ class InvoiceController extends Controller
                 'total' => $request->total_amount,
                 'invoice_date' => $request->invoice_date,
                 'challan_no' => $request->challan_no,
-                'challan_type'=>'product',
+                'challan_type' => 'product',
                 'particulars' => 'Product Sale'
             ]);
 
@@ -84,7 +90,7 @@ class InvoiceController extends Controller
                 $product->delete();
             }
             $invoice = Invoice::find($request->invoice_id);
-            CustomerPayment::where('challan_no', $invoice->challan_no)->where('challan_type','product')->delete();
+            CustomerPayment::where('challan_no', $invoice->challan_no)->where('challan_type', 'product')->delete();
             RecalculateCustomerPaymentService::recalculateCustomerPayment($invoice->customer_id);
             $invoice->delete();
             DB::commit();
