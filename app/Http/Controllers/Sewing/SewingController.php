@@ -39,8 +39,9 @@ class SewingController extends Controller
     public function createSewing(SewingService $sewingService, Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'sewing_party_id' => 'required',
+            'sewing_party_id' => 'required|exists:sewing_parties,id',
             'unit' => 'required|numeric|min:1',
+            'challan_no' => 'required|integer|unique:sewings,challan_no',
         ], [
             'unit.required' => 'Pcs is required',
         ]);

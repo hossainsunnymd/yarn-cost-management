@@ -36,7 +36,7 @@ class YarnPurchaseController extends Controller
 
 
         $validation = Validator::make($request->all(), [
-            'challan_no' => 'required|string|unique:yarn_purchases,challan_no',
+            'challan_no' => 'required|integer|unique:yarn_purchases,challan_no',
             'yarn_party_id' => 'required|exists:yarn_parties,id',
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
@@ -93,7 +93,7 @@ class YarnPurchaseController extends Controller
     {
 
         $validation = Validator::make($request->all(), [
-            'challan_no' => 'required|string|unique:yarn_purchases,challan_no',
+            'challan_no' => 'required|integer|unique:yarn_purchases,challan_no',
             'yarn_party_id' => 'required|exists:yarn_parties,id'.',' . $request->id,
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('knitting_receive_id');
             $table->foreign('knitting_receive_id')->references('id')->on('knitting_receives')
                 ->restrictOnDelete()->cascadeOnUpdate();
-            $table->string('challan_no')->unique();
+            $table->integer('challan_no')->unique();
             $table->string('design_name')->nullable();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->string('challan_no')->unique();
+            $table->integer('challan_no')->unique();
             $table->date('sale_date');
             $table->decimal('total_cost', 10, 2);
             $table->decimal('total_sale_price', 10, 2);

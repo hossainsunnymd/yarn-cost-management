@@ -41,7 +41,7 @@ class DyeingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'dyeing_party_id' => 'required|exists:dyeing_parties,id',
-            'challan_no' => 'required|string|unique:dyeings,challan_no',
+            'challan_no' => 'required|integer|unique:dyeings,challan_no',
             'unit' => 'required|numeric|min:1',
             'color' => 'required',
             'roll' => 'required|numeric|min:1',

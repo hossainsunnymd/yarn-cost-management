@@ -44,7 +44,7 @@ class CuttingController extends Controller
             'category_id' => 'required',
             'unit' => 'required|numeric|min:1',
             'roll' => 'required|min:1',
-            'challan_no' => 'required|unique:cuttings,challan_no',
+            'challan_no' => 'required|integer|unique:cuttings,challan_no',
         ]);
 
         if ($validation->fails()) {
