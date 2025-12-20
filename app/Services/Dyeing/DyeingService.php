@@ -27,6 +27,7 @@ class DyeingService
         try {
 
             $data = [
+                'challan_no' => $request->challan_no,
                 'dyeing_party_id' => $request->dyeing_party_id,
                 'knitting_receive_id' => $request->knitting_receive_id,
                 'unit' => $request->unit,
@@ -43,7 +44,7 @@ class DyeingService
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception("Something went wrong");
+            throw new Exception($e->getMessage());
         }
     }
 }

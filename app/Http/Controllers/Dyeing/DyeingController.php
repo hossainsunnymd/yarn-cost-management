@@ -39,6 +39,7 @@ class DyeingController extends Controller
     //create dyeing
     public function createDyeing(DyeingService $dyeingService, Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'dyeing_party_id' => 'required|exists:dyeing_parties,id',
             'challan_no' => 'required|integer|unique:dyeings,challan_no',
