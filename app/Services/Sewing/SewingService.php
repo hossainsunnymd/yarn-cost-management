@@ -23,6 +23,7 @@ class SewingService{
         DB::beginTransaction();
         try {
             $data = [
+                'challan_no' => $request->challan_no,
                 'cutting_receive_id' => $request->cutting_receive_id,
                 'sewing_party_id' => $request->sewing_party_id,
                 'unit' => $request->unit,
