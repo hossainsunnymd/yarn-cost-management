@@ -410,7 +410,7 @@ function createInvoice() {
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/invoice-list"), 500);
             } else {
-                toaster.error(page.props.flash.error);
+                toaster.error(page.props.flash.message);
             }
         },
     });
