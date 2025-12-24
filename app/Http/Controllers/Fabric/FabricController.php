@@ -87,7 +87,7 @@ class FabricController extends Controller
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
                 'debit' => $request->total_sale_price,
-
+                'date' => $request->sale_date
             ]);
 
             DB::commit();

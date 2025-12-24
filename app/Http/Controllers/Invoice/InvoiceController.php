@@ -56,8 +56,8 @@ class InvoiceController extends Controller
             ]);
 
 
-            Customer::find($request->customer_id)->increment('due_amount', $request->total_amount);
-
+            $customer=Customer::find($request->customer_id);
+            $customer->increment('due_amount', $request->total_amount);
 
             foreach ($request->products as $product) {
                 InvoiceProduct::create([
@@ -71,6 +71,16 @@ class InvoiceController extends Controller
                 SewingReceive::find($product['id'])->decrement('available_unit', $product['weight']);
 
             }
+
+            CustomerPayment::create([
+                'customer_id' => $request->customer_id,
+                'challan_no' => $request->challan_no,
+                'challan_type' => 'product',
+                'amount' => $customer->due_amount,
+                'date' => $request->invoice_date,
+                'credit' => $request->total_amount,
+                'particulars' => 'Product Sale'
+            ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Created Successfully', 'error' => '']);
         } catch (Exception $e) {

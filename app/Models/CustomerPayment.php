@@ -14,6 +14,7 @@ class CustomerPayment extends Model
         'challan_no',
         'challan_type',
         'particulars',
+        'date',
     ];
 
     public function customer()

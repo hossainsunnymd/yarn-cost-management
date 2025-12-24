@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage,router} from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
+import YarnSaleDetails from "./YarnSaleDetails.vue";
 
 const toaster = createToaster({});
 const page = usePage();
@@ -9,24 +10,43 @@ const page = usePage();
 // Table headers definition for EasyDataTable component
 const headers = [
     { text: "No", value: "id" },
-    { text: "Unit", value: "unit" },
+    { text: "Sale Date", value: "sale_date" },
+    { text: "Challan No", value: "challan_no" },
+    { text: "Unit", value: "total_unit" },
     { text: "Price", value: "total_amount" },
-    { text: "Yarn Sale date", value: "created_at" },
+    { text: "Action", value: "action" },
 ];
-
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("en-GB");
-};
 
 // Yarn Sale list
 const items = ref(page.props.yarnSaleList);
+const yarns=ref();
+const modal = ref(false);
 
 // Search functionality
 const searchField = ref("name");
 const searchItem = ref("");
+
+
+const showModal=(id)=>{
+    yarns.value=items.value.find((yarn) => yarn.id === id);
+    modal.value = true;
+}
+
+const deleteYarnSale = (id) => {
+    if (confirm("Are you sure you want to delete this yarn sale?")) {
+        router.visit(`/yarn-sale-delete/${id}`);
+    }
+}
+
+if(page.props.flash.status === true){
+    toaster.success(page.props.flash.message);
+}else if(page.props.flash.status === false){
+    toaster.error(page.props.flash.message);
+}
 </script>
 
 <template>
+    <YarnSaleDetails :yarns="yarns" :modal="modal" @update:modal="modal = $event" />
     <p class="text-2xl font-bold mb-4">Yarn Sale List</p>
 
     <!-- Search input -->
@@ -52,11 +72,23 @@ const searchItem = ref("");
         :search-field="searchField"
         :search-value="searchItem"
     >
-
         <!-- Date Format -->
-        <template #item-created_at="{ created_at }">
-            {{ formatDate(created_at) }}
+        <template #item-action="{ id }">
+            <div class="flex gap-2">
+                <button
+                    @click="deleteYarnSale(id)"
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded-md transition"
+                >
+                    Delete
+                </button>
+                <button
+                    @click="showModal(id)"
+                    type="button"
+                    class="border border-gray-700 text-gray-700 font-bold py-1 px-2 rounded-md transition text-sm"
+                >
+                    <span class="material-icons">visibility</span>
+                </button>
+            </div>
         </template>
-
     </EasyDataTable>
 </template>

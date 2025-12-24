@@ -76,6 +76,13 @@ if (page.props.flash.status === true) {
             >
                 Add Yarn Purchase
             </Link>
+
+                        <Link
+                :href="`/yarn-sale-page`"
+                class="bg-blue-500 text-white py-2 px-4 rounded block text-center md:inline-block w-full md:w-auto ml-1"
+            >
+                Yarn Sale
+            </Link>
         </div>
     </div>
 
@@ -101,12 +108,6 @@ if (page.props.flash.status === true) {
             >
                 Delete
             </button>
-            <Link
-                :href="`/yarn-sale-page?yarn_purchase_id=${id}`"
-                class="bg-blue-500 text-white font-bold py-2 px-4 rounded ml-1"
-            >
-                Yarn Sale
-            </Link>
         </template>
 
         <template #item-created_at="{ created_at }">

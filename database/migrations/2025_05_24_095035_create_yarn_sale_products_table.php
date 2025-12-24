@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('yarn_sales', function (Blueprint $table) {
+        Schema::create('yarn_sale_products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')
+            $table->unsignedBigInteger('yarn_sale_id');
+            $table->foreign('yarn_sale_id')->references('id')->on('yarn_sales')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('total_unit', 8, 2);
+            $table->unsignedBigInteger('yarn_purchase_id');
+            $table->foreign('yarn_purchase_id')->references('id')->on('yarn_purchases')
+            ->restrictOnDelete()->cascadeOnUpdate();
+            $table->decimal('unit', 8, 2);
+            $table->decimal('price', 8, 2);
             $table->decimal('total_amount', 8, 2);
-            $table->integer('challan_no')->unique();
-            $table->date('sale_date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('yarn_sales');
+        Schema::dropIfExists('yarn_sale_products');
     }
 };

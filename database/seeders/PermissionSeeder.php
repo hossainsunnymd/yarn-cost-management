@@ -40,6 +40,7 @@ class PermissionSeeder extends Seeder
     'yarn-sale-list',
     'yarn-sale-page',
     'create-yarn-sale',
+    'yarn-sale-delete',
 
     // Yarn Payment
     'save-yarn-payment',

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('particulars')->nullable();
             $table->integer('challan_no')->nullable();
             $table->string('challan_type')->nullable();
+            $table->date('date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
