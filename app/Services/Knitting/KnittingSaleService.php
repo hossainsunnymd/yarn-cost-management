@@ -26,17 +26,17 @@ class KnittingSaleService
                 'sale_date' => $request->sale_date
             ]);
 
-            foreach ($request->knittingReceives as $knitting) {
+            foreach ($request->knittingReceives as $knittingReceive) {
                 KnittingSaleProduct::create([
                     'knitting_sale_id' => $knittingSale->id,
-                    'knitting_receive_id' => $knitting['knitting_receive_id'],
-                    'unit' => $knitting['weight'],
-                    'price' => $knitting['price'],
-                    'total_amount' => $knitting['sale_price']
+                    'knitting_receive_id' => $knittingReceive['id'],
+                    'unit' => $knittingReceive['weight'],
+                    'price' => $knittingReceive['price'],
+                    'total_amount' => $knittingReceive['sale_price']
 
                 ]);
 
-                KnittingReceive::find($knitting['knitting_receive_id'])->decrement('available_unit', $knitting['weight']);
+                KnittingReceive::find($knittingReceive['id'])->decrement('available_unit', $knittingReceive['weight']);
             }
 
             $customer = Customer::find($request->customer_id);
@@ -56,7 +56,7 @@ class KnittingSaleService
             return;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception("Something went wrong");
+            throw new Exception($e->getMessage());
         }
     }
 }

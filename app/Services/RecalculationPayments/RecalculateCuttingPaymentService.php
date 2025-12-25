@@ -22,7 +22,7 @@ class RecalculateCuttingPaymentService
 
             $balance = 0;
             CuttingPayment::where('cutting_party_id', $cuttingPartyId)
-                ->chunkById(1000, function ($cuttingPayments) use (&$balance) {
+                ->chunkById(100, function ($cuttingPayments) use (&$balance) {
 
                     foreach ($cuttingPayments as $cuttingPayment) {
                         $debit = $cuttingPayment->debit ?? 0;

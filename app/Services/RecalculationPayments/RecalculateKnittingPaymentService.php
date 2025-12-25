@@ -21,7 +21,7 @@ class RecalculateKnittingPaymentService
 
             $balance = 0;
             KnittingPayment::where('knitting_party_id', $knittingPartyId)
-                ->chunkById(1000, function ($knittingPayments) use (&$balance) {
+                ->chunkById(100, function ($knittingPayments) use (&$balance) {
 
                     foreach ($knittingPayments as $knittingPayment) {
                         $debit = $knittingPayment->debit ?? 0;

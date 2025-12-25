@@ -23,7 +23,7 @@ class RecalculateCustomerPaymentService
 
             $balance = 0;
             CustomerPayment::where('customer_id', $customerId)
-                ->chunkById(1000, function ($customerPayments) use (&$balance) {
+                ->chunkById(100, function ($customerPayments) use (&$balance) {
 
                     foreach ($customerPayments as $customerPayment) {
                         $debit = $customerPayment->debit ?? 0;

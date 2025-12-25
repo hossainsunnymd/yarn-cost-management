@@ -21,7 +21,7 @@ class RecalculateSewingPaymentService
 
             $balance = 0;
             SewingPayment::where('sewing_party_id', $sewingPartyId)
-                ->chunkById(1000, function ($sewingPayments) use (&$balance) {
+                ->chunkById(100, function ($sewingPayments) use (&$balance) {
 
                     foreach ($sewingPayments as $sewingPayment) {
                         $debit = $sewingPayment->debit ?? 0;

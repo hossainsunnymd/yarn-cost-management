@@ -21,7 +21,7 @@ class RecalculateDyeingPaymentService
 
             $balance = 0;
             DyeingPayment::where('dyeing_party_id', $dyeingPartyId)
-                ->chunkById(1000, function ($dyeingPayments) use (&$balance) {
+                ->chunkById(100, function ($dyeingPayments) use (&$balance) {
 
                     foreach ($dyeingPayments as $dyeingPayment) {
                         $debit = $dyeingPayment->debit ?? 0;

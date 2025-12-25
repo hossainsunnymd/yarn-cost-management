@@ -21,7 +21,7 @@ class RecalculateYarnPaymentService
 
             $balance = 0;
             YarnPayment::where('yarn_party_id', $yarnPartyId)
-                ->chunkById(1000, function ($yarnPayments) use (&$balance) {
+                ->chunkById(100, function ($yarnPayments) use (&$balance) {
 
                     foreach ($yarnPayments as $yarnPayment) {
                         $debit = $yarnPayment->debit ?? 0;
