@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class KnittingSale extends Model
 {
-    protected $fillable=['knitting_receive_id','unit','total_amount'];
+    protected $fillable=['customer_id','unit','total_amount','challan_no','sale_date'];
+
+    public function knittingSaleProducts(){
+        return $this->hasMany(KnittingSaleProduct::class);
+    }
 }

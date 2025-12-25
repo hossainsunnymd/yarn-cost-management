@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Knitting;
 
 use Exception;
 use Inertia\Inertia;
+use App\Models\Customer;
 use App\Models\KnittingSale;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\KnittingReceive;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\Services\Knitting\KnittingSaleService;
 
 class KnittingSaleController extends Controller
@@ -15,21 +17,15 @@ class KnittingSaleController extends Controller
     //knitting sale page
     public function knittingSalePage(Request $request)
     {
-        return Inertia::render('Knittings/KnittingSale/KnittingSalePage');
+        $knittingReceives = KnittingReceive::with('knitting')->get();
+        $customers = Customer::all();
+        return Inertia::render('Knittings/KnittingSale/KnittingSalePage', ['knittingReceives' => $knittingReceives, 'customers' => $customers]);
     }
 
     //create knitting sale
     public function createKnittingSale(KnittingSaleService $knittingSaleService, Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'unit' => 'required|numeric',
-            'total_amount' => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->with(['error' => $validator->errors()]);
-        }
-
+      
         try {
             $knittingSaleService->createKnittingSale($request);
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting sale created successfully', 'error' => '']);

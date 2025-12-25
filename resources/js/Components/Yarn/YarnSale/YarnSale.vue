@@ -238,7 +238,7 @@ const customerHeaders = [
 ];
 
 const yarnHeaders = [
-    { text: "Description", value: "description" },
+    { text: "Name", value: "name" },
     { text: "Stock", value: "available_unit" },
     { text: "Unit Price", value: "per_unit_cost" },
     { text: "Action", value: "action" },

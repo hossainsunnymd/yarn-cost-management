@@ -34,7 +34,7 @@ const formatDate = (date) => {
 
 // Table items from backend
 const items = ref(page.props.knittingList);
-
+console.log(items.value);
 
 // Search functionality
 const searchField = ref("name");
