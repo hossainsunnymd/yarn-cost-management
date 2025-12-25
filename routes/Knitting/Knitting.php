@@ -24,12 +24,13 @@ Route::get('/knitting-delete', [KnittingController::class, 'knittingDelete'])->n
 Route::get('/knitting-receive-page', [KnittingController::class, 'knittingReceivePage'])->name('knitting-receive-page')->middleware('permission:knitting-receive-page');
 Route::post('/create-knitting-receive', [KnittingController::class, 'createKnittingReceive'])->name('create-knitting-receive')->middleware('permission:create-knitting-receive');
 Route::get('/knitting-receive-list', [KnittingController::class, 'knittingReceiveList'])->name('knitting-receive-list')->middleware('permission:knitting-receive-list');
-Route::get('/delete-knitting-receive', [KnittingController::class, 'deleteKnittingReceive'])->name('delete-knitting-receive');
+Route::get('/delete-knitting-receive', [KnittingController::class, 'deleteKnittingReceive'])->name('delete-knitting-receive')->middleware('permission:delete-knitting-receive');
 
 // Knitting Sale
 Route::get('/knitting-sale-page', [KnittingSaleController::class, 'knittingSalePage'])->name('knitting-sale-page')->middleware('permission:knitting-sale-page');
 Route::post('/create-knitting-sale', [KnittingSaleController::class, 'createKnittingSale'])->name('create-knitting-sale')->middleware('permission:create-knitting-sale');
 Route::get('/knitting-sale-list', [KnittingSaleController::class, 'knittingSaleList'])->name('knitting-sale-list')->middleware('permission:knitting-sale-list');
+Route::get('/delete-knitting-sale', [KnittingSaleController::class, 'deleteKnittingSale'])->name('delete-knitting-sale')->middleware('permission:delete-knitting-sale');
 
 // Knitting Payment
 Route::post('/save-knitting-payment', [KnittingPartyController::class, 'saveKnittingPayment'])->name('save-knitting-payment')->middleware('permission:save-knitting-payment');

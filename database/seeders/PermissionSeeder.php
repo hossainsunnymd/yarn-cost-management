@@ -64,11 +64,13 @@ class PermissionSeeder extends Seeder
     'knitting-receive-page',
     'create-knitting-receive',
     'knitting-receive-list',
+    'delete-knitting-receive',
 
     // Knitting Sale
     'knitting-sale-page',
     'create-knitting-sale',
     'knitting-sale-list',
+    'delete-knitting-sale',
 
     // Knitting Payment
     'save-knitting-payment',
