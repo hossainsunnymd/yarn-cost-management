@@ -18,6 +18,7 @@ const emit = defineEmits(["update:paymentModal"]);
 const form = useForm({
     amount: "",
     particulars: "",
+    date: "",
 });
 
 // Handle confirm button click
@@ -82,6 +83,19 @@ function confirmPayment() {
                 type="text"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 placeholder="Enter particulars"
+            />
+
+            <!-- Date Input -->
+            <label
+                for="date"
+                class="block text-sm font-medium text-gray-700 mb-1"
+            >
+                Date
+            </label>
+            <input
+                v-model="form.date"
+                type="date"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full"
             />
 
             <!-- Action Buttons -->

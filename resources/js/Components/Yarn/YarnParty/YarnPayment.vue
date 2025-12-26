@@ -16,6 +16,7 @@ const props = defineProps({
 const form = useForm({
     amount: "",
     particulars: "",
+    date: "",
 });
 
 // Emit event to update modal visibility
@@ -75,6 +76,16 @@ function confirmPayment() {
                 type="text"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 placeholder="Enter particulars"
+            />
+
+            <!-- Date Input -->
+            <label for="date" class="block text-sm font-medium mb-1"
+                >Date</label
+            >
+            <input
+                v-model="form.date"
+                type="date"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full"
             />
 
             <!-- Action Buttons -->

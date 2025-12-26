@@ -19,6 +19,7 @@ const emit = defineEmits(["update:paymentModal"]);
 const form = useForm({
     amount: "",
     particulars: "",
+    date: "",
 });
 
 // Submit payment function
@@ -74,7 +75,7 @@ function confirmPayment() {
             </div>
 
             <div class="mb-4">
-                <label for="amount" class="block mb-1 font-medium"
+                <label for="particulars" class="block mb-1 font-medium"
                     >Particulars</label
                 >
                 <input
@@ -82,6 +83,17 @@ function confirmPayment() {
                     type="text"
                     class="border border-gray-300 rounded-md px-4 py-2 w-full"
                     placeholder="Enter payment amount"
+                />
+            </div>
+
+             <div class="mb-4">
+                <label for="date" class="block mb-1 font-medium"
+                    >Date</label
+                >
+                <input
+                    v-model="form.date"
+                    type="date"
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 />
             </div>
 
