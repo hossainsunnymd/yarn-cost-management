@@ -114,7 +114,8 @@ class CuttingPartyController extends Controller
                 'cutting_party_id' => $request->cutting_party_id,
                 'amount' => $cuttingParty->due_amount,
                 'credit'=>$request->amount,
-                'particulars'=>$request->particulars
+                'particulars'=>$request->particulars,
+                'date'=>$request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);

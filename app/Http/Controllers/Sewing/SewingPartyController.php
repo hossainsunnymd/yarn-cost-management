@@ -112,7 +112,8 @@ class SewingPartyController extends Controller
                 'particulars' => $request->particulars,
                 'sewing_party_id' => $request->sewing_party_id,
                 'amount' =>$sweingParty->due_amount,
-                'credit'=>$request->amount
+                'credit'=>$request->amount,
+                'date'=>$request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);

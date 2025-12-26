@@ -111,7 +111,8 @@ class KnittingPartyController extends Controller
                 'knitting_party_id' => $request->knitting_party_id,
                 'amount' => $knittingParty->due_amount,
                 'credit' => $request->amount,
-                'particulars' => $request->particulars
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Saved Successfully', 'error' => '']);

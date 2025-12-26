@@ -111,7 +111,8 @@ class DyeingPartyController extends Controller
                 'dyeing_party_id' => $request->dyeing_party_id,
                 'amount' => $dyeingParty->due_amount,
                 'credit' => $request->amount,
-                'particulars' => $request->particulars
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);

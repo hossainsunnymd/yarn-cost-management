@@ -113,7 +113,9 @@ class YarnPartyController extends Controller
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
                 'amount' => $yarnParty->due_amount,
-                'credit' => $request->amount
+                'credit' => $request->amount,
+                'particulars' => $request->particulars,
+                'date' => $request->date
 
             ]);
             DB::commit();
