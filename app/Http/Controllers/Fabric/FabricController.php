@@ -111,11 +111,10 @@ class FabricController extends Controller
                 $fabricSaleProduct->delete();
 
             }
-            $fabricSale = FabricSale::find($request->fabric_sale_id)->first();
+            $fabricSale = FabricSale::find($request->fabric_sale_id);
             CustomerPayment::where('challan_no', $fabricSale->challan_no)->where('challan_type','fabric')->delete();
-            $fabricSale->delete();
             RecalculateCustomerPaymentService::recalculateCustomerPayment($fabricSale->customer_id);
-
+            $fabricSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

@@ -11,4 +11,8 @@ class KnittingSale extends Model
     public function knittingSaleProducts(){
         return $this->hasMany(KnittingSaleProduct::class);
     }
+
+    public function customer(){
+        return $this->belongsTo(Customer::class);
+    }
 }

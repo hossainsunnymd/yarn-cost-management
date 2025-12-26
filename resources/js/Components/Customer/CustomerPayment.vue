@@ -18,14 +18,18 @@ const emit = defineEmits(["update:paymentModal"]);
 const form = useForm({
     amount: "",
     particulars: "",
+    date: "",
 });
 
 // Handle confirm button click
 function confirmPayment() {
-    if (form.amount === "") {
-        toaster.error("Please enter amount");
-        return;
-    }
+    if (!form.amount) return toaster.error("Please enter amount");
+
+    if(!form.particulars) return toaster.error("Please enter particulars");
+
+    if(!form.date) return toaster.error("Please enter particulars");
+
+
 
     // Post the form to the backend
     form.post(`/save-customer-payment?customer_id=${props.paymentId}`, {
@@ -82,6 +86,19 @@ function confirmPayment() {
                 type="text"
                 class="border border-gray-300 rounded-md px-4 py-2 w-full"
                 placeholder="Enter particulars"
+            />
+
+            <!-- Date Input -->
+            <label
+                for="particulars"
+                class="block text-sm font-medium text-gray-700 mb-1"
+            >
+                Particulars
+            </label>
+            <input
+                v-model="form.date"
+                type="date"
+                class="border border-gray-300 rounded-md px-4 py-2 w-full"
             />
 
             <!-- Action Buttons -->

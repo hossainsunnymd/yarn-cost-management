@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { router, usePage, Link } from '@inertiajs/vue3'
+import { ref } from "vue";
+import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
-import KnittingSaleDetails from './KnittingSaleDetails.vue';
+import KnittingSaleDetails from "./KnittingSaleDetails.vue";
 
 //  toaster for notifications
 const toaster = createToaster({});
@@ -13,18 +13,17 @@ const knittings = ref({});
 
 // Table headers
 const headers = [
-  { text: 'No', value: 'id' },
-  { text: 'Sale Date', value: 'sale_date' },
-  { text: 'Challan No', value: 'challan_no' },
-  { text: 'Total Weight', value: 'unit' },
-  { text: 'Total Amount', value: 'total_amount' },
-  { text: 'Action', value: 'action' },
+    { text: "No", value: "id" },
+    { text: "Sale Date", value: "sale_date" },
+    { text: "Challan No", value: "challan_no" },
+    { text: "Total Weight", value: "unit" },
+    { text: "Total Amount", value: "total_amount" },
+    { text: "Action", value: "action" },
 ];
-
 
 // handle props for data table
 const items = ref(page.props.knittingSaleList);
-
+console.log(items.value);
 //search field
 const searchField = ref("name");
 
@@ -32,24 +31,32 @@ const searchField = ref("name");
 const searchItem = ref();
 
 const showModal = (id) => {
-    knittings.value=items.value.find((item) => item.id == id);
+    knittings.value = items.value.find((item) => item.id == id);
     modal.value = true;
-}
+};
 
 const deleteKnittingSale = (id) => {
-    if(confirm("Are you sure you want to delete this knitting sale?")) {
-        
+    if (confirm("Are you sure you want to delete this knitting sale?")) {
+        router.visit(`/delete-knitting-sale/${id}`);
     }
+};
+
+if (page.props.flash.status === true) {
+    toaster.success(page.props.flash.message);
+} else if (page.props.flash.status === false) {
+    toaster.error(page.props.flash.message);
 }
 </script>
 
 <template>
-
+    <KnittingSaleDetails :knittings="knittings" v-model:modal="modal" />
     <!-- Page title -->
     <p class="text-2xl font-bold">Knitting Sale List</p>
 
     <!-- Search input and layout -->
-    <div class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center">
+    <div
+        class="flex flex-col md:flex-row md:justify-between gap-3 md:items-center"
+    >
         <div class="w-full md:w-auto">
             <input
                 type="text"
@@ -58,9 +65,7 @@ const deleteKnittingSale = (id) => {
                 placeholder="Search by name"
             />
         </div>
-        <div>
-
-        </div>
+        <div></div>
     </div>
 
     <!-- Data table  -->
@@ -72,8 +77,7 @@ const deleteKnittingSale = (id) => {
         :search-field="searchField"
         :search-value="searchItem"
     >
-
-            <template #item-action="{ id }">
+        <template #item-action="{ id }">
             <div class="flex gap-2">
                 <button
                     @click="deleteKnittingSale(id)"
@@ -90,8 +94,5 @@ const deleteKnittingSale = (id) => {
                 </button>
             </div>
         </template>
-
     </EasyDataTable>
 </template>
-
-

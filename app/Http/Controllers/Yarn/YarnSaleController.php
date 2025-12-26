@@ -91,8 +91,8 @@ class YarnSaleController extends Controller
             }
             $yarnSale = YarnSale::find($id);
             CustomerPayment::where('challan_no', $yarnSale->challan_no)->where('challan_type', 'yarn')->delete();
-            $yarnSale->delete();
             RecalculateCustomerPaymentService::recalculateCustomerPayment($yarnSale->customer_id);
+            $yarnSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Sale Deleted Successfully']);
 

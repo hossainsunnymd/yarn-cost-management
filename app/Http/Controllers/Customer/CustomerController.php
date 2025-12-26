@@ -108,6 +108,8 @@ class CustomerController extends Controller
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
                 'credit' => $request->amount,
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
 
 

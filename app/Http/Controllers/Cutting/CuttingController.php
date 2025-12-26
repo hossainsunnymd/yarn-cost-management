@@ -129,8 +129,8 @@ class CuttingController extends Controller
             $cutting = Cutting::find($cuttingReceive->cutting_id);
             $cutting->increment('available_unit', $cutting->unit);
             CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
-            $cuttingReceive->delete();
             RecalculateCuttingPaymentService::recalculateCuttingPayment($cutting->cutting_party_id);
+            $cuttingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Deleted Successfully', 'error' => '']);
 
