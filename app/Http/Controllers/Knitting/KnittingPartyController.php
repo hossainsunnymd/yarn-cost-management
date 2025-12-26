@@ -88,8 +88,16 @@ class KnittingPartyController extends Controller
     //knitting payment list
     public function knittingPaymentList(Request $request)
     {
-        $knittingPayments = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->paginate(100);
+        $knittingPayments = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
         $knittingParty = KnittingParty::find($request->knitting_party_id);
+
+        $pagination=[
+            'next_page_url' => $knittingPayments->nextPageUrl(),
+            'prev_page_url' => $knittingPayments->previousPageUrl(),
+            'last_page'=> $knittingPayments->lastPage(),
+        ];
 
         $lists = [];
 
@@ -150,9 +158,9 @@ class KnittingPartyController extends Controller
             $knittingParty = KnittingParty::findOrFail($knittingPayment->knitting_party_id);
 
             if ($knittingPayment->debit) {
-                $knittingParty->increment('due_amount', $knittingPayment->debit);
+                $knittingParty->decrement('due_amount', $knittingPayment->debit);
             } else if ($knittingPayment->credit) {
-                $knittingParty->decrement('due_amount', $knittingPayment->credit);
+                $knittingParty->increment('due_amount', $knittingPayment->credit);
             }
 
             $knittingPayment->delete();

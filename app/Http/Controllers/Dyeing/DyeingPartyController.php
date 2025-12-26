@@ -87,8 +87,16 @@ class DyeingPartyController extends Controller
     //dyeing payment list
     public function dyeingPaymentList(Request $request)
     {
-        $dyeingPayments = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)->paginate(100);
+        $dyeingPayments = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
         $dyeingParty = DyeingParty::find($request->dyeing_party_id);
+
+        $pagination=[
+            'next_page_url'=>$dyeingPayments->nextPageUrl(),
+            'prev_page_url'=>$dyeingPayments->previousPageUrl(),
+            'last_page'=>$dyeingPayments->lastPage(),
+        ];
 
         $lists=[];
         foreach($dyeingPayments as $dyeingPayment){
@@ -108,7 +116,7 @@ class DyeingPartyController extends Controller
 
         }
 
-        return Inertia::render('Dyeings/DyeingParty/DyeingPaymentListPage', ['dyeingPayment' => $lists, 'dyeingParty' => $dyeingParty]);
+        return Inertia::render('Dyeings/DyeingParty/DyeingPaymentListPage', ['dyeingPayment' => $lists, 'dyeingParty' => $dyeingParty, 'pagination'=>$pagination]);
     }
 
     //save dyeing payment
@@ -149,9 +157,9 @@ class DyeingPartyController extends Controller
             $dyeingParty = DyeingParty::find($dyeingPayment->dyeing_party_id);
 
             if ($dyeingPayment->debit) {
-                $dyeingParty->increment('due_amount', $dyeingPayment->debit);
+                $dyeingParty->decrement('due_amount', $dyeingPayment->debit);
             } else if ($dyeingPayment->credit) {
-                $dyeingParty->decrement('due_amount', $dyeingPayment->credit);
+                $dyeingParty->increment('due_amount', $dyeingPayment->credit);
             }
 
             $dyeingPayment->delete();

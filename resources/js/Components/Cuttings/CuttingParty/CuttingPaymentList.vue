@@ -105,4 +105,30 @@ function deleteCuttingPayment(id) {
             </button>
         </template>
     </EasyDataTable>
+
+    <div class="flex justify-end items-center mt-4 space-x-2">
+        <!-- Prev -->
+        <Link
+            v-if="page.props.pagination.prev_page_url"
+            :href="page.props.pagination.prev_page_url"
+            class="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+        >
+            ← Prev
+        </Link>
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-500">
+            Page {{ page.props.pagination.current_page }} of
+            {{ page.props.pagination.last_page }}
+        </span>
+
+        <!-- Next -->
+        <Link
+            v-if="page.props.pagination.next_page_url"
+            :href="page.props.pagination.next_page_url"
+            class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+        >
+            Next →
+        </Link>
+    </div>
 </template>

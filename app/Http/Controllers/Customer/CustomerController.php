@@ -28,8 +28,14 @@ class CustomerController extends Controller
 
 
         $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)
-            ->orderBy('id')
-            ->paginate(100);
+            ->orderBy('id','asc')
+            ->paginate(100)->withQueryString();
+
+        $pagination = [
+            'next_page_url' => $customerPayment->nextPageUrl(),
+            'prev_page_url' => $customerPayment->previousPageUrl(),
+            'last_page' => $customerPayment->lastPage(),
+        ];
 
         $list = [];
 
@@ -53,6 +59,7 @@ class CustomerController extends Controller
         return Inertia::render('Customer/CustomerPaymentListPage', [
             'customerPayment' => $list,
             'dueAmount' => $customer->due_amount,
+            'pagination' => $pagination
         ]);
     }
 

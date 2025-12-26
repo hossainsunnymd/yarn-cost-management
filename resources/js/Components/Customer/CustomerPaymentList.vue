@@ -12,7 +12,6 @@ const paymentId = ref(
     new URLSearchParams(window.location.search).get("customer_id")
 );
 
-
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
@@ -24,10 +23,7 @@ const headers = [
     { text: "Credit", value: "credit" },
     { text: "Balance", value: "amount" },
     { text: "Action", value: "action" },
-
 ];
-
-console.log(page.props.customerPayment);
 
 // Reactive data
 const items = ref(page.props.customerPayment);
@@ -97,12 +93,39 @@ function deleteCustomerPayment(id) {
         :search-field="searchField"
         :search-value="searchItem"
     >
-
         <template #item-action="{ id }">
-            <button @click="deleteCustomerPayment(id)" class="bg-red-500 px-2 py-1 rounded text-white">
+            <button
+                @click="deleteCustomerPayment(id)"
+                class="bg-red-500 px-2 py-1 rounded text-white"
+            >
                 Delete
             </button>
         </template>
-
     </EasyDataTable>
+
+    <div class="flex justify-end items-center mt-4 space-x-2">
+        <!-- Prev -->
+        <Link
+            v-if="page.props.pagination.prev_page_url"
+            :href="page.props.pagination.prev_page_url"
+            class="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+        >
+            ← Prev
+        </Link>
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-500">
+            Page {{ page.props.pagination.current_page }} of
+            {{ page.props.pagination.last_page }}
+        </span>
+
+        <!-- Next -->
+        <Link
+            v-if="page.props.pagination.next_page_url"
+            :href="page.props.pagination.next_page_url"
+            class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+        >
+            Next →
+        </Link>
+    </div>
 </template>

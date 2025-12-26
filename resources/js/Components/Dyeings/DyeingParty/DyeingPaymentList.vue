@@ -51,10 +51,7 @@ function deleteDyeingPayment(id) {
 </script>
 
 <template>
-    <DyeingPayment
-        :paymentId="paymentId"
-        v-model:paymentModal="paymentModal"
-    />
+    <DyeingPayment :paymentId="paymentId" v-model:paymentModal="paymentModal" />
     <!-- Page Title -->
     <p class="text-2xl font-bold">Dyeing Payment List</p>
 
@@ -93,11 +90,42 @@ function deleteDyeingPayment(id) {
         :search-field="searchField"
         :search-value="searchItem"
     >
-    <template #item-created_at="{created_at}">
-        {{ new Date(created_at).toLocaleDateString() }}
-    </template>
-    <template #item-action="{ id }">
-        <button @click="deleteDyeingPayment(id)" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition">Delete</button>
-    </template>
+        <template #item-created_at="{ created_at }">
+            {{ new Date(created_at).toLocaleDateString() }}
+        </template>
+        <template #item-action="{ id }">
+            <button
+                @click="deleteDyeingPayment(id)"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition"
+            >
+                Delete
+            </button>
+        </template>
     </EasyDataTable>
+
+    <div class="flex justify-end items-center mt-4 space-x-2">
+        <!-- Prev -->
+        <Link
+            v-if="page.props.pagination.prev_page_url"
+            :href="page.props.pagination.prev_page_url"
+            class="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+        >
+            ← Prev
+        </Link>
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-500">
+            Page {{ page.props.pagination.current_page }} of
+            {{ page.props.pagination.last_page }}
+        </span>
+
+        <!-- Next -->
+        <Link
+            v-if="page.props.pagination.next_page_url"
+            :href="page.props.pagination.next_page_url"
+            class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+        >
+            Next →
+        </Link>
+    </div>
 </template>

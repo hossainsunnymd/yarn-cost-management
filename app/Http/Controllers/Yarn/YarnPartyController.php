@@ -91,9 +91,18 @@ class YarnPartyController extends Controller
     //yarn payment list
     public function yarnPaymentList(Request $request)
     {
-        $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->paginate(100);
+        $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
         $yarnParty = YarnParty::find($request->yarn_party_id);
 
+        $pagination=[
+            'next_page_url' => $yarnPayments->nextPageUrl(),
+            'prev_page_url' => $yarnPayments->previousPageUrl(),
+            'last_page'=> $yarnPayments->lastPage(),
+        ];
+
+        $lists = [];
         foreach ($yarnPayments as $yarnPayment) {
 
             $amount = YarnPayment::where('yarn_party_id', $request->yarn_party_id)
@@ -110,7 +119,7 @@ class YarnPartyController extends Controller
             ];
         }
 
-        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $lists, 'yarnParty' => $yarnParty]);
+        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $lists, 'yarnParty' => $yarnParty, 'pagination' => $pagination]);
     }
 
     //yarn payment
@@ -150,10 +159,10 @@ class YarnPartyController extends Controller
         try {
             $yarnPayment = YarnPayment::findOrFail($id);
             $yarnParty = YarnParty::findOrFail($yarnPayment->yarn_party_id);
-            if ($yarnParty->debit) {
-                $yarnParty->increment('due_amount', $yarnPayment->debit);
-            } else if ($yarnParty->credit) {
-                $yarnParty->decrement('due_amount', $yarnPayment->credit);
+            if ($yarnPayment->debit) {
+                $yarnParty->decrement('due_amount', $yarnPayment->debit);
+            } else if ($yarnPayment->credit) {
+                $yarnParty->increment('due_amount', $yarnPayment->credit);
             }
             $yarnPayment->delete();
             DB::commit();

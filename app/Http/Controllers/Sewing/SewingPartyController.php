@@ -87,8 +87,17 @@ class SewingPartyController extends Controller
     //sewing payment list
     public function sewingPaymentList(Request $request)
     {
-        $sewingPayments = SewingPayment::where('sewing_party_id', $request->sewing_party_id)->with('sewingParty')->paginate(100);
+        $sewingPayments = SewingPayment::where('sewing_party_id', $request->sewing_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
         $sewingParty = SewingParty::find($request->sewing_party_id);
+
+
+        $pagination = [
+            'next_page_url' => $sewingPayments->nextPageUrl(),
+            'prev_page_url' => $sewingPayments->previousPageUrl(),
+            'last_page_url' => $sewingPayments->lastPage(),
+        ];
 
         $lists = [];
         foreach ($sewingPayments as $sewingPayment) {
@@ -108,7 +117,7 @@ class SewingPartyController extends Controller
             ];
         }
 
-        return Inertia::render('Sewings/SewingParty/SewingPaymentListPage', ['sewingPayment' => $lists, 'sewingParty' => $sewingParty]);
+        return Inertia::render('Sewings/SewingParty/SewingPaymentListPage', ['sewingPayment' => $lists, 'sewingParty' => $sewingParty, 'pagination' => $pagination]);
     }
 
     //sewing payment
@@ -150,9 +159,9 @@ class SewingPartyController extends Controller
             $sewingParty = SewingParty::findOrFail($sewingPayment->sewing_party_id);
 
             if ($sewingPayment->debit) {
-                $sewingParty->increment('due_amount', $sewingPayment->debit);
+                $sewingParty->decrement('due_amount', $sewingPayment->debit);
             } else if ($sewingPayment->credit) {
-                $sewingParty->decrement('due_amount', $sewingPayment->credit);
+                $sewingParty->increment('due_amount', $sewingPayment->credit);
             }
 
             $sewingPayment->delete();

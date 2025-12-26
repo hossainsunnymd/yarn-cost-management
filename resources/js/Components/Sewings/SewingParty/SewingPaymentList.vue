@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref,computed } from "vue";
 import { router, usePage, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import SewingPayment from "./SewingPayment.vue";
@@ -26,7 +26,7 @@ const headers = [
 ];
 
 // Reactive data
-const items = ref(page.props.sewingPayment);
+const items = computed(() => page.props.sewingPayment);
 const searchField = ref("name");
 const searchItem = ref("");
 
@@ -91,7 +91,7 @@ function deleteSewingPayment(id) {
         :search-value="searchItem"
     >
         <template #item-created_at="{ created_at }">
-            {{ new Date(created_at).toLocaleDateString('en-GB') }}
+            {{ new Date(created_at).toLocaleDateString("en-GB") }}
         </template>
         <template #item-action="{ id }">
             <button
@@ -102,4 +102,30 @@ function deleteSewingPayment(id) {
             </button>
         </template>
     </EasyDataTable>
+
+    <div class="flex justify-end items-center mt-4 space-x-2">
+        <!-- Prev -->
+        <Link
+            v-if="page.props.pagination.prev_page_url"
+            :href="page.props.pagination.prev_page_url"
+            class="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+        >
+            ← Prev
+        </Link>
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-500">
+            Page {{ page.props.pagination.current_page }} of
+            {{ page.props.pagination.last_page }}
+        </span>
+
+        <!-- Next -->
+        <Link
+            v-if="page.props.pagination.next_page_url"
+            :href="page.props.pagination.next_page_url"
+            class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+        >
+            Next →
+        </Link>
+    </div>
 </template>

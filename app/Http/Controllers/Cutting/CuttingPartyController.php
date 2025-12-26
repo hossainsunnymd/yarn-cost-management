@@ -88,8 +88,18 @@ class CuttingPartyController extends Controller
     //cutting payment list
     public function CuttingPaymentList(Request $request)
     {
-        $cuttingPayments = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->paginate(100);
+        $cuttingPayments = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
         $cuttingParty = CuttingParty::find($request->cutting_party_id);
+
+        $pagination = [
+            'next_page_url' => $cuttingPayments->nextPageUrl(),
+            'prev_page_url' => $cuttingPayments->previousPageUrl(),
+            'last_page' => $cuttingPayments->lastPage(),
+        ];
+
+        $lists = [];
 
         foreach ($cuttingPayments as $cuttingPayment) {
 
@@ -107,7 +117,7 @@ class CuttingPartyController extends Controller
             ];
         }
 
-        return Inertia::render('Cuttings/CuttingParty/CuttingPaymentListPage', ['cuttingPayment' => $lists, 'cuttingParty' => $cuttingParty]);
+        return Inertia::render('Cuttings/CuttingParty/CuttingPaymentListPage', ['cuttingPayment' => $lists, 'cuttingParty' => $cuttingParty, 'pagination' => $pagination]);
     }
 
     //cutting payment
@@ -148,9 +158,9 @@ class CuttingPartyController extends Controller
             $cuttingParty = CuttingParty::findOrFail($cuttingPayment->cutting_party_id);
 
             if ($cuttingPayment->debit) {
-                $cuttingParty->increment('due_amount', $cuttingPayment->debit);
+                $cuttingParty->decrement('due_amount', $cuttingPayment->debit);
             } else if ($cuttingPayment->credit) {
-                $cuttingParty->decrement('due_amount', $cuttingPayment->credit);
+                $cuttingParty->increment('due_amount', $cuttingPayment->credit);
 
             }
 

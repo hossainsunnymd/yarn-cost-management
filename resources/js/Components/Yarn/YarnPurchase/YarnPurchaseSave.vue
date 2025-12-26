@@ -3,6 +3,9 @@ import { computed } from "vue";
 import { usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
+import vSelect from "vue3-select";
+import "vue3-select/dist/vue3-select.css";
+
 const toaster = createToaster({});
 const page = usePage();
 
@@ -76,19 +79,14 @@ function submitForm() {
                 >
                     Select Yarn Party
                 </label>
-                <select
+                <vSelect
                     v-model="form.yarn_party_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="" disabled>Select Yarn Party</option>
-                    <option
-                        v-for="party in page.props.yarnParty"
-                        :key="party.id"
-                        :value="party.id"
-                    >
-                        {{ party.name }}
-                    </option>
-                </select>
+                    :options="page.props.yarnParties"
+                    label="name"
+                    :reduce="(yarn_party) => yarn_party.id"
+                    placeholder="Select or type Yarn Party"
+                    class="custom-input"
+                />
                 <p
                     v-if="errors.yarn_party_id"
                     class="text-red-500 text-md mt-1"
@@ -238,4 +236,9 @@ function submitForm() {
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+
+
+
+</style>

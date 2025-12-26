@@ -25,9 +25,9 @@ class YarnPurchaseController extends Controller
     //yarn save page
     public function yarnPurchaseSavePage(Request $request)
     {
-        $yarnParty = YarnParty::all();
+        $yarnParties = YarnParty::all();
         $yarnPurchase = YarnPurchase::find($request->id);
-        return Inertia::render('Yarn/YarnPurchase/YarnPurchaseSavePage', ['yarnPurchase' => $yarnPurchase, 'yarnParty' => $yarnParty]);
+        return Inertia::render('Yarn/YarnPurchase/YarnPurchaseSavePage', ['yarnPurchase' => $yarnPurchase, 'yarnParties' => $yarnParties]);
     }
 
     //create yarn purchase
