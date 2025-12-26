@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DyeingPayment extends Model
 {
-    protected $fillable=['dyeing_party_id','amount','debit','credit','particulars'];
+    protected $fillable=['dyeing_party_id','amount','debit','credit','particulars','date'];
 
     public function dyeingParty()
     {

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('amount', 8, 2);
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();
+            $table->date('date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
