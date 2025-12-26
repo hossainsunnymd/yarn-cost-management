@@ -27,9 +27,7 @@ const headers = [
 
 ];
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("en-GB");
-};
+console.log(page.props.customerPayment);
 
 // Reactive data
 const items = ref(page.props.customerPayment);
@@ -99,11 +97,6 @@ function deleteCustomerPayment(id) {
         :search-field="searchField"
         :search-value="searchItem"
     >
-
-        <!-- Date Format -->
-        <template #item-created_at="{ created_at }">
-            {{ formatDate(created_at) }}
-        </template>
 
         <template #item-action="{ id }">
             <button @click="deleteCustomerPayment(id)" class="bg-red-500 px-2 py-1 rounded text-white">

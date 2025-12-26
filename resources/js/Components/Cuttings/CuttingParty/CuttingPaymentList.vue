@@ -71,7 +71,7 @@ function deleteCuttingPayment(id) {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.cuttingPayment[0]?.cutting_party.due_amount }} Tk
+                {{ page.props.cuttingParty.due_amount }} Tk
             </p>
         </div>
         <div class="">

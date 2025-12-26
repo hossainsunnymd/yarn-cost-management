@@ -16,7 +16,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Cutting\CuttingService;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Cutting\CuttingReceiveService;
-use App\Services\RecalculationPayments\RecalculateCuttingPaymentService;
 
 class CuttingController extends Controller
 {
@@ -129,7 +128,6 @@ class CuttingController extends Controller
             $cutting = Cutting::find($cuttingReceive->cutting_id);
             $cutting->increment('available_unit', $cutting->unit);
             CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
-            RecalculateCuttingPaymentService::recalculateCuttingPayment($cutting->cutting_party_id);
             $cuttingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Deleted Successfully', 'error' => '']);

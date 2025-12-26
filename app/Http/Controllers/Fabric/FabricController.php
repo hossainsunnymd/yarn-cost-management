@@ -13,7 +13,6 @@ use App\Models\CustomerPayment;
 use App\Models\FabricSaleProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 use Illuminate\Support\Facades\Validator;
 
 class FabricController extends Controller
@@ -113,7 +112,6 @@ class FabricController extends Controller
             }
             $fabricSale = FabricSale::find($request->fabric_sale_id);
             CustomerPayment::where('challan_no', $fabricSale->challan_no)->where('challan_type','fabric')->delete();
-            RecalculateCustomerPaymentService::recalculateCustomerPayment($fabricSale->customer_id);
             $fabricSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);

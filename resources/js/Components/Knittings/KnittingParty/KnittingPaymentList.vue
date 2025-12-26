@@ -73,7 +73,7 @@ function deleteKnittingPayment(id) {
             <p class="mt-4 font-bold">
                 Total Due:
                 {{
-                    page.props.knittingPayment[0]?.knitting_party.due_amount
+                    page.props.knittingParty.due_amount
                 }}
                 Tk
             </p>

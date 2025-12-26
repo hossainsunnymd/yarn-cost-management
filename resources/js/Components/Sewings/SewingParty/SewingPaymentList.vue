@@ -68,7 +68,7 @@ function deleteSewingPayment(id) {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.sewingPayment[0]?.sewing_party.due_amount }} Tk
+                {{ page.props.sewingParty.due_amount }} Tk
             </p>
         </div>
         <div class="">

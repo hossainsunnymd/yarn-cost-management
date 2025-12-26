@@ -26,7 +26,7 @@ const modal = ref(false);
 const searchField = ref("name");
 const searchItem = ref("");
 
-
+console.log(items.value);
 const showModal=(id)=>{
     yarns.value=items.value.find((yarn) => yarn.id === id);
     modal.value = true;

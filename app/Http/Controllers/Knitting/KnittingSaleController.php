@@ -14,7 +14,7 @@ use App\Models\KnittingSaleProduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Knitting\KnittingSaleService;
-use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
+
 
 class KnittingSaleController extends Controller
 {
@@ -57,7 +57,6 @@ class KnittingSaleController extends Controller
             }
             $knittingSale = KnittingSale::find($id);
             CustomerPayment::where('challan_no', $knittingSale->challan_no)->where('challan_type', 'knitting')->delete();
-            RecalculateCustomerPaymentService::recalculateCustomerPayment($knittingSale->customer_id);
             $knittingSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting sale deleted successfully', 'error' => '']);

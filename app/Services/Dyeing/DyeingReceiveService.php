@@ -68,7 +68,6 @@ class DyeingReceiveService
                 'challan_no' => $dyeing->challan_no,
                 'particulars' => 'Dyeing Receive',
                 'dyeing_party_id' => $dyeingPartyId,
-                'amount' => $totalDyeingCost,
                 'debit' => $totalDyeingCost,
                 'date' => date('Y-m-d')
             ]);

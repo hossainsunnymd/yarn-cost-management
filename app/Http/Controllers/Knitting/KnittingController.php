@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Knitting\KnittingService;
 use App\Services\Knitting\KnittingReceiveService;
-use App\Services\RecalculationPayments\RecalculateKnittingPaymentService;
+
 
 class KnittingController extends Controller
 {
@@ -124,7 +124,6 @@ class KnittingController extends Controller
             $knittingReceive=KnittingReceive::find($request->knitting_receive_id)->with('knitting')->first();
             Knitting::increment('available_unit', $knittingReceive->available_unit);
             KnittingPayment::where('challan_no', $knittingReceive->knitting->challan_no)->delete();
-            RecalculateKnittingPaymentService::recalculateKnittingPayment($knittingReceive->knitting->knitting_party_id);
             $knittingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);

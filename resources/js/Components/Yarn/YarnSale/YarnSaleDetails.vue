@@ -39,14 +39,19 @@ const printModal = () => {
                 &times;
             </button>
 
-            <!-- Print button -->
-            <button
-                @click="printModal"
-                class="absolute top-3 left-3 text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
-                aria-label="Print modal content"
-            >
-                🖨️ Print
-            </button>
+            <!-- headers -->
+            <div class="flex justify-center items-center">
+                <h1 class="text-2xl font-bold text-left pb-2">
+                    Yarn Sale Details
+                </h1>
+            </div>
+
+            <div>
+                <h1 class="text-left">Challan No: {{ props.yarns.challan_no }}</h1>
+                <h1>Date: {{ props.yarns.sale_date }}</h1>
+                <h1>Customer Name: {{ props.yarns.customer.name }}</h1>
+                <h1>Customer Name: {{ props.yarns.customer.phone }}</h1>
+            </div>
 
             <!-- Products Table -->
             <div class="overflow-x-auto overflow-y-auto mt-20">
@@ -55,9 +60,10 @@ const printModal = () => {
                         <tr>
                             <th class="px-4 py-2 border text-center">#</th>
                             <th class="px-4 py-2 border text-center">
-                                Per Unit Cost
+                                Price
                             </th>
                             <th class="px-4 py-2 border text-center">Unit</th>
+                            <th class="px-4 py-2 border text-center">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,10 +77,13 @@ const printModal = () => {
                                 {{ index + 1 }}
                             </td>
                             <td class="px-4 py-2 border text-center">
-                                <!-- {{ item.sewing_receive.per_unit_cost }} -->
+                                {{ item.price }}
                             </td>
                             <td class="px-4 py-2 border text-center">
                                 {{ item.unit }}
+                            </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{ item.total_amount }}
                             </td>
                         </tr>
                     </tbody>
@@ -85,6 +94,15 @@ const printModal = () => {
             <div class="mt-6 text-center text-xs text-gray-500 print:hidden">
                 Press the Print button or Ctrl+P to print this summary.
             </div>
+
+                  <!-- Print button -->
+            <button
+                @click="printModal"
+                class=" text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
+                aria-label="Print modal content"
+            >
+                🖨️ Print
+            </button>
         </div>
     </div>
 </template>

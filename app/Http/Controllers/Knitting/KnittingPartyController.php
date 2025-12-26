@@ -10,7 +10,6 @@ use App\Models\KnittingParty;
 use App\Models\KnittingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Services\RecalculationPayments\RecalculateKnittingPaymentService;
 use Illuminate\Support\Facades\Validator;
 
 class KnittingPartyController extends Controller
@@ -89,8 +88,28 @@ class KnittingPartyController extends Controller
     //knitting payment list
     public function knittingPaymentList(Request $request)
     {
-        $knittingPayment = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->with('knittingParty')->get();
-        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $knittingPayment]);
+        $knittingPayments = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)->paginate(100);
+        $knittingParty = KnittingParty::find($request->knitting_party_id);
+
+        $lists = [];
+
+        foreach ($knittingPayments as $knittingPayment) {
+
+            $amount = KnittingPayment::where('knitting_party_id', $request->knitting_party_id)
+                ->where('id', '<=', $knittingPayment->id)
+                ->sum(DB::raw('IFNULL(debit,0) - IFNULL(credit,0)'));
+
+            $lists[] = [
+                'id' => $knittingPayment->id,
+                'date' => $knittingPayment->date,
+                'particulars' => $knittingPayment->particulars,
+                'debit' => $knittingPayment->debit,
+                'credit' => $knittingPayment->credit,
+                'amount' => $amount
+            ];
+        }
+
+        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $lists, 'knittingParty' => $knittingParty]);
     }
 
     //save knitting payment
@@ -109,7 +128,6 @@ class KnittingPartyController extends Controller
             $knittingParty->decrement('due_amount', $request->amount);
             KnittingPayment::create([
                 'knitting_party_id' => $request->knitting_party_id,
-                'amount' => $knittingParty->due_amount,
                 'credit' => $request->amount,
                 'particulars' => $request->particulars,
                 'date' => $request->date
@@ -129,8 +147,15 @@ class KnittingPartyController extends Controller
         try {
             $knittingPayment = KnittingPayment::findOrFail($id);
 
+            $knittingParty = KnittingParty::findOrFail($knittingPayment->knitting_party_id);
+
+            if ($knittingPayment->debit) {
+                $knittingParty->increment('due_amount', $knittingPayment->debit);
+            } else if ($knittingPayment->credit) {
+                $knittingParty->decrement('due_amount', $knittingPayment->credit);
+            }
+
             $knittingPayment->delete();
-            RecalculateKnittingPaymentService::recalculateKnittingPayment($knittingPayment->knitting_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
