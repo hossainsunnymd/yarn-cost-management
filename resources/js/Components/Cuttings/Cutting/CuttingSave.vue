@@ -5,6 +5,9 @@ import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
+import vSelect from "vue3-select";
+import "vue3-select/dist/vue3-select.css";
+
 // Access global page props
 const page = usePage();
 
@@ -78,19 +81,13 @@ function submitForm() {
                 >
                     Select Cutting Party
                 </label>
-                <select
+                <vSelect
                     v-model="form.cutting_party_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="" disabled>Select Cutting Party</option>
-                    <option
-                        v-for="cutting in page.props.cuttingParty"
-                        :key="cutting.id"
-                        :value="cutting.id"
-                    >
-                        {{ cutting.name }}
-                    </option>
-                </select>
+                    :options="page.props.cuttingParties"
+                    :reduce="(cutting_party) => cutting_party.id"
+                    label="name"
+                    placeholder="Select or type Cutting Party"
+                />
                 <p v-if="errors.category_id" class="text-red-500 text-md mt-1">
                     {{ errors.category_id[0] }}
                 </p>
@@ -104,19 +101,13 @@ function submitForm() {
                 >
                     Select Category
                 </label>
-                <select
+                <vSelect
                     v-model="form.category_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="" disabled>Select Category</option>
-                    <option
-                        v-for="category in page.props.categories"
-                        :key="category.id"
-                        :value="category.id"
-                    >
-                        {{ category.name }}
-                    </option>
-                </select>
+                    :options="page.props.categories"
+                    :reduce="(category) => category.id"
+                    label="name"
+                    placeholder="Select or type Category"
+                />
                 <p v-if="errors.category_id" class="text-red-500 text-md mt-1">
                     {{ errors.category_id[0] }}
                 </p>

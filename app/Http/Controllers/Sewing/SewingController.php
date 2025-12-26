@@ -31,8 +31,8 @@ class SewingController extends Controller
     {
         $cuttingReceive = CuttingReceive::findOrFail($request->cutting_receive_id);
 
-        $sewingParty = SewingParty::all();
-        return Inertia::render('Sewings/Sewing/SewingSavePage', ['sewingParty' => $sewingParty, 'cuttingReceive' => $cuttingReceive]);
+        $sewingParties = SewingParty::all();
+        return Inertia::render('Sewings/Sewing/SewingSavePage', ['sewingParties' => $sewingParties, 'cuttingReceive' => $cuttingReceive]);
     }
 
     //Sewing create

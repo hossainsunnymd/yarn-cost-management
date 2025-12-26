@@ -5,6 +5,9 @@ import { createToaster } from "@meforma/vue-toaster";
 import { router } from "@inertiajs/vue3";
 import { computed } from "vue";
 
+import vSelect from "vue3-select";
+import "vue3-select/dist/vue3-select.css";
+
 const page = usePage();
 
 // Get knitting_receive_id from URL query string
@@ -80,19 +83,12 @@ function submitForm() {
                 >
                     Select Dyeing Party
                 </label>
-                <select
+                <vSelect
                     v-model="form.dyeing_party_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="" disabled>Select Dyeing Party</option>
-                    <option
-                        v-for="party in page.props.dyeingPartyList"
-                        :key="party.id"
-                        :value="party.id"
-                    >
-                        {{ party.name }}
-                    </option>
-                </select>
+                    :options="page.props.dyeingPartyList"
+                    :reduce="(dyeing_party) => dyeing_party.id"
+                    label="name"
+                />
                 <p
                     v-if="errors.dyeing_party_id"
                     class="text-red-500 text-md mt-1"

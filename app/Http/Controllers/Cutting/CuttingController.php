@@ -31,9 +31,9 @@ class CuttingController extends Controller
     public function cuttingSavePage(Request $request)
     {
         $categories = Category::all();
-        $cuttingParty = CuttingParty::all();
+        $cuttingParties = CuttingParty::all();
         $dyeingReceive = DyeingReceive::find($request->dyeing_receive_id);
-        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories, 'dyeingReceive' => $dyeingReceive, 'cuttingParty' => $cuttingParty]);
+        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories, 'dyeingReceive' => $dyeingReceive, 'cuttingParties' => $cuttingParties]);
     }
 
     //create cutting
