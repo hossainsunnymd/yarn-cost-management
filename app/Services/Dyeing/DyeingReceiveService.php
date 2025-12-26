@@ -70,6 +70,7 @@ class DyeingReceiveService
                 'dyeing_party_id' => $dyeingPartyId,
                 'amount' => $totalDyeingCost,
                 'debit' => $totalDyeingCost,
+                'date' => date('Y-m-d')
             ]);
 
             DB::commit();

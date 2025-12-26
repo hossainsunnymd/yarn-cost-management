@@ -79,6 +79,9 @@ class YarnPurchaseController extends Controller
                 'yarn_party_id' => $request->yarn_party_id,
                 'amount' => $yarnParty->due_amount,
                 'debit' => $bill_amount,
+                'challan_no' => $request->challan_no,
+                'particulars'=>'Yarn Purchase',
+                'date' => date('Y-m-d')
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Created Successfully', 'error' => '']);

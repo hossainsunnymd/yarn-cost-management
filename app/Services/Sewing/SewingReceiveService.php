@@ -76,6 +76,7 @@ class SewingReceiveService{
                 'sewing_party_id' => $sewingPartyId,
                 'amount' => $sewingParty->due_amount,
                 'debit' => $totalSewingCost,
+                'date' => date('Y-m-d'),
             ]);
 
             DB::commit();
