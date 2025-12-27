@@ -102,6 +102,7 @@ class PermissionSeeder extends Seeder
     'fabric-sale-page',
     'fabric-sale',
     'fabric-sale-list',
+    'delete-fabric-sale',
 
     // Category
     'list-category',

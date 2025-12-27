@@ -18,8 +18,8 @@ return new class extends Migration
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->integer('challan_no')->unique();
             $table->date('sale_date');
-            $table->decimal('total_cost', 10, 2);
-            $table->decimal('total_sale_price', 10, 2);
+            $table->decimal('total_unit', 10, 2);
+            $table->decimal('total_amount', 10, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

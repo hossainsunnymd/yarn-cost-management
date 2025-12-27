@@ -21,6 +21,18 @@
             <!-- Modal Body -->
             <div class="px-6 py-4 space-y-4">
                 <div>
+                    <label for="available_weight" class="block font-semibold mb-1"
+                        >Available Weight</label
+                    >
+                    <input
+                        v-model="selectedFabrics.available_weight"
+                        type="text"
+                        class="w-full border px-3 py-2 rounded"
+                        readonly
+                    />
+                </div>
+
+                <div>
                     <label for="weight" class="block font-semibold mb-1"
                         >Weight</label
                     >
@@ -31,14 +43,15 @@
                     />
                 </div>
 
-                <div>
-                    <label for="sale_price" class="block font-semibold mb-1"
-                        >Sale Price</label
+                    <div>
+                    <label for="available_roll" class="block font-semibold mb-1"
+                        >Available Roll</label
                     >
                     <input
-                        v-model="per_unit_sale_price"
+                        v-model="selectedFabrics.roll"
                         type="text"
                         class="w-full border px-3 py-2 rounded"
+                        readonly
                     />
                 </div>
 
@@ -48,6 +61,29 @@
                     >
                     <input
                         v-model="roll"
+                        type="text"
+                        class="w-full border px-3 py-2 rounded"
+                    />
+                </div>
+
+                <div>
+                    <label for="sale_price" class="block font-semibold mb-1"
+                        >Cost Price</label
+                    >
+                    <input
+                        v-model="selectedFabrics.per_unit_cost"
+                        type="text"
+                        class="w-full border px-3 py-2 rounded"
+                        readonly
+                    />
+                </div>
+
+                    <div>
+                    <label for="sale_price" class="block font-semibold mb-1"
+                        >Sale Price</label
+                    >
+                    <input
+                        v-model="price"
                         type="text"
                         class="w-full border px-3 py-2 rounded"
                     />
@@ -126,7 +162,9 @@
                                 id,
                                 per_unit_cost,
                                 available_unit,
+                                dyeing,
                                 roll,
+
                             }"
                         >
                             <button
@@ -135,7 +173,9 @@
                                         id,
                                         per_unit_cost,
                                         available_unit,
-                                        roll
+                                        dyeing,
+                                        roll,
+
                                     )
                                 "
                                 class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
@@ -184,15 +224,13 @@
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="border px-2 py-1 text-sm">No</th>
+                            <th class="border px-2 py-1 text-sm">Design Name</th>
+                            <th class="border px-2 py-1 text-sm">Color</th>
                             <th class="border px-2 py-1 text-sm">Weight</th>
                             <th class="border px-2 py-1 text-sm">
-                                Per Unit Cost
+                                Price
                             </th>
-                            <th class="border px-2 py-1 text-sm">Total Cost</th>
-                            <th class="border px-2 py-1 text-sm">
-                                Per Unit Sale Price
-                            </th>
-                            <th class="border px-2 py-1 text-sm">Total Sale</th>
+                            <th class="border px-2 py-1 text-sm">Total</th>
                             <th class="border px-2 py-1 text-sm">Action</th>
                         </tr>
                     </thead>
@@ -206,20 +244,16 @@
                             <td class="border px-2 py-1 text-xs">
                                 {{ index + 1 }}
                             </td>
+                            <td class="border px-2 py-1 text-xs">{{ fabric.design_name }}</td>
+                            <td class="border px-2 py-1 text-xs">{{ fabric.color }}</td>
                             <td class="border px-2 py-1 text-xs">
                                 {{ fabric.weight }}
                             </td>
                             <td class="border px-2 py-1 text-xs">
-                                {{ fabric.per_unit_cost }}
+                                {{ fabric.price }}
                             </td>
                             <td class="border px-2 py-1 text-xs">
-                                {{ fabric.total_cost }}
-                            </td>
-                            <td class="border px-2 py-1 text-xs">
-                                {{ fabric.per_unit_sale_price }}
-                            </td>
-                            <td class="border px-2 py-1 text-xs">
-                                {{ fabric.sale_price }}
+                                {{ fabric.total_amount }}
                             </td>
                             <td class="border px-2 py-1 text-xs">
                                 <button
@@ -242,19 +276,13 @@
                     <tfoot>
                         <tr class="font-semibold">
                             <td
-                                colspan="3"
+                                colspan="6"
                                 class="border px-2 py-1 text-sm text-right"
                             >
                                 Total
                             </td>
                             <td class="border px-2 py-1 text-sm">
-                                {{ calculate.total }}
-                            </td>
-                            <td class="border px-2 py-1 text-sm text-right">
-                                Total Sale
-                            </td>
-                            <td colspan="2" class="border px-2 py-1 text-sm">
-                                {{ calculate.total_sale_price }}
+                                {{ totalAmount }}
                             </td>
                         </tr>
                     </tfoot>
@@ -275,7 +303,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
@@ -286,7 +314,7 @@ const toaster = createToaster({});
 // Modal state
 const showModal = ref(false);
 const weight = ref(0);
-const per_unit_sale_price = ref(0);
+const price = ref(0);
 const roll = ref(0);
 
 // State for selected fabric
@@ -295,6 +323,8 @@ const selectedFabrics = reactive({
     per_unit_cost: 0,
     available_weight: 0,
     roll: 0,
+    design_name: "",
+    color: "",
 });
 
 // Customer & fabric search
@@ -329,9 +359,6 @@ const customer = reactive({ name: "", phone: "", id: "", due_amount: 0 });
 // Selected fabric list
 const fabrics = ref([]);
 
-// Total calculation state
-const calculate = reactive({ total: 0, total_sale_price: 0 });
-
 // Add customer from table
 function addCustomer(name, phone, id, due_amount) {
     customer.name = name;
@@ -341,10 +368,12 @@ function addCustomer(name, phone, id, due_amount) {
 }
 
 // Open quantity modal
-function openQtyModal(id, per_unit_cost, available_unit, roll) {
+function openQtyModal(id, per_unit_cost, available_unit, dyeing,roll) {
     selectedFabrics.id = id;
     selectedFabrics.per_unit_cost = per_unit_cost;
     selectedFabrics.available_weight = available_unit;
+    selectedFabrics.design_name = dyeing.design_name;
+    selectedFabrics.color = dyeing.color;
     selectedFabrics.roll = roll;
     showModal.value = true;
 }
@@ -361,23 +390,8 @@ function addFabrics() {
         return;
     }
 
-    if (per_unit_sale_price.value <= 0) {
+    if (price.value <= 0) {
         toaster.error("Please enter a sale price greater than zero.");
-        return;
-    }
-
-    if (roll.value <= 0) {
-        toaster.error("Please enter a roll greater than zero.");
-        return;
-    }
-
-    if (roll.value > selectedFabrics.roll) {
-        toaster.error("Roll is not available");
-        return;
-    }
-
-    if (weight.value <= 0) {
-        toaster.error("Please enter a quantity greater than zero.");
         return;
     }
 
@@ -389,52 +403,47 @@ function addFabrics() {
 
     fabrics.value.push({
         id: selectedFabrics.id,
-        per_unit_cost: selectedFabrics.per_unit_cost,
         weight: weight.value,
-        per_unit_sale_price: per_unit_sale_price.value,
-        sale_price: (
-            parseFloat(per_unit_sale_price.value) * weight.value
+        price: price.value,
+        design_name: selectedFabrics.design_name,
+        roll: selectedFabrics.roll,
+        color: selectedFabrics.color,
+        total_amount: (
+            parseFloat(price.value) * weight.value
         ).toFixed(2),
-        roll: roll.value,
-        total_cost: (selectedFabrics.per_unit_cost * weight.value).toFixed(2),
     });
 
     closeModal();
-    calculateTotal();
 }
 
 // Remove fabric row
 function removeFabrics(index) {
     fabrics.value.splice(index, 1);
-    calculateTotal();
 }
 
 // Calculate total
-function calculateTotal() {
-    let total_cost = 0;
-    let total_sale_price = 0;
-    fabrics.value.forEach((f) => {
-        total_cost += parseFloat(f.total_cost);
-        total_sale_price += parseFloat(f.sale_price);
-    });
-    calculate.total_cost = total_cost.toFixed(2);
-    calculate.total_sale_price = total_sale_price.toFixed(2);
-}
+const totalAmount = computed(() =>
+ {
+    return fabrics.value.reduce((sum, fabric) => sum + parseFloat(fabric.total_amount), 0);
+});
 
+const totalUnit = computed(() => {
+    return fabrics.value.reduce((sum, fabric) => sum + parseFloat(fabric.weight), 0);
+})
 // Form and invoice submission
 const form = useForm({
     customer_id: "",
     fabrics: [],
-    total_cost: "",
-    total_sale_price: "",
-    sale_date:'',
-    challan_no:'',
+    total_unit: "",
+    total_amount: "",
+    sale_date: "",
+    challan_no: "",
 });
 
 function createInvoice() {
-    if(!form.sale_date) return toaster.error("Date is required");
+    if (!form.sale_date) return toaster.error("Date is required");
 
-    if(!form.challan_no) return toaster.error("Challan No is required");
+    if (!form.challan_no) return toaster.error("Challan No is required");
 
     if (!customer.name) return toaster.error("Customer is required");
 
@@ -442,16 +451,16 @@ function createInvoice() {
 
     form.customer_id = customer.id;
     form.fabrics = fabrics.value;
-    form.total_cost = calculate.total_cost;
-    form.total_sale_price = calculate.total_sale_price;
+    form.total_unit = totalUnit.value;
+    form.total_amount = totalAmount.value;
 
     form.post("fabric-sale", {
         onSuccess: () => {
             if (page.props.flash.status === true) {
                 form.reset();
                 fabrics.value = [];
-                calculate.total = 0;
-                calculate.total_sale_price = 0;
+                totalAmount.value = 0;
+                totalUnit.value = 0;
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/fabric-list"), 500);
             } else {

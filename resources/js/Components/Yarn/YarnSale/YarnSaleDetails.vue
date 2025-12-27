@@ -47,10 +47,10 @@ const printModal = () => {
             </div>
 
             <div>
-                <h1 class="text-left">Challan No: {{ props.yarns.challan_no }}</h1>
-                <h1>Date: {{ props.yarns.sale_date }}</h1>
-                <h1>Customer Name: {{ props.yarns.customer.name }}</h1>
-                <h1>Customer Name: {{ props.yarns.customer.phone }}</h1>
+                <h1 class="text-2xl font-bold mb-10">Challan No: {{ props.yarns.challan_no }}</h1>
+                <h1 class="font-bold">Date: {{ new Date(props.yarns.sale_date).toLocaleDateString() }}</h1>
+                <h1 class="font-bold">Customer Name: {{ props.yarns.customer.name }}</h1>
+                <h1 class="font-bold">Customer Phone: {{ props.yarns.customer.phone }}</h1>
             </div>
 
             <!-- Products Table -->

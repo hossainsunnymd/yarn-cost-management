@@ -40,13 +40,28 @@ const printModal = () => {
                 &times;
             </button>
 
-            <!-- Print Button (Hidden on print) -->
-            <button
-                @click="printModal"
-                class="absolute top-3 left-3 text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
-            >
-                🖨️ Print
-            </button>
+            <!-- headers -->
+            <div class="flex justify-center items-center">
+                <h1 class="text-2xl font-bold text-left pb-2">
+                    Fabric Sale Details
+                </h1>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-bold mb-10">
+                    Challan No: {{ props.fabricProducts.challan_no }}
+                </h1>
+                <h1 class="font-bold">
+                    Date:
+                    {{ new Date(props.fabricProducts.sale_date).toLocaleDateString() }}
+                </h1>
+                <h1 class="font-bold">
+                    Customer Name: {{ props.fabricProducts.customer.name }}
+                </h1>
+                <h1 class="font-bold">
+                    Customer Phone: {{ props.fabricProducts.customer.phone }}
+                </h1>
+            </div>
 
             <!-- Fabric Sale Product Table -->
             <div class="overflow-x-auto mt-20">
@@ -56,11 +71,14 @@ const printModal = () => {
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-2 border text-center">#</th>
-                            <th class="px-4 py-2 border text-center">Desing Name</th>
+                            <th class="px-4 py-2 border text-center">
+                                Desing Name
+                            </th>
                             <th class="px-4 py-2 border text-center">Unit</th>
-                            <th class="px-4 py-2 border text-center">Per Unit Cost</th>
-                            <th class="px-4 py-2 border text-center">Total Cost</th>
-                            <th class="px-4 py-2 border text-center">Sale Price</th>
+                            <th class="px-4 py-2 border text-center">Price</th>
+                            <th class="px-4 py-2 border text-center">
+                                Total Amount
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,14 +97,13 @@ const printModal = () => {
                             <td class="px-4 py-2 border text-center">
                                 {{ item.unit }}
                             </td>
-                             <td class="px-4 py-2 border text-center">
-                                {{ item.per_unit_cost }}
+
+                            <td class="px-4 py-2 border text-center">
+                                {{ item.price }}
                             </td>
-                             <td class="px-4 py-2 border text-center">
-                                {{ item.total_cost }}
-                            </td>
-                             <td class="px-4 py-2 border text-center">
-                                {{ item.sale_price }}
+
+                            <td class="px-4 py-2 border text-center">
+                                {{ item.total_amount }}
                             </td>
                         </tr>
                     </tbody>
@@ -97,6 +114,15 @@ const printModal = () => {
             <div class="mt-6 text-center text-xs text-gray-500 print:hidden">
                 Press the Print button or Ctrl+P to print this summary.
             </div>
+
+            <!-- Print button -->
+            <button
+                @click="printModal"
+                class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
+                aria-label="Print modal content"
+            >
+                🖨️ Print
+            </button>
         </div>
     </div>
 </template>
