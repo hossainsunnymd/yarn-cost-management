@@ -117,7 +117,7 @@ class KnittingPartyController extends Controller
             ];
         }
 
-        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $lists, 'knittingParty' => $knittingParty]);
+        return Inertia::render('Knittings/KnittingParty/KnittingPaymentListPage', ['knittingPayment' => $lists, 'knittingParty' => $knittingParty, 'pagination' => $pagination]);
     }
 
     //save knitting payment
