@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('yarn_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('yarn_party_id');
+            $table->unsignedBigInteger('yarn_party_id')->index();
             $table->foreign('yarn_party_id')->references('id')->on('yarn_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->nullable();
+            $table->integer('challan_no')->nullable()->index();
             $table->foreign('challan_no')->references('challan_no')->on('yarn_purchases')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('debit', 8, 2)->nullable();

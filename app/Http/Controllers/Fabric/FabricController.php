@@ -58,7 +58,8 @@ class FabricController extends Controller
                 'sale_date' => $request->sale_date,
                 'customer_id' => $request->customer_id,
                 'total_unit' => $request->total_unit,
-                'total_amount' => $request->total_amount
+                'total_amount' => $request->total_amount,
+                'total_cost' => $request->total_cost
             ]);
 
             foreach ($request->fabrics as $fabric) {
@@ -69,6 +70,7 @@ class FabricController extends Controller
                     'unit' => $fabric['weight'],
                     'roll' => $fabric['roll'],
                     'total_amount' => $fabric['total_amount'],
+                    'per_unit_cost' => $fabric['per_unit_cost']
                 ]);
                 $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
                 $dyeingReceive->decrement('available_unit', $fabric['weight']);

@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('cuttings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dyeing_receive_id');
+            $table->unsignedBigInteger('dyeing_receive_id')->index();
             $table->foreign('dyeing_receive_id')->references('id')->on('dyeing_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('cutting_party_id');
+            $table->unsignedBigInteger('cutting_party_id')->index();
             $table->foreign('cutting_party_id')->references('id')->on('cutting_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->unique();
+            $table->integer('challan_no')->unique()->index();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
             $table->decimal('roll', 8, 2);

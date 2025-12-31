@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('sewings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cutting_receive_id');
+            $table->unsignedBigInteger('cutting_receive_id')->index();
             $table->foreign('cutting_receive_id')->references('id')->on('cutting_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('sewing_party_id');
+            $table->unsignedBigInteger('sewing_party_id')->index();
             $table->foreign('sewing_party_id')->references('id')->on('sewing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->unique();
+            $table->integer('challan_no')->unique()->index();
             $table->decimal('unit', 8, 2);
             $table->decimal('available_unit', 8, 2);
             $table->timestamp('created_at')->useCurrent();

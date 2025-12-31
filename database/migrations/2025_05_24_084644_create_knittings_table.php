@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('knittings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('knitting_party_id');
+            $table->unsignedBigInteger('knitting_party_id')->index();
             $table->foreign('knitting_party_id')->references('id')->on('knitting_parties')->
             restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('total_unit', 8, 2);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('per_unit_cost', 8, 2);
             $table->string('fabric_name', 255);
             $table->date('send_date');
-            $table->integer('challan_no')->unique();
+            $table->integer('challan_no')->unique()->index();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

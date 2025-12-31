@@ -113,7 +113,8 @@ class KnittingPartyController extends Controller
                 'particulars' => $knittingPayment->particulars,
                 'debit' => $knittingPayment->debit,
                 'credit' => $knittingPayment->credit,
-                'amount' => $amount
+                'amount' => $amount,
+                'challan_no' => $knittingPayment->challan_no
             ];
         }
 

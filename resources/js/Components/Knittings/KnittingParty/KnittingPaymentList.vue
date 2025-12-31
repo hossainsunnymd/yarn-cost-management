@@ -27,6 +27,7 @@ const headers = [
 
 // Reactive data
 const items = ref(page.props.knittingPayment);
+
 const searchField = ref("name");
 const searchItem = ref("");
 

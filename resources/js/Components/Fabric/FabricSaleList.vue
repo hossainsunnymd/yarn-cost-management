@@ -1,6 +1,6 @@
 <script setup>
 import FabricSaleDetails from "./FabricSaleDetails.vue";
-import { usePage, router,Link } from "@inertiajs/vue3";
+import { usePage, router, Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { ref } from "vue";
 
@@ -22,9 +22,9 @@ const headers = [
     { text: "Total Unit", value: "total_unit" },
     { text: "Total Amount", value: "total_amount" },
     { text: "Fabric Sale date", value: "sale_date" },
+    { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];
-
 
 // Data items to display in the table
 const items = ref(page.props.fabricSaleList);
@@ -33,13 +33,11 @@ const items = ref(page.props.fabricSaleList);
 const searchField = ref(["id", "name", "category.name", "parts_no"]);
 const searchItem = ref("");
 
-
 const deleteFabricSale = (id) => {
     if (confirm("Are you sure you want to delete this fabric sale?")) {
         router.get(`/delete-fabric-sale/${id}`);
     }
 };
-
 
 // Show toaster notification based on flash message status
 if (page.props.flash.status === true) {
@@ -102,8 +100,17 @@ function showModal(id) {
                         <span class="material-icons text-sm">visibility</span>
                     </button>
 
-                    <button @click="deleteFabricSale(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 hover:bg-red-600 transition duration-300">Delete</button>
+                    <button
+                        @click="deleteFabricSale(id)"
+                        class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 hover:bg-red-600 transition duration-300"
+                    >
+                        Delete
+                    </button>
                 </div>
+            </template>
+
+            <template #item-profit_loss="{ total_amount, total_cost }">
+                {{ Number(total_amount - total_cost) }}
             </template>
         </EasyDataTable>
     </div>

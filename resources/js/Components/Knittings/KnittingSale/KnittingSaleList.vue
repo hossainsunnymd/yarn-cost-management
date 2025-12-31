@@ -18,6 +18,7 @@ const headers = [
     { text: "Challan No", value: "challan_no" },
     { text: "Total Weight", value: "unit" },
     { text: "Total Amount", value: "total_amount" },
+    { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];
 
@@ -94,5 +95,9 @@ if (page.props.flash.status === true) {
                 </button>
             </div>
         </template>
+
+    <template #item-profit_loss="{total_amount,total_cost}">
+        {{ Number(total_amount - total_cost) }}
+       </template>
     </EasyDataTable>
 </template>

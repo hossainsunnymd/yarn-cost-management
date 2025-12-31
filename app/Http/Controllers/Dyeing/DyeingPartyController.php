@@ -111,7 +111,8 @@ class DyeingPartyController extends Controller
                 'particulars'=>$dyeingPayment->particulars,
                 'debit'=>$dyeingPayment->debit,
                 'credit'=>$dyeingPayment->credit,
-                'amount'=>$amount
+                'amount'=>$amount,
+                'challan_no'=>$dyeingPayment->challan_no
             ];
 
         }

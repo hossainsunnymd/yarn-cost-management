@@ -411,6 +411,7 @@ function addFabrics() {
         total_amount: (
             parseFloat(price.value) * weight.value
         ).toFixed(2),
+        per_unit_cost: selectedFabrics.per_unit_cost,
     });
 
     closeModal();
@@ -430,6 +431,11 @@ const totalAmount = computed(() =>
 const totalUnit = computed(() => {
     return fabrics.value.reduce((sum, fabric) => sum + parseFloat(fabric.weight), 0);
 })
+
+const totalCost = computed(() => {
+    return fabrics.value.reduce((sum, fabric) => sum + parseFloat(fabric.weight * fabric.per_unit_cost), 0);
+})
+
 // Form and invoice submission
 const form = useForm({
     customer_id: "",
@@ -438,6 +444,7 @@ const form = useForm({
     total_amount: "",
     sale_date: "",
     challan_no: "",
+    total_cost: ""
 });
 
 function createInvoice() {
@@ -453,6 +460,7 @@ function createInvoice() {
     form.fabrics = fabrics.value;
     form.total_unit = totalUnit.value;
     form.total_amount = totalAmount.value;
+    form.total_cost = totalCost.value
 
     form.post("fabric-sale", {
         onSuccess: () => {
@@ -461,6 +469,7 @@ function createInvoice() {
                 fabrics.value = [];
                 totalAmount.value = 0;
                 totalUnit.value = 0;
+                form.total_cost = 0
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/fabric-list"), 500);
             } else {

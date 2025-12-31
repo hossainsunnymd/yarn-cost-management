@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('yarn_purchases', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('yarn_party_id');
+            $table->unsignedBigInteger('yarn_party_id')->index();
             $table->foreign('yarn_party_id')->references('id')->on('yarn_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->unique();
+            $table->integer('challan_no')->unique()->index();
             $table->string('name');
             $table->string('description');
             $table->string('bags');
