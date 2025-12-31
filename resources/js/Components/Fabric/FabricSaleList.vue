@@ -17,11 +17,12 @@ const fabricProducts = ref({});
 // Table headers definition for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Fabric Sale date", value: "sale_date" },
     { text: "Challan No", value: "challan_no" },
     { text: "Customer", value: "customer.name" },
     { text: "Total Unit", value: "total_unit" },
     { text: "Total Amount", value: "total_amount" },
-    { text: "Fabric Sale date", value: "sale_date" },
+    { text: "Total Cost", value: "total_cost" },
     { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];

@@ -17,11 +17,12 @@ const products = ref([]);
 // Table headers for the invoice list
 const headers = [
     { text: "ID", value: "id" },
+    { text: "Invoice Date", value: "invoice_date" },
     { text: "Challan No", value: "challan_no" },
     { text: "Customer Name", value: "customer.name" },
     { text: "Total Unit", value: "total_unit" },
     { text: "Total Amount", value: "total_amount" },
-    { text: "Invoice Date", value: "invoice_date" },
+    { text: "Total Cost", value: "total_cost" },
     { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];

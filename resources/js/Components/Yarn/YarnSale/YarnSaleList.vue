@@ -13,7 +13,8 @@ const headers = [
     { text: "Sale Date", value: "sale_date" },
     { text: "Challan No", value: "challan_no" },
     { text: "Unit", value: "total_unit" },
-    { text: "Price", value: "total_amount" },
+    { text: "Total Amount", value: "total_amount" },
+    { text: "Total Cost", value: "total_cost" },
     { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];
