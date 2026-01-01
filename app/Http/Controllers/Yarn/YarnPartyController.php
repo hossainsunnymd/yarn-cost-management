@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateYarnPaymentService;
+
 
 class YarnPartyController extends Controller
 {
@@ -91,8 +91,35 @@ class YarnPartyController extends Controller
     //yarn payment list
     public function yarnPaymentList(Request $request)
     {
-        $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)->with('yarnParty')->get();
-        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $yarnPayments]);
+        $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
+        $yarnParty = YarnParty::find($request->yarn_party_id);
+
+        $pagination=[
+            'next_page_url' => $yarnPayments->nextPageUrl(),
+            'prev_page_url' => $yarnPayments->previousPageUrl(),
+            'last_page'=> $yarnPayments->lastPage(),
+        ];
+
+        $lists = [];
+        foreach ($yarnPayments as $yarnPayment) {
+
+            $amount = YarnPayment::where('yarn_party_id', $request->yarn_party_id)
+                ->where('id', '<=', $yarnPayment->id)
+                ->sum(DB::raw('IFNULL(debit,0) - IFNULL(credit,0)'));
+
+            $lists[] = [
+                'id' => $yarnPayment->id,
+                'particulars' => $yarnPayment->particulars,
+                'amount' => $amount,
+                'credit' => $yarnPayment->credit,
+                'debit' => $yarnPayment->debit,
+                'date' => $yarnPayment->date,
+            ];
+        }
+
+        return Inertia::render('Yarn/YarnParty/YarnPaymentListPage', ['yarnPayments' => $lists, 'yarnParty' => $yarnParty, 'pagination' => $pagination]);
     }
 
     //yarn payment
@@ -112,15 +139,16 @@ class YarnPartyController extends Controller
             $yarnParty->decrement('due_amount', $request->amount);
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
-                'amount' => $yarnParty->due_amount,
-                'credit' => $request->amount
+                'credit' => $request->amount,
+                'particulars' => $request->particulars,
+                'date' => $request->date
 
             ]);
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Saved Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -130,9 +158,13 @@ class YarnPartyController extends Controller
         DB::beginTransaction();
         try {
             $yarnPayment = YarnPayment::findOrFail($id);
+            $yarnParty = YarnParty::findOrFail($yarnPayment->yarn_party_id);
+            if ($yarnPayment->debit) {
+                $yarnParty->decrement('due_amount', $yarnPayment->debit);
+            } else if ($yarnPayment->credit) {
+                $yarnParty->increment('due_amount', $yarnPayment->credit);
+            }
             $yarnPayment->delete();
-
-            RecalculateYarnPaymentService::recalculateYarnPayment($yarnPayment->yarn_party_id);
             DB::commit();
 
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Deleted Successfully', 'error' => '']);

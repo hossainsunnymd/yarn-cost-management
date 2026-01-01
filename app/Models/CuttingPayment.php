@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CuttingPayment extends Model
 {
-   protected $fillable=['cutting_party_id','amount','debit','credit','particulars','challan_no'];
+   protected $fillable=['cutting_party_id','debit','credit','particulars','challan_no','date'];
 
    public function cuttingParty(){
        return $this->belongsTo(CuttingParty::class);

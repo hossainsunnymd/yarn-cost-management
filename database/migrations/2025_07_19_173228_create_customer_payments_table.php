@@ -16,12 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->decimal('amount', 10, 2);
             $table->decimal('debit', 10, 2)->nullable();
             $table->decimal('credit', 10, 2)->nullable();
             $table->string('particulars')->nullable();
             $table->integer('challan_no')->nullable();
             $table->string('challan_type')->nullable();
+            $table->date('date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

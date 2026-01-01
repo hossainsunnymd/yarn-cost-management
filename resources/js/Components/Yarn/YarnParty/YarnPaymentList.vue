@@ -15,7 +15,9 @@ const paymentId = ref(
 // Table headers for EasyDataTable
 const headers = [
     { text: "ID", value: "id" },
-    { text: "Date", value: "created_at" },
+    { text: "Date", value: "date" },
+    { text: "Challan No", value: "challan_no" },
+    { text: "Particulars", value: "particulars" },
     { text: "Party Name", value: "yarn_party.name" },
     { text: "Debit", value: "debit" },
     { text: "Credit", value: "credit" },
@@ -70,7 +72,7 @@ function deleteKnittingPayment(id) {
             />
             <p class="mt-4 font-bold">
                 Total Due:
-                {{ page.props.yarnPayments[0]?.yarn_party.due_amount }} Tk
+                {{ page.props.yarnParty.due_amount }} Tk
             </p>
         </div>
         <div class="">
@@ -104,4 +106,30 @@ function deleteKnittingPayment(id) {
             </button>
         </template>
     </EasyDataTable>
+
+       <div class="flex justify-end items-center mt-4 space-x-2">
+        <!-- Prev -->
+        <Link
+            v-if="page.props.pagination.prev_page_url"
+            :href="page.props.pagination.prev_page_url"
+            class="px-3 py-1.5 text-sm rounded border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+        >
+            ← Prev
+        </Link>
+
+        <!-- Page Info -->
+        <span class="text-sm text-gray-500">
+            Page {{ page.props.pagination.current_page }} of
+            {{ page.props.pagination.last_page }}
+        </span>
+
+        <!-- Next -->
+        <Link
+            v-if="page.props.pagination.next_page_url"
+            :href="page.props.pagination.next_page_url"
+            class="px-3 py-1.5 text-sm rounded bg-blue-600 text-white hover:bg-blue-700 transition"
+        >
+            Next →
+        </Link>
+    </div>
 </template>

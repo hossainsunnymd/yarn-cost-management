@@ -10,7 +10,7 @@ use App\Models\CustomerPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
+
 
 class CustomerController extends Controller
 {
@@ -24,11 +24,45 @@ class CustomerController extends Controller
     //customer payment list
     public function customerPaymentList(Request $request)
     {
-        $dueAmount = Customer::find($request->customer_id)->due_amount;
-        $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)->with('customer')->get();
-        $latestPayment = CustomerPayment::latest()->first();
-        return Inertia::render('Customer/CustomerPaymentListPage', ['customerPayment' => $customerPayment, 'latestPayment' => $latestPayment, 'dueAmount' => $dueAmount]);
+        $customer = Customer::findOrFail($request->customer_id);
+
+
+        $customerPayment = CustomerPayment::where('customer_id', $request->customer_id)
+            ->orderBy('id','asc')
+            ->paginate(100)->withQueryString();
+
+        $pagination = [
+            'next_page_url' => $customerPayment->nextPageUrl(),
+            'prev_page_url' => $customerPayment->previousPageUrl(),
+            'last_page' => $customerPayment->lastPage(),
+        ];
+
+        $list = [];
+
+        foreach ($customerPayment as $payment) {
+
+            $amount = CustomerPayment::where('customer_id', $request->customer_id)
+                ->where('id', '<=', $payment->id)
+                ->sum(DB::raw('IFNULL(credit,0) - IFNULL(debit,0)'));
+
+            $list[] = [
+                'id' => $payment->id,
+                'date' => $payment->date,
+                'challan_no' => $payment->challan_no,
+                'credit' => $payment->credit,
+                'debit' => $payment->debit,
+                'particulars' => $payment->particulars,
+                'amount' => $amount
+            ];
+        }
+
+        return Inertia::render('Customer/CustomerPaymentListPage', [
+            'customerPayment' => $list,
+            'dueAmount' => $customer->due_amount,
+            'pagination' => $pagination
+        ]);
     }
+
 
     //customer save page
     public function customerSavePage(Request $request)
@@ -107,7 +141,9 @@ class CustomerController extends Controller
             CustomerPayment::create([
                 'customer_id' => $request->customer_id,
                 'amount' => $customer->due_amount,
-                'credit' => $request->amount,
+                'debit' => $request->amount,
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
 
 
@@ -127,7 +163,6 @@ class CustomerController extends Controller
         try {
             $customerPayment = CustomerPayment::findOrFail($id);
             $customerPayment->delete();
-            RecalculateCustomerPaymentService::recalculateCustomerPayment($customerPayment->customer_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

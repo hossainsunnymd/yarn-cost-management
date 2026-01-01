@@ -15,7 +15,6 @@ use App\Models\DyeingPayment;
 use App\Services\Dyeing\DyeingService;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Dyeing\DyeingReceiveService;
-use App\Services\RecalculationPayments\RecalculateDyeingPaymentService;
 
 class DyeingController extends Controller
 {
@@ -39,7 +38,7 @@ class DyeingController extends Controller
     //create dyeing
     public function createDyeing(DyeingService $dyeingService, Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'dyeing_party_id' => 'required|exists:dyeing_parties,id',
             'challan_no' => 'required|integer|unique:dyeings,challan_no',
@@ -118,7 +117,6 @@ class DyeingController extends Controller
             $dyeing->increment('available_unit', $dyeingReceive->unit);
             $dyeing->increment('roll', $dyeingReceive->roll);
             DyeingPayment::where('challan_no', $dyeingReceive->challan_no)->delete();
-            RecalculateDyeingPaymentService::recalculateDyeingPayment($dyeing->dyeing_party_id);
             $dyeingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Deleted Successfully', 'error' => '']);

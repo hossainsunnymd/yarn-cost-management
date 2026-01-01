@@ -28,6 +28,7 @@ Route::get('/yarn-purchase-delete', [YarnPurchaseController::class, 'yarnPurchas
 Route::get('/yarn-sale-list', [YarnSaleController::class, 'yarnSaleList'])->name('yarn-sale-list')->middleware('permission:yarn-sale-list');
 Route::get('/yarn-sale-page', [YarnSaleController::class, 'yarnSalePage'])->name('yarn-sale-page')->middleware('permission:yarn-sale-page');
 Route::post('/create-yarn-sale', [YarnSaleController::class, 'createYarnSale'])->name('create-yarn-sale')->middleware('permission:create-yarn-sale');
+Route::get('/yarn-sale-delete/{id}', [YarnSaleController::class, 'yarnSaleDelete'])->name('yarn-sale-delete')->middleware('permission:yarn-sale-delete');
 
 // Yarn Payment
 Route::post('/save-yarn-payment', [YarnPartyController::class, 'saveYarnPayment'])->name('save-yarn-payment')->middleware('permission:save-yarn-payment');

@@ -11,7 +11,6 @@ use App\Models\CuttingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateCuttingPaymentService;
 
 class CuttingPartyController extends Controller
 {
@@ -25,9 +24,9 @@ class CuttingPartyController extends Controller
     //cutting party detail list
     public function CuttingPartyDetailList(Request $request)
     {
-        $cutting=Cutting::where('cutting_party_id',$request->cutting_party_id)->with('cuttingParty')->get();
-        $cuttingPayments=CuttingPayment::where('cutting_party_id',$request->cutting_party_id)->latest()->first();
-        return Inertia::render('Cuttings/CuttingParty/CuttingPartyDetailListPage', ['cutting' => $cutting,'cuttingPayments'=>$cuttingPayments]);
+        $cutting = Cutting::where('cutting_party_id', $request->cutting_party_id)->with('cuttingParty')->get();
+        $cuttingPayments = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->latest()->first();
+        return Inertia::render('Cuttings/CuttingParty/CuttingPartyDetailListPage', ['cutting' => $cutting, 'cuttingPayments' => $cuttingPayments]);
     }
 
     //sewing party save page
@@ -89,20 +88,46 @@ class CuttingPartyController extends Controller
     //cutting payment list
     public function CuttingPaymentList(Request $request)
     {
+        $cuttingPayments = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
+        $cuttingParty = CuttingParty::find($request->cutting_party_id);
 
-        $cuttingPayment = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->with('cuttingParty')->get();
-        $totalPayment = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)->sum('amount');
-        return Inertia::render('Cuttings/CuttingParty/CuttingPaymentListPage', ['cuttingPayment' => $cuttingPayment, 'totalPayment' => $totalPayment]);
+        $pagination = [
+            'next_page_url' => $cuttingPayments->nextPageUrl(),
+            'prev_page_url' => $cuttingPayments->previousPageUrl(),
+            'last_page' => $cuttingPayments->lastPage(),
+        ];
+
+        $lists = [];
+
+        foreach ($cuttingPayments as $cuttingPayment) {
+
+            $amount = CuttingPayment::where('cutting_party_id', $request->cutting_party_id)
+                ->where('id', '<=', $cuttingPayment->id)
+                ->sum(DB::raw('IFNULL(debit,0) - IFNULL(credit,0)'));
+
+            $lists[] = [
+                'id' => $cuttingPayment->id,
+                'date' => $cuttingPayment->date,
+                'particulars' => $cuttingPayment->particulars,
+                'debit' => $cuttingPayment->debit,
+                'credit' => $cuttingPayment->credit,
+                'amount' => $amount
+            ];
+        }
+
+        return Inertia::render('Cuttings/CuttingParty/CuttingPaymentListPage', ['cuttingPayment' => $lists, 'cuttingParty' => $cuttingParty, 'pagination' => $pagination]);
     }
 
     //cutting payment
     public function saveCuttingPayment(Request $request)
     {
-        $validation=Validator::make($request->all(),[
-            'amount'=>'required|numeric|min:1',
+        $validation = Validator::make($request->all(), [
+            'amount' => 'required|numeric|min:1',
         ]);
 
-        if($validation->fails()){
+        if ($validation->fails()) {
             return redirect()->back()->with(['message' => 'Please Enter valid amount']);
         }
 
@@ -112,9 +137,9 @@ class CuttingPartyController extends Controller
             $cuttingParty->decrement('due_amount', $request->amount);
             CuttingPayment::create([
                 'cutting_party_id' => $request->cutting_party_id,
-                'amount' => $cuttingParty->due_amount,
-                'credit'=>$request->amount,
-                'particulars'=>$request->particulars
+                'credit' => $request->amount,
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Saved Successfully', 'error' => '']);
@@ -124,14 +149,22 @@ class CuttingPartyController extends Controller
         }
     }
 
-  //dyeing cutting delete
+    //dyeing cutting delete
     public function cuttingPaymentDelete(Request $request, $id)
     {
         DB::beginTransaction();
         try {
             $cuttingPayment = CuttingPayment::findOrFail($id);
+            $cuttingParty = CuttingParty::findOrFail($cuttingPayment->cutting_party_id);
+
+            if ($cuttingPayment->debit) {
+                $cuttingParty->decrement('due_amount', $cuttingPayment->debit);
+            } else if ($cuttingPayment->credit) {
+                $cuttingParty->increment('due_amount', $cuttingPayment->credit);
+
+            }
+
             $cuttingPayment->delete();
-            RecalculateCuttingPaymentService::recalculateCuttingPayment($cuttingPayment->cutting_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

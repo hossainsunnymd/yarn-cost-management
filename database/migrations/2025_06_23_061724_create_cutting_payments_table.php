@@ -20,9 +20,9 @@ return new class extends Migration
             $table->foreign('challan_no')->references('challan_no')->on('cuttings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('particulars');
-            $table->decimal('amount', 8, 2);
             $table->decimal('debit', 8, 2)->nullable();
             $table->decimal('credit', 8, 2)->nullable();
+            $table->date('date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

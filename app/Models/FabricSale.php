@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FabricSale extends Model
 {
-    protected $fillable=['customer_id','total_cost','total_sale_price','sale_date','challan_no'];
+    protected $fillable=['customer_id','total_unit','total_amount','sale_date','challan_no'];
 
     public function fabricSaleProducts(){
         return $this->hasMany(FabricSaleProduct::class);

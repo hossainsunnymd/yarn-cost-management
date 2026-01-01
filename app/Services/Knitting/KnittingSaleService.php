@@ -3,34 +3,60 @@
 namespace App\Services\Knitting;
 
 use Exception;
+use App\Models\Customer;
 use App\Models\KnittingSale;
+use App\Models\CustomerPayment;
 use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
+use App\Models\KnittingSaleProduct;
 
 
 class KnittingSaleService
 {
     public function createKnittingSale($request)
     {
-        //check available unit
-        $knittingReceive = KnittingReceive::findOrFail($request->knitting_receive_id);
-        if ($request->unit > $knittingReceive->available_unit) {
-           throw new Exception('Unit not available');
-        }
+
         DB::beginTransaction();
         try {
-            $data = [
-                'knitting_receive_id' => $request->knitting_receive_id,
-                'unit' => $request->unit,
+            $knittingSale = KnittingSale::create([
+                'challan_no' => $request->challan_no,
+                'customer_id' => $request->customer_id,
+                'unit' => $request->total_unit,
                 'total_amount' => $request->total_amount,
-            ];
-            KnittingSale::create($data);
-            KnittingReceive::where('id', $request->knitting_receive_id)->decrement('available_unit', $request->unit);
+                'sale_date' => $request->sale_date
+            ]);
+
+            foreach ($request->knittingReceives as $knittingReceive) {
+                KnittingSaleProduct::create([
+                    'knitting_sale_id' => $knittingSale->id,
+                    'knitting_receive_id' => $knittingReceive['id'],
+                    'unit' => $knittingReceive['weight'],
+                    'price' => $knittingReceive['price'],
+                    'total_amount' => $knittingReceive['sale_price']
+
+                ]);
+
+                KnittingReceive::find($knittingReceive['id'])->decrement('available_unit', $knittingReceive['weight']);
+            }
+
+            $customer = Customer::find($request->customer_id);
+            $customer->increment('due_amount', $request->total_amount);
+
+            CustomerPayment::create([
+                'customer_id' => $request->customer_id,
+                'amount' => $customer->due_amount,
+                'credit' => $request->total_amount,
+                'challan_no' => $request->challan_no,
+                'challan_type' => 'knitting',
+                'particulars' => 'Knitting Sale',
+                'date' => $request->sale_date
+            ]);
+
             DB::commit();
-            return true;
+            return;
         } catch (Exception $e) {
             DB::rollBack();
-            throw new Exception("Something went wrong");
+            throw new Exception($e->getMessage());
         }
     }
 }

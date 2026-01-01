@@ -11,7 +11,7 @@ use App\Models\DyeingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateDyeingPaymentService;
+
 
 class DyeingPartyController extends Controller
 {
@@ -87,9 +87,36 @@ class DyeingPartyController extends Controller
     //dyeing payment list
     public function dyeingPaymentList(Request $request)
     {
-        $dyeingPayment = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)->with('dyeingParty')->get();
-        $totalPayment = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)->sum('amount');
-        return Inertia::render('Dyeings/DyeingParty/DyeingPaymentListPage', ['dyeingPayment' => $dyeingPayment, 'totalPayment' => $totalPayment]);
+        $dyeingPayments = DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
+        $dyeingParty = DyeingParty::find($request->dyeing_party_id);
+
+        $pagination=[
+            'next_page_url'=>$dyeingPayments->nextPageUrl(),
+            'prev_page_url'=>$dyeingPayments->previousPageUrl(),
+            'last_page'=>$dyeingPayments->lastPage(),
+        ];
+
+        $lists=[];
+        foreach($dyeingPayments as $dyeingPayment){
+
+            $amount=DyeingPayment::where('dyeing_party_id', $request->dyeing_party_id)
+            ->where('id','<=', $dyeingPayment->id)
+            ->sum(DB::raw('IFNULL(debit,0) - IFNULL(credit,0)'));
+
+            $lists[]=[
+                'id'=>$dyeingPayment->id,
+                'date'=>$dyeingPayment->date,
+                'particulars'=>$dyeingPayment->particulars,
+                'debit'=>$dyeingPayment->debit,
+                'credit'=>$dyeingPayment->credit,
+                'amount'=>$amount
+            ];
+
+        }
+
+        return Inertia::render('Dyeings/DyeingParty/DyeingPaymentListPage', ['dyeingPayment' => $lists, 'dyeingParty' => $dyeingParty, 'pagination'=>$pagination]);
     }
 
     //save dyeing payment
@@ -109,9 +136,9 @@ class DyeingPartyController extends Controller
             $dyeingParty->decrement('due_amount', $request->amount);
             DyeingPayment::create([
                 'dyeing_party_id' => $request->dyeing_party_id,
-                'amount' => $dyeingParty->due_amount,
                 'credit' => $request->amount,
-                'particulars' => $request->particulars
+                'particulars' => $request->particulars,
+                'date' => $request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Saved Successfully', 'error' => '']);
@@ -127,8 +154,15 @@ class DyeingPartyController extends Controller
         DB::beginTransaction();
         try {
             $dyeingPayment = DyeingPayment::findOrFail($id);
+            $dyeingParty = DyeingParty::find($dyeingPayment->dyeing_party_id);
+
+            if ($dyeingPayment->debit) {
+                $dyeingParty->decrement('due_amount', $dyeingPayment->debit);
+            } else if ($dyeingPayment->credit) {
+                $dyeingParty->increment('due_amount', $dyeingPayment->credit);
+            }
+
             $dyeingPayment->delete();
-            RecalculateDyeingPaymentService::recalculateDyeingPayment($dyeingPayment->dyeing_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

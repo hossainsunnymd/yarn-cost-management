@@ -20,10 +20,9 @@ return new class extends Migration
             $table->foreign('fabric_sale_id')->references('id')->on('fabric_sales')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
-            $table->decimal('per_unit_cost', 8, 2);
-            $table->decimal('total_cost', 10, 2);
-            $table->decimal('sale_price', 10, 2);
-            $table->decimal('role', 10, 2);
+            $table->decimal('roll', 8, 2);
+            $table->decimal('total_amount', 8, 2);
+            $table->decimal('price', 10, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

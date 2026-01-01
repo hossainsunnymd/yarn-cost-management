@@ -40,6 +40,7 @@ class PermissionSeeder extends Seeder
     'yarn-sale-list',
     'yarn-sale-page',
     'create-yarn-sale',
+    'yarn-sale-delete',
 
     // Yarn Payment
     'save-yarn-payment',
@@ -63,11 +64,13 @@ class PermissionSeeder extends Seeder
     'knitting-receive-page',
     'create-knitting-receive',
     'knitting-receive-list',
+    'delete-knitting-receive',
 
     // Knitting Sale
     'knitting-sale-page',
     'create-knitting-sale',
     'knitting-sale-list',
+    'delete-knitting-sale',
 
     // Knitting Payment
     'save-knitting-payment',
@@ -99,6 +102,7 @@ class PermissionSeeder extends Seeder
     'fabric-sale-page',
     'fabric-sale',
     'fabric-sale-list',
+    'delete-fabric-sale',
 
     // Category
     'list-category',

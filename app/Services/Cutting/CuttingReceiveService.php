@@ -48,8 +48,8 @@ class CuttingReceiveService
                 'challan_no' => $cutting->challan_no,
                 'particulars'=>'Cutting Receive',
                 'cutting_party_id' => $cuttingPartyId,
-                'amount' => $cuttingParty->due_amount,
                 'debit'=>$totalCuttingCost,
+                'date'=>date('Y-m-d')
             ]);
 
             DB::commit();

@@ -3,6 +3,9 @@ import { usePage, useForm, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { computed } from "vue";
 
+import vSelect from "vue3-select";
+import "vue3-select/dist/vue3-select.css";
+
 // Access page props and flash messages
 const page = usePage();
 const toaster = createToaster();
@@ -73,19 +76,13 @@ function submitForm() {
                 >
                     Sewing Party
                 </label>
-                <select
+                <vSelect
                     v-model="form.sewing_party_id"
-                    class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    <option value="">Select Sewing Party</option>
-                    <option
-                        v-for="party in page.props.sewingParty"
-                        :key="party.id"
-                        :value="party.id"
-                    >
-                        {{ party.name }}
-                    </option>
-                </select>
+                    :options="page.props.sewingParties"
+                    :reduce="(sewing_party) => sewing_party.id"
+                    label="name"
+                    placeholder="Select or type Sewing Party"
+                />
                 <p
                     v-if="errors.sewing_party_id"
                     class="text-red-500 text-md mt-1"

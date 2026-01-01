@@ -16,7 +16,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Cutting\CuttingService;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Cutting\CuttingReceiveService;
-use App\Services\RecalculationPayments\RecalculateCuttingPaymentService;
 
 class CuttingController extends Controller
 {
@@ -32,9 +31,9 @@ class CuttingController extends Controller
     public function cuttingSavePage(Request $request)
     {
         $categories = Category::all();
-        $cuttingParty = CuttingParty::all();
+        $cuttingParties = CuttingParty::all();
         $dyeingReceive = DyeingReceive::find($request->dyeing_receive_id);
-        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories, 'dyeingReceive' => $dyeingReceive, 'cuttingParty' => $cuttingParty]);
+        return Inertia::render('Cuttings/Cutting/CuttingSavePage', ['categories' => $categories, 'dyeingReceive' => $dyeingReceive, 'cuttingParties' => $cuttingParties]);
     }
 
     //create cutting
@@ -130,7 +129,6 @@ class CuttingController extends Controller
             $cutting->increment('available_unit', $cutting->unit);
             CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
             $cuttingReceive->delete();
-            RecalculateCuttingPaymentService::recalculateCuttingPayment($cutting->cutting_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Receive Deleted Successfully', 'error' => '']);
 

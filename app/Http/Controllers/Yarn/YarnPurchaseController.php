@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateYarnPaymentService;
+
 
 class YarnPurchaseController extends Controller
 {
@@ -25,9 +25,9 @@ class YarnPurchaseController extends Controller
     //yarn save page
     public function yarnPurchaseSavePage(Request $request)
     {
-        $yarnParty = YarnParty::all();
+        $yarnParties = YarnParty::all();
         $yarnPurchase = YarnPurchase::find($request->id);
-        return Inertia::render('Yarn/YarnPurchase/YarnPurchaseSavePage', ['yarnPurchase' => $yarnPurchase, 'yarnParty' => $yarnParty]);
+        return Inertia::render('Yarn/YarnPurchase/YarnPurchaseSavePage', ['yarnPurchase' => $yarnPurchase, 'yarnParties' => $yarnParties]);
     }
 
     //create yarn purchase
@@ -79,8 +79,10 @@ class YarnPurchaseController extends Controller
             $yarnParty->increment('due_amount', $bill_amount);
             YarnPayment::create([
                 'yarn_party_id' => $request->yarn_party_id,
-                'amount' => $yarnParty->due_amount,
                 'debit' => $bill_amount,
+                'challan_no' => $request->challan_no,
+                'particulars'=>'Yarn Purchase',
+                'date' => date('Y-m-d')
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Created Successfully', 'error' => '']);
@@ -132,11 +134,10 @@ class YarnPurchaseController extends Controller
             YarnPurchase::find($request->id)->update($data);
             $yarnParty = YarnParty::find($request->yarn_party_id);
             $yarnParty->increment('due_amount', $bill_amount);
-            YarnPayment::create([
-                'challan_no' => $request->challan_no,
+            YarnPayment::where('challan_no', $request->challan_no)->update([
                 'yarn_party_id' => $request->yarn_party_id,
-                'amount' => $yarnParty->total_amount,
                 'debit' => $bill_amount,
+                'challan_no' => $request->challan_no,
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Updated Successfully', 'error' => '']);
@@ -153,7 +154,6 @@ class YarnPurchaseController extends Controller
 
             $yarnPurchase=YarnPurchase::findOrFail($request->id)->first();
             YarnPayment::where('challan_no', $yarnPurchase->challan_no)->delete();
-            RecalculateYarnPaymentService::recalculateYarnPayment($yarnPurchase->yarn_party_id);
             $yarnPurchase->delete();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

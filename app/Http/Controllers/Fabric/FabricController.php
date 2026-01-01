@@ -13,7 +13,6 @@ use App\Models\CustomerPayment;
 use App\Models\FabricSaleProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Services\RecalculationPayments\RecalculateCustomerPaymentService;
 use Illuminate\Support\Facades\Validator;
 
 class FabricController extends Controller
@@ -58,19 +57,18 @@ class FabricController extends Controller
                 'challan_no' => $request->challan_no,
                 'sale_date' => $request->sale_date,
                 'customer_id' => $request->customer_id,
-                'total_cost' => $request->total_cost,
-                'total_sale_price' => $request->total_sale_price
+                'total_unit' => $request->total_unit,
+                'total_amount' => $request->total_amount
             ]);
 
             foreach ($request->fabrics as $fabric) {
                 FabricSaleProduct::create([
                     'fabric_sale_id' => $fabricSale->id,
                     'dyeing_receive_id' => $fabric['id'],
-                    'per_unit_cost' => $fabric['per_unit_cost'],
-                    'total_cost' => $fabric['total_cost'],
-                    'sale_price' => $fabric['sale_price'],
-                    'role' => $fabric['roll'],
+                    'price' => $fabric['price'],
                     'unit' => $fabric['weight'],
+                    'roll' => $fabric['roll'],
+                    'total_amount' => $fabric['total_amount'],
                 ]);
                 $dyeingReceive = DyeingReceive::findOrFail($fabric['id']);
                 $dyeingReceive->decrement('available_unit', $fabric['weight']);
@@ -79,31 +77,30 @@ class FabricController extends Controller
 
 
             $customer = Customer::findOrFail($request->customer_id);
-            $customer->increment('due_amount', $request->total_sale_price);
+            $customer->increment('due_amount', $request->total_amount);
             CustomerPayment::create([
                 'challan_no' => $request->challan_no,
                 'challan_type'=>'fabric',
                 'particulars' => 'Fabric Sale',
                 'customer_id' => $request->customer_id,
-                'amount' => $customer->due_amount,
-                'debit' => $request->total_sale_price,
-
+                'debit' => $request->total_amount,
+                'date' => $request->sale_date
             ]);
 
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Created Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
     //delete fabric sale
-    public function deleteFabricSale(Request $request)
+    public function deleteFabricSale($id)
     {
         DB::beginTransaction();
         try {
-            $fabricSaleProducts = FabricSaleProduct::where('fabric_sale_id', $request->fabric_sale_id)->get();
+            $fabricSaleProducts = FabricSaleProduct::where('fabric_sale_id', $id)->get();
             foreach ($fabricSaleProducts as $fabricSaleProduct) {
                 $dyeingReceive = DyeingReceive::findOrFail($fabricSaleProduct->dyeing_receive_id);
                 $dyeingReceive->increment('available_unit', $fabricSaleProduct->unit);
@@ -111,11 +108,9 @@ class FabricController extends Controller
                 $fabricSaleProduct->delete();
 
             }
-            $fabricSale = FabricSale::find($request->fabric_sale_id)->first();
+            $fabricSale = FabricSale::find($id);
             CustomerPayment::where('challan_no', $fabricSale->challan_no)->where('challan_type','fabric')->delete();
             $fabricSale->delete();
-            RecalculateCustomerPaymentService::recalculateCustomerPayment($fabricSale->customer_id);
-
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

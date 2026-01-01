@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Knitting extends Model
 {
-    protected $fillable=['knitting_party_id','yarn_purchase_id','total_unit','available_unit','total_cost','per_unit_cost','fabric_name','send_date','challan_no'];
+    protected $fillable=['knitting_party_id','total_unit','available_unit','total_cost','per_unit_cost','fabric_name','send_date','challan_no'];
 
     public function knittingParty()
     {
@@ -16,10 +16,5 @@ class Knitting extends Model
     public function knittingYarn()
     {
         return $this->hasMany(KnittingYarn::class);
-    }
-
-    public function yarnPurchase()
-    {
-        return $this->belongsTo(YarnPurchase::class);
     }
 }

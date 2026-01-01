@@ -1,6 +1,6 @@
 <script setup>
 import FabricSaleDetails from "./FabricSaleDetails.vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { usePage, router,Link } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 import { ref } from "vue";
 
@@ -19,23 +19,27 @@ const headers = [
     { text: "ID", value: "id" },
     { text: "Challan No", value: "challan_no" },
     { text: "Customer", value: "customer.name" },
-    { text: "Total Cost", value: "total_cost" },
-    { text: "Total Sale Price", value: "total_sale_price" },
+    { text: "Total Unit", value: "total_unit" },
+    { text: "Total Amount", value: "total_amount" },
     { text: "Fabric Sale date", value: "sale_date" },
     { text: "Action", value: "action" },
 ];
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("en-GB");
-};
 
 // Data items to display in the table
 const items = ref(page.props.fabricSaleList);
-console.log(items.value);
 
 // Search configuration for filtering table data
 const searchField = ref(["id", "name", "category.name", "parts_no"]);
 const searchItem = ref("");
+
+
+const deleteFabricSale = (id) => {
+    if (confirm("Are you sure you want to delete this fabric sale?")) {
+        router.get(`/delete-fabric-sale/${id}`);
+    }
+};
+
 
 // Show toaster notification based on flash message status
 if (page.props.flash.status === true) {
@@ -97,15 +101,10 @@ function showModal(id) {
                     >
                         <span class="material-icons text-sm">visibility</span>
                     </button>
+
+                    <button @click="deleteFabricSale(id)" class="bg-red-500 text-white font-bold py-2 px-4 rounded ml-1 hover:bg-red-600 transition duration-300">Delete</button>
                 </div>
             </template>
-
-            <!-- Date Format -->
-        <template #item-created_at="{ created_at }">
-            {{ formatDate(created_at) }}
-        </template>
-
-
         </EasyDataTable>
     </div>
 </template>

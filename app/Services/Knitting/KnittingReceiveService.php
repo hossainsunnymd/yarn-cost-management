@@ -57,10 +57,10 @@ class KnittingReceiveService{
             $knittingParty->increment('due_amount', $totalKnittingCost);
             KnittingPayment::create([
                 'knitting_party_id' => $knittingPartyId,
-                'amount' => $knittingParty->due_amount,
                 'debit' => $totalKnittingCost,
                 'particulars'=>'Knitting Receive',
-                'challan_no'=>$knitting->challan_no
+                'challan_no'=>$knitting->challan_no,
+                'date'=>date('Y-m-d')
             ]);
 
             DB::commit();

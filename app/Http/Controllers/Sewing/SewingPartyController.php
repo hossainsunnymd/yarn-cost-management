@@ -11,7 +11,6 @@ use App\Models\SewingPayment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Services\RecalculationPayments\RecalculateSewingPaymentService;
 
 class SewingPartyController extends Controller
 {
@@ -88,9 +87,37 @@ class SewingPartyController extends Controller
     //sewing payment list
     public function sewingPaymentList(Request $request)
     {
-        $sewingPayment = SewingPayment::where('sewing_party_id', $request->sewing_party_id)->with('sewingParty')->with('sewingParty')->get();
-        $totalPayment = SewingPayment::where('sewing_party_id', $request->sewing_party_id)->sum('amount');
-        return Inertia::render('Sewings/SewingParty/SewingPaymentListPage', ['sewingPayment' => $sewingPayment, 'totalPayment' => $totalPayment]);
+        $sewingPayments = SewingPayment::where('sewing_party_id', $request->sewing_party_id)
+        ->orderBy('id', 'asc')
+        ->paginate(100)->withQueryString();
+        $sewingParty = SewingParty::find($request->sewing_party_id);
+
+
+        $pagination = [
+            'next_page_url' => $sewingPayments->nextPageUrl(),
+            'prev_page_url' => $sewingPayments->previousPageUrl(),
+            'last_page_url' => $sewingPayments->lastPage(),
+        ];
+
+        $lists = [];
+        foreach ($sewingPayments as $sewingPayment) {
+
+            $amount = SewingPayment::where('sewing_party_id', $request->sewing_party_id)
+                ->where('id', '<=', $sewingPayment->id)
+                ->sum(DB::raw('IFNULL(debit,0) - IFNULL(credit,0)'));
+
+
+            $lists[] = [
+                'id' => $sewingPayment->id,
+                'particulars' => $sewingPayment->particulars,
+                'amount' => $amount,
+                'credit' => $sewingPayment->credit,
+                'debit' => $sewingPayment->debit,
+                'date' => $sewingPayment->date,
+            ];
+        }
+
+        return Inertia::render('Sewings/SewingParty/SewingPaymentListPage', ['sewingPayment' => $lists, 'sewingParty' => $sewingParty, 'pagination' => $pagination]);
     }
 
     //sewing payment
@@ -111,8 +138,8 @@ class SewingPartyController extends Controller
             SewingPayment::create([
                 'particulars' => $request->particulars,
                 'sewing_party_id' => $request->sewing_party_id,
-                'amount' =>$sweingParty->due_amount,
-                'credit'=>$request->amount
+                'credit' => $request->amount,
+                'date' => $request->date
             ]);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Saved Successfully', 'error' => '']);
@@ -128,8 +155,16 @@ class SewingPartyController extends Controller
         DB::beginTransaction();
         try {
             $sewingPayment = SewingPayment::findOrFail($id);
+
+            $sewingParty = SewingParty::findOrFail($sewingPayment->sewing_party_id);
+
+            if ($sewingPayment->debit) {
+                $sewingParty->decrement('due_amount', $sewingPayment->debit);
+            } else if ($sewingPayment->credit) {
+                $sewingParty->increment('due_amount', $sewingPayment->credit);
+            }
+
             $sewingPayment->delete();
-            RecalculateSewingPaymentService::recalculateSewingPayment($sewingPayment->sewing_party_id);
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

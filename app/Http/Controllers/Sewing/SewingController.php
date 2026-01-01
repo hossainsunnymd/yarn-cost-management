@@ -15,7 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Sewing\SewingService;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Sewing\SewingReceiveService;
-use App\Services\RecalculationPayments\RecalculateSewingPaymentService;
+
 
 class SewingController extends Controller
 {
@@ -31,8 +31,8 @@ class SewingController extends Controller
     {
         $cuttingReceive = CuttingReceive::findOrFail($request->cutting_receive_id);
 
-        $sewingParty = SewingParty::all();
-        return Inertia::render('Sewings/Sewing/SewingSavePage', ['sewingParty' => $sewingParty, 'cuttingReceive' => $cuttingReceive]);
+        $sewingParties = SewingParty::all();
+        return Inertia::render('Sewings/Sewing/SewingSavePage', ['sewingParties' => $sewingParties, 'cuttingReceive' => $cuttingReceive]);
     }
 
     //Sewing create
@@ -112,7 +112,6 @@ class SewingController extends Controller
             $sewing = Sewing::where('id', $sewingReceive->sewing_id);
             $sewing->increment('available_unit', $sewingReceive->unit);
             SewingPayment::where('chalan_no', $sewingReceive->chalan_no)->delete();
-            RecalculateSewingPaymentService::recalculateSewingPayment($sewingReceive->sewing_party_id);
             $sewingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Receive Deleted Successfully', 'error' => '']);
