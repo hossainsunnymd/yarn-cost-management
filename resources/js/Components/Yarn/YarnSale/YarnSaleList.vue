@@ -13,7 +13,9 @@ const headers = [
     { text: "Sale Date", value: "sale_date" },
     { text: "Challan No", value: "challan_no" },
     { text: "Unit", value: "total_unit" },
-    { text: "Price", value: "total_amount" },
+    { text: "Total Amount", value: "total_amount" },
+    { text: "Total Cost", value: "total_cost" },
+    { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];
 
@@ -26,7 +28,6 @@ const modal = ref(false);
 const searchField = ref("name");
 const searchItem = ref("");
 
-console.log(items.value);
 const showModal=(id)=>{
     yarns.value=items.value.find((yarn) => yarn.id === id);
     modal.value = true;
@@ -90,5 +91,8 @@ if(page.props.flash.status === true){
                 </button>
             </div>
         </template>
+       <template #item-profit_loss="{total_amount,total_cost}">
+        {{ Number(total_amount - total_cost) }}
+       </template>
     </EasyDataTable>
 </template>

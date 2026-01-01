@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('cutting_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cutting_party_id');
+            $table->unsignedBigInteger('cutting_party_id')->index();
             $table->foreign('cutting_party_id')->references('id')->on('cutting_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->nullable();
+            $table->integer('challan_no')->nullable()->index();
             $table->foreign('challan_no')->references('challan_no')->on('cuttings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('particulars');

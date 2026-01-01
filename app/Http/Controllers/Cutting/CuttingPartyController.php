@@ -113,7 +113,8 @@ class CuttingPartyController extends Controller
                 'particulars' => $cuttingPayment->particulars,
                 'debit' => $cuttingPayment->debit,
                 'credit' => $cuttingPayment->credit,
-                'amount' => $amount
+                'amount' => $amount,
+                'challan_no' => $cuttingPayment->challan_no
             ];
         }
 

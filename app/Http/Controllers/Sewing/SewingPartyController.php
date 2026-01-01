@@ -114,6 +114,7 @@ class SewingPartyController extends Controller
                 'credit' => $sewingPayment->credit,
                 'debit' => $sewingPayment->debit,
                 'date' => $sewingPayment->date,
+                'challan_no' => $sewingPayment->challan_no
             ];
         }
 

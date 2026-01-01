@@ -281,6 +281,7 @@ const selectedProduct = reactive({
     name: "",
     available_unit: 0,
     price: 0,
+    per_unit_cost: 0,
 });
 
 // Lists for customers and products fetched from backend props
@@ -290,8 +291,6 @@ const productList = ref(page.props.sewingReceive || []);
 // List of selected products for invoice
 const selectedProductList = ref([]);
 
-// Total amount computed from selected products
-const totalAmount = ref(0);
 
 // Table headers
 const customerHeaders = [
@@ -331,6 +330,7 @@ function openQtyModal(id) {
 
     selectedProduct.id = product.id;
     selectedProduct.available_unit = product.available_unit;
+    selectedProduct.per_unit_cost = product.per_unit_cost;
     selectedProduct.price =
         product.sewing.cutting_receive.cutting.category.price;
     selectedProduct.name = product.sewing.cutting_receive.cutting.category.name;
@@ -360,9 +360,11 @@ function addProduct() {
     selectedProductList.value.push({
         id: selectedProduct.id,
         name: selectedProduct.name,
-        sale_price:
+        price: selectedProduct.price,
+        total_amount:
             parseFloat(selectedProduct.price) * parseFloat(weight.value),
         weight: weight.value,
+        per_unit_cost: selectedProduct.per_unit_cost,
     });
 
     calculateTotal();
@@ -376,11 +378,28 @@ function removeProduct(index) {
 }
 
 // Calculate total amount
-function calculateTotal() {
-    totalAmount.value = selectedProductList.value
-        .reduce((sum, item) => sum + parseFloat(item.sale_price), 0)
-        .toFixed(2);
-}
+const totalAmount = computed(() => {
+    return selectedProductList.value.reduce(
+        (sum, product) => sum + parseFloat(product.total_amount),
+        0
+    );
+})
+
+// Calculate total cost
+const totalCost = computed(() => {
+    return selectedProductList.value.reduce(
+        (sum, product) => sum + parseFloat(product.weight * product.per_unit_cost),
+        0
+    );
+})
+
+// Calculate total unit
+const totalUnit = computed(() => {
+    return selectedProductList.value.reduce(
+        (sum, product) => sum + parseFloat(product.weight),
+        0
+    );
+})
 
 // Invoice form
 const form = useForm({
@@ -389,6 +408,8 @@ const form = useForm({
     total_amount: "",
     invoice_date: "",
     challan_no: "",
+    total_cost: "",
+    total_unit: ""
 });
 
 // Create invoice
@@ -400,6 +421,8 @@ function createInvoice() {
     form.customer_id = customer.id;
     form.products = selectedProductList.value;
     form.total_amount = totalAmount.value;
+    form.total_cost = totalCost.value
+    form.total_unit = totalUnit.value
 
     form.post("/create-invoice", {
         onSuccess: () => {
@@ -407,6 +430,8 @@ function createInvoice() {
                 form.reset();
                 selectedProductList.value = [];
                 totalAmount.value = 0;
+                totalUnit.value = 0;
+                totalCost.value = 0
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/invoice-list"), 500);
             } else {

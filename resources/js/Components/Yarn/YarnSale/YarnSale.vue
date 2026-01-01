@@ -289,6 +289,7 @@ function addYarn() {
         weight: weight.value,
         price: price.value,
         sale_price: weight.value * price.value,
+        per_unit_cost: selectedYarn.per_unit_cost,
     });
     closeModal();
 }
@@ -315,6 +316,15 @@ const calculateTotalWeight=computed(
     }
 );
 
+const calculateTotalCost=computed(
+    () => {
+       return selectedYarnList.value.reduce(
+            (sum, item) => sum + Number(item.weight * item.per_unit_cost),
+            0
+        );
+    }
+)
+
 const form = useForm({
     customer_id: "",
     yarns: [],
@@ -322,6 +332,7 @@ const form = useForm({
     sale_date: "",
     total_unit: "",
     challan_no: "",
+    total_cost: "",
 });
 
 function createYarnSale() {
@@ -334,6 +345,7 @@ function createYarnSale() {
     form.yarns = selectedYarnList.value;
     form.total_amount = calculateTotal.value;
     form.total_unit = calculateTotalWeight.value;
+    form.total_cost = calculateTotalCost.value;
 
     form.post("/create-yarn-sale", {
         preserveScroll: true,
@@ -343,6 +355,7 @@ function createYarnSale() {
                 selectedYarnList.value = [];
                 calculateTotal.value = 0;
                 calculateTotalWeight.value = 0;
+                calculateTotalCost.value = 0;
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/yarn-sale-list"), 500);
             } else if(page.props.flash.status === false) {

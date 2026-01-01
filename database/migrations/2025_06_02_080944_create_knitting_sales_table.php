@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('knitting_sales', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('customer_id')->index();
             $table->foreign('customer_id')->references('id')->on('customers')
             ->cascadeOnUpdate()->restrictOnDelete();
-            $table->decimal('unit', 8, 2);
-            $table->decimal('total_amount', 8, 2);
-            $table->integer('challan_no')->unique();
+            $table->decimal('total_unit', 15, 2);
+            $table->decimal('total_amount', 15, 2);
+            $table->decimal('total_cost', 15, 2);
+            $table->integer('challan_no')->unique()->index();
             $table->date('sale_date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

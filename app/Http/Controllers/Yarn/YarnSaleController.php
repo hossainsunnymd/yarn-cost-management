@@ -35,7 +35,8 @@ class YarnSaleController extends Controller
                 'challan_no' => $request->challan_no,
                 'total_unit' => $request->total_unit,
                 'total_amount' => $request->total_amount,
-                'sale_date' => $request->sale_date
+                'sale_date' => $request->sale_date,
+                'total_cost' => $request->total_cost
             ]);
 
             foreach ($request->yarns as $yarn) {
@@ -44,7 +45,8 @@ class YarnSaleController extends Controller
                     'yarn_purchase_id' => $yarn['id'],
                     'unit' => $yarn['weight'],
                     'price' => $yarn['price'],
-                    'total_amount' => $yarn['sale_price']
+                    'total_amount' => $yarn['sale_price'],
+                    'per_unit_cost' => $yarn['per_unit_cost']
                 ]);
                 YarnPurchase::where('id', $yarn['id'])->decrement('available_unit', $yarn['weight']);
             }

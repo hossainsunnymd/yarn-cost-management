@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('dyeing_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dyeing_party_id');
+            $table->unsignedBigInteger('dyeing_party_id')->index();
             $table->foreign('dyeing_party_id')->references('id')->on('dyeing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->nullable();
+            $table->integer('challan_no')->nullable()->index();
             $table->foreign('challan_no')->references('challan_no')->on('dyeings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('particulars');

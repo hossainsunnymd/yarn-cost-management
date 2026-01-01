@@ -116,6 +116,7 @@ class YarnPartyController extends Controller
                 'credit' => $yarnPayment->credit,
                 'debit' => $yarnPayment->debit,
                 'date' => $yarnPayment->date,
+                'challan_no' => $yarnPayment->challan_no
             ];
         }
 

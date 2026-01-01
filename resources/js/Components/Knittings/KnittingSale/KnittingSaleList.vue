@@ -16,14 +16,15 @@ const headers = [
     { text: "No", value: "id" },
     { text: "Sale Date", value: "sale_date" },
     { text: "Challan No", value: "challan_no" },
-    { text: "Total Weight", value: "unit" },
+    { text: "Total Weight", value: "total_unit" },
     { text: "Total Amount", value: "total_amount" },
+    { text: "Total Cost", value: "total_cost" },
+    { text: "Profit/Loss", value: "profit_loss" },
     { text: "Action", value: "action" },
 ];
 
 // handle props for data table
 const items = ref(page.props.knittingSaleList);
-console.log(items.value);
 //search field
 const searchField = ref("name");
 
@@ -94,5 +95,9 @@ if (page.props.flash.status === true) {
                 </button>
             </div>
         </template>
+
+    <template #item-profit_loss="{total_amount,total_cost}">
+        {{ Number(total_amount - total_cost) }}
+       </template>
     </EasyDataTable>
 </template>

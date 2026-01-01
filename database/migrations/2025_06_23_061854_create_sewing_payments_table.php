@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('sewing_payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sewing_party_id');
+            $table->unsignedBigInteger('sewing_party_id')->index();
             $table->foreign('sewing_party_id')->references('id')->on('sewing_parties')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->integer('challan_no')->nullable();
+            $table->integer('challan_no')->nullable()->index();
             $table->foreign('challan_no')->references('challan_no')->on('sewings')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->string('particulars');

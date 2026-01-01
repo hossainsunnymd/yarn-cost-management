@@ -290,6 +290,7 @@ function addKnittingReceive() {
         weight: weight.value,
         price: price.value,
         sale_price: weight.value * price.value,
+        per_unit_cost: selectedKnittingReceive.per_unit_cost,
     });
     closeModal();
 }
@@ -316,6 +317,15 @@ const calculateTotalWeight=computed(
     }
 );
 
+const calculateTotalCost=computed(
+    () => {
+       return selectedKnittingReceiveList.value.reduce(
+            (sum, item) => sum + Number(item.per_unit_cost),
+            0
+        );
+    }
+)
+
 const form = useForm({
     customer_id: "",
     knittingReceives: [],
@@ -323,6 +333,7 @@ const form = useForm({
     sale_date: "",
     total_unit: "",
     challan_no: "",
+    total_cost: ""
 });
 
 function createKnittingReceiveSale() {
@@ -335,6 +346,7 @@ function createKnittingReceiveSale() {
     form.knittingReceives = selectedKnittingReceiveList.value;
     form.total_amount = calculateTotal.value;
     form.total_unit = calculateTotalWeight.value;
+    form.total_cost = calculateTotalCost.value
 
     form.post("/create-knitting-sale", {
         preserveScroll: true,
@@ -344,6 +356,7 @@ function createKnittingReceiveSale() {
                 selectedKnittingReceiveList.value = [];
                 calculateTotal.value = 0;
                 calculateTotalWeight.value = 0;
+                calculateTotalCost.value = 0
                 toaster.success(page.props.flash.message);
                 setTimeout(() => router.get("/knitting-sale-list"), 500);
             } else if(page.props.flash.status === false) {

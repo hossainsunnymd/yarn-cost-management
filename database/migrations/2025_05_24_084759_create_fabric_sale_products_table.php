@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('fabric_sale_products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dyeing_receive_id');
+            $table->unsignedBigInteger('dyeing_receive_id')->index();
             $table->foreign('dyeing_receive_id')->references('id')->on('dyeing_receives')
             ->restrictOnDelete()->cascadeOnUpdate();
-            $table->unsignedBigInteger('fabric_sale_id');
+            $table->unsignedBigInteger('fabric_sale_id')->index();
             $table->foreign('fabric_sale_id')->references('id')->on('fabric_sales')
             ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);
             $table->decimal('roll', 8, 2);
             $table->decimal('total_amount', 8, 2);
             $table->decimal('price', 10, 2);
+            $table->decimal('per_unit_cost', 10, 2);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

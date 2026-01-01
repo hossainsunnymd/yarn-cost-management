@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sewing_receives', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sewing_id');
+            $table->unsignedBigInteger('sewing_id')->index();
             $table->foreign('sewing_id')->references('id')->on('sewings')
                 ->restrictOnDelete()->cascadeOnUpdate();
             $table->decimal('unit', 8, 2);

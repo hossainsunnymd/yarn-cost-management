@@ -47,11 +47,11 @@ class InvoiceController extends Controller
 
             $invoice = Invoice::create([
                 'customer_id' => $request->customer_id,
-                'total' => $request->total_amount,
+                'total_amount' => $request->total_amount,
                 'invoice_date' => $request->invoice_date,
                 'challan_no' => $request->challan_no,
-                'challan_type' => 'product',
-                'particulars' => 'Product Sale'
+                'total_cost' => $request->total_cost,
+                'total_unit' => $request->total_unit
             ]);
 
 
@@ -63,7 +63,9 @@ class InvoiceController extends Controller
                     'invoice_id' => $invoice->id,
                     'sewing_receive_id' => $product['id'],
                     'unit' => $product['weight'],
-                    'sale_price' => $product['sale_price']
+                    'price' => $product['price'],
+                    'total_amount' => $product['total_amount'],
+                    'per_unit_cost' => $product['per_unit_cost']
                 ]);
 
                 //update available unit

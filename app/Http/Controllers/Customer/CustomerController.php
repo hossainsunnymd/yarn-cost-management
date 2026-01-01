@@ -52,7 +52,7 @@ class CustomerController extends Controller
                 'credit' => $payment->credit,
                 'debit' => $payment->debit,
                 'particulars' => $payment->particulars,
-                'amount' => $amount
+                'amount' => $amount,
             ];
         }
 
