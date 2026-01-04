@@ -124,9 +124,10 @@ class CuttingController extends Controller
     {
         DB::beginTransaction();
         try {
-            $cuttingReceive = CuttingReceive::find($request->cutting_receive_id);
+            $cuttingReceive = CuttingReceive::find($request->cutting_receive_id)->with('cutting');
             $cutting = Cutting::find($cuttingReceive->cutting_id);
             $cutting->increment('available_unit', $cutting->unit);
+            
             CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
             $cuttingReceive->delete();
             DB::commit();
