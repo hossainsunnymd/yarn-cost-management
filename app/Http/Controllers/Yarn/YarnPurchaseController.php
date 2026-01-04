@@ -152,8 +152,9 @@ class YarnPurchaseController extends Controller
     {
         try {
 
-            $yarnPurchase=YarnPurchase::findOrFail($request->id)->first();
+            $yarnPurchase=YarnPurchase::find($request->id);
             YarnPayment::where('challan_no', $yarnPurchase->challan_no)->delete();
+            YarnParty::find($yarnPurchase->yarn_party_id)->decrement('due_amount', $yarnPurchase->total_amount);
             $yarnPurchase->delete();
             return redirect()->back()->with(['status' => true, 'message' => 'Yarn Purchase Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {

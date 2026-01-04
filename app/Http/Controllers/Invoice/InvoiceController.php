@@ -102,6 +102,7 @@ class InvoiceController extends Controller
             }
             $invoice = Invoice::find($request->invoice_id);
             CustomerPayment::where('challan_no', $invoice->challan_no)->where('challan_type', 'product')->delete();
+            Customer::find($invoice->customer_id)->decrement('due_amount', $invoice->total_amount);
             $invoice->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Invoice Deleted Successfully', 'error' => '']);

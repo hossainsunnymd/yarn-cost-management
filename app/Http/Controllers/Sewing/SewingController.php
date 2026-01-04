@@ -111,6 +111,7 @@ class SewingController extends Controller
             $sewingReceive = SewingReceive::findOrFail($request->sewing_receive_id);
             $sewing = Sewing::where('id', $sewingReceive->sewing_id);
             $sewing->increment('available_unit', $sewingReceive->unit);
+            SewingParty::find($sewingReceive->sewing_party_id)->decrement('due_amount', $sewingReceive->sewing_cost);
             SewingPayment::where('chalan_no', $sewingReceive->chalan_no)->delete();
             $sewingReceive->delete();
             DB::commit();
