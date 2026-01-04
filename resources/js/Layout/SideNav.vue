@@ -30,14 +30,14 @@ const toggleSidebar = () => {
         <!-- Sidebar -->
         <aside
             :class="[
-                'w-64 bg-gray-800 text-white fixed inset-y-0 left-0 transform transition-transform duration-300 z-20 shadow-xl',
+                'w-64 bg-[#e7e7e7] text-gray-800  fixed inset-y-0 left-0 transform transition-transform duration-300 z-20 shadow-xl',
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full',
                 'md:translate-x-0',
             ]"
             class="flex flex-col"
         >
             <div class="p-6 border-b border-gray-700">
-                <h1 class="text-2xl font-bold text-white">My Dashboard</h1>
+                <h1 class="text-2xl font-bold text-gray-800">My Dashboard</h1>
             </div>
 
             <nav class="p-4 flex-1 overflow-y-auto">
@@ -50,7 +50,7 @@ const toggleSidebar = () => {
                                 `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
                                 isActiveRoute('/list-user')
                                     ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons">groups</span>
@@ -66,7 +66,7 @@ const toggleSidebar = () => {
                                 `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200`,
                                 isActiveRoute('/list-role')
                                     ? 'bg-gray-700 text-white'
-                                    : 'hover:bg-gray-700',
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons"
@@ -98,8 +98,8 @@ const toggleSidebar = () => {
                             :class="[
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActiveRoute('/customer-list')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons"> person </span>
@@ -114,8 +114,8 @@ const toggleSidebar = () => {
                             :class="[
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActiveRoute('/list-category')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons">category</span>
@@ -132,8 +132,8 @@ const toggleSidebar = () => {
                             :class="[
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActiveRoute('/list-product')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons">inventory_2</span>
@@ -149,8 +149,8 @@ const toggleSidebar = () => {
                             :class="[
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActiveRoute('/sale-page')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons">shopping_cart</span>
@@ -166,8 +166,8 @@ const toggleSidebar = () => {
                             :class="[
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActiveRoute('/invoice-list')
-                                    ? 'bg-gray-700 text-blue-300 font-semibold'
-                                    : '',
+                                    ? 'bg-gray-700 text-white'
+                                    : 'hover:bg-white',
                             ]"
                         >
                             <span class="material-icons">receipt</span>
