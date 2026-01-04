@@ -123,7 +123,7 @@ class KnittingController extends Controller
         DB::beginTransaction();
          try {
             $knittingReceive=KnittingReceive::find($request->knitting_receive_id)->with('knitting')->first();
-            Knitting::increment('available_unit', $knittingReceive->available_unit);
+            Knitting::increment('available_unit', $knittingReceive->available_unit + $knittingReceive->wastage??0);
             KnittingPayment::where('challan_no', $knittingReceive->knitting->challan_no)->delete();
             $knittingReceive->delete();
             DB::commit();

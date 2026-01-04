@@ -37,13 +37,15 @@ class KnittingReceiveService{
 
                 $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $totalKnittingCost;
                 $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
+
+                $unit = $request->unit - $request->wastage;
             }
 
             $data = [
                 'knitting_id' => $request->knitting_id,
                 'total_cost' => $receivedKnittingUnitCost,
-                'unit' => $request->unit,
-                'available_unit' => $request->unit,
+                'unit' => $unit,
+                'available_unit' => $unit,
                 'knitting_cost' => $totalKnittingCost,
                 'per_unit_cost' => $receivePerUnitCost,
                 'roll' => $request->roll,

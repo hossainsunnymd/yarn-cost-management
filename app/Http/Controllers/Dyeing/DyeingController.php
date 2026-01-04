@@ -114,7 +114,7 @@ class DyeingController extends Controller
         try {
             $dyeingReceive = DyeingReceive::findOrFail($request->dyeing_receive_id);
             $dyeing = Dyeing::find($dyeingReceive->dyeing_id);
-            $dyeing->increment('available_unit', $dyeingReceive->unit);
+            $dyeing->increment('available_unit', $dyeingReceive->unit + $dyeingReceive->wastage??0);
             $dyeing->increment('roll', $dyeingReceive->roll);
             DyeingPayment::where('challan_no', $dyeingReceive->challan_no)->delete();
             $dyeingReceive->delete();
