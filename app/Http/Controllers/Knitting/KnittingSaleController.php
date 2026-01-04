@@ -57,6 +57,7 @@ class KnittingSaleController extends Controller
             }
             $knittingSale = KnittingSale::find($id);
             CustomerPayment::where('challan_no', $knittingSale->challan_no)->where('challan_type', 'knitting')->delete();
+            Customer::find($knittingSale->customer_id)->decrement('due_amount', $knittingSale->total_amount);
             $knittingSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting sale deleted successfully', 'error' => '']);

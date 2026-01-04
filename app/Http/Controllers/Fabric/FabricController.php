@@ -103,7 +103,7 @@ class FabricController extends Controller
         DB::beginTransaction();
         try {
             $fabricSaleProducts = FabricSaleProduct::where('fabric_sale_id', $id)->get();
-            
+
             foreach ($fabricSaleProducts as $fabricSaleProduct) {
                 $dyeingReceive = DyeingReceive::findOrFail($fabricSaleProduct->dyeing_receive_id);
                 $dyeingReceive->increment('available_unit', $fabricSaleProduct->unit);
@@ -113,6 +113,7 @@ class FabricController extends Controller
             }
             $fabricSale = FabricSale::find($id);
             CustomerPayment::where('challan_no', $fabricSale->challan_no)->where('challan_type','fabric')->delete();
+            Customer::find($fabricSale->customer_id)->decrement('due_amount', $fabricSale->total_amount);
             $fabricSale->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
