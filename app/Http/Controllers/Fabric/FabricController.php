@@ -103,10 +103,11 @@ class FabricController extends Controller
         DB::beginTransaction();
         try {
             $fabricSaleProducts = FabricSaleProduct::where('fabric_sale_id', $id)->get();
+            
             foreach ($fabricSaleProducts as $fabricSaleProduct) {
                 $dyeingReceive = DyeingReceive::findOrFail($fabricSaleProduct->dyeing_receive_id);
                 $dyeingReceive->increment('available_unit', $fabricSaleProduct->unit);
-                $dyeingReceive->increment('roll', $fabricSaleProduct->role);
+                $dyeingReceive->increment('roll', $fabricSaleProduct->roll);
                 $fabricSaleProduct->delete();
 
             }
@@ -117,7 +118,7 @@ class FabricController extends Controller
             return redirect()->back()->with(['status' => true, 'message' => 'Fabric Sale Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 }
