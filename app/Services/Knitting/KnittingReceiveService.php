@@ -22,7 +22,7 @@ class KnittingReceiveService{
 
         DB::beginTransaction();
         try {
-
+            $unit = $request->unit;
             $knittingPartyId = $knitting->knitting_party_id;
             $perUnitKnittingCost = $knitting->per_unit_cost;
 
@@ -54,7 +54,7 @@ class KnittingReceiveService{
             ];
 
             KnittingReceive::create($data);
-            $knitting->decrement('available_unit', $request->unit + $request->wastage ?? 0);
+            $knitting->decrement('available_unit', $request->unit);
             $knittingParty=KnittingParty::find($knittingPartyId);
             $knittingParty->increment('due_amount', $totalKnittingCost);
             KnittingPayment::create([
