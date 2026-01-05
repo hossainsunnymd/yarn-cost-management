@@ -45,18 +45,11 @@ class KnittingReceiveService{
 
         $receivePerUnitCost = $receivedKnittingUnitCost / $unit;
 
-        $data = [
-            'knitting_id' => $request->knitting_id,
-            'total_cost' => $receivedKnittingUnitCost,
-            'unit' => $unit,
-            'available_unit' => $unit,
-            'knitting_cost' => $totalKnittingCost,
-            'per_unit_cost' => $receivePerUnitCost,
-            'roll' => $request->roll,
-            'wastage' => $wastage,
-        ];
-
-        KnittingReceive::create($data);
+        DB::beginTransaction();
+        try {
+            $unit = $request->unit;
+            $knittingPartyId = $knitting->knitting_party_id;
+            $perUnitKnittingCost = $knitting->per_unit_cost;
 
         // update knitting stock
         $knitting->decrement('available_unit', $request->unit + $wastage);
@@ -77,10 +70,40 @@ class KnittingReceiveService{
         DB::commit();
         return true;
 
-    } catch (Exception $e) {
-        DB::rollBack();
-        throw $e;
+                $unit = $request->unit - $request->wastage;
+            }
+
+            $data = [
+                'knitting_id' => $request->knitting_id,
+                'total_cost' => $receivedKnittingUnitCost,
+                'unit' => $unit,
+                'available_unit' => $unit,
+                'knitting_cost' => $totalKnittingCost,
+                'per_unit_cost' => $receivePerUnitCost,
+                'roll' => $request->roll,
+                'wastage' => $request->wastage
+
+            ];
+
+            KnittingReceive::create($data);
+            $knitting->decrement('available_unit', $request->unit);
+            $knittingParty=KnittingParty::find($knittingPartyId);
+            $knittingParty->increment('due_amount', $totalKnittingCost);
+            KnittingPayment::create([
+                'knitting_party_id' => $knittingPartyId,
+                'debit' => $totalKnittingCost,
+                'particulars'=>'Knitting Receive',
+                'challan_no'=>$knitting->challan_no,
+                'date'=>date('Y-m-d')
+            ]);
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
     }
 }
 
-}
+
