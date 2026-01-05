@@ -110,6 +110,7 @@ class DyeingController extends Controller
     //delete dyeing receive
     public function dyeingReceiveDelete(Request $request)
     {
+
         DB::beginTransaction();
         try {
             $dyeingReceive = DyeingReceive::find($request->dyeing_receive_id);
@@ -117,13 +118,13 @@ class DyeingController extends Controller
             $dyeing->increment('available_unit', $dyeingReceive->unit + $dyeingReceive->wastage??0);
             $dyeing->increment('roll', $dyeingReceive->roll);
             DyeingPayment::where('challan_no', $dyeingReceive->challan_no)->delete();
-            DyeingParty::find($$dyeing->dyeing_party_id)->decrement('due_amount', $dyeingReceive->total_cost);
+            DyeingParty::find($dyeing->dyeing_party_id)->decrement('due_amount', $dyeingReceive->total_cost);
             $dyeingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Receive Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 }
