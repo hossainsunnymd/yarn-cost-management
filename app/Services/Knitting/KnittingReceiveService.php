@@ -10,40 +10,15 @@ use App\Models\KnittingReceive;
 use Illuminate\Support\Facades\DB;
 
 class KnittingReceiveService{
-    public function createKnittingReceive($request)
-{
-    $knitting = Knitting::findOrFail($request->knitting_id);
+    public function createKnittingReceive( $request)
+    {
 
-    if ($knitting->available_unit < $request->unit) {
-        throw new Exception('You cannot receive more unit than available unit');
-    }
-
-    DB::beginTransaction();
-    try {
-
-        $knittingPartyId = $knitting->knitting_party_id;
-        $perUnitKnittingCost = $knitting->per_unit_cost;
-
-        // ✅ ALWAYS define unit first
-        $unit = $request->unit;
-        $wastage = $request->wastage ?? 0;
-
-        // calculate total knitting cost
-        $totalKnittingCost = $request->unit * $request->per_unit_knitting_cost;
-
-        // base calculation
-        $receivedKnittingUnitCost =
-            ($request->unit * $perUnitKnittingCost) + $totalKnittingCost;
-
-        // if wastage exists
-        if ($wastage > 0) {
-            $receivedKnittingUnitCost =
-                (($request->unit + $wastage) * $perUnitKnittingCost) + $totalKnittingCost;
-
-            $unit = $request->unit - $wastage; // ✅ overwrite safely
+        //check is knitting unit available
+         $knitting = Knitting::findOrFail($request->knitting_id);
+        if ($knitting->available_unit < $request->unit) {
+            throw new Exception('You cannot receive more unit than available unit');
         }
 
-        $receivePerUnitCost = $receivedKnittingUnitCost / $unit;
 
         DB::beginTransaction();
         try {
@@ -51,24 +26,17 @@ class KnittingReceiveService{
             $knittingPartyId = $knitting->knitting_party_id;
             $perUnitKnittingCost = $knitting->per_unit_cost;
 
-        // update knitting stock
-        $knitting->decrement('available_unit', $request->unit + $wastage);
+            //calculate total knitting cost
+            $totalKnittingCost=$request->unit*$request->per_unit_knitting_cost;
 
-        // update party due
-        KnittingParty::find($knittingPartyId)
-            ->increment('due_amount', $totalKnittingCost);
+            //calculate received knitting unit cost
+            $receivedKnittingUnitCost = ($request->unit * $perUnitKnittingCost) + $totalKnittingCost;
+            $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
 
-        // payment log
-        KnittingPayment::create([
-            'knitting_party_id' => $knittingPartyId,
-            'debit' => $totalKnittingCost,
-            'particulars' => 'Knitting Receive',
-            'challan_no' => $knitting->challan_no,
-            'date' => now()->format('Y-m-d'),
-        ]);
+            if ($request->wastage > 0) {
 
-        DB::commit();
-        return true;
+                $receivedKnittingUnitCost = (($request->unit + $request->wastage) * $perUnitKnittingCost) + $totalKnittingCost;
+                $receivePerUnitCost = $receivedKnittingUnitCost / $request->unit;
 
                 $unit = $request->unit - $request->wastage;
             }
@@ -105,5 +73,3 @@ class KnittingReceiveService{
         }
     }
 }
-
-
