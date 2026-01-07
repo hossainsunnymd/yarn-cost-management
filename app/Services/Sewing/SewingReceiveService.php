@@ -33,14 +33,17 @@ class SewingReceiveService{
             //calculate total sewing cost
             $totalSewingCost = $request->unit * $request->sewing_cost;
 
+            //calculate total extra cost
+            $totalExtraCost = $request->unit * $request->extra_cost;
+
             //calulate received sewing unit cost
-            $receivedSewingUnitCost = ($request->unit * $perUnitCost) + $totalSewingCost + $request->extra_cost??0;
+            $receivedSewingUnitCost = ($request->unit * $perUnitCost) + $totalSewingCost + $totalExtraCost;
             $receiveSewingPerUnitCost = $receivedSewingUnitCost / $request->unit;
 
 
             if ($request->wastage > 0) {
 
-                $receivedSewingUnitCost = ($request->unit  * $perUnitCost) +  $totalSewingCost + $request->extra_cost??0;
+                $receivedSewingUnitCost = ($request->unit  * $perUnitCost) +  $totalSewingCost + $totalExtraCost;
                 $receiveSewingPerUnitCost = $receivedSewingUnitCost / ($request->unit - $request->wastage);
                 $unit = $unit - $request->wastage;
             }

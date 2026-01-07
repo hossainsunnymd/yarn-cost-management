@@ -128,7 +128,7 @@ class CuttingController extends Controller
             $cutting = Cutting::find($cuttingReceive->cutting_id);
             $cutting->increment('available_unit', $cutting->unit);
 
-            CuttingParty::find($cutting->cutting_party_id)->decrement('due_amount', $cuttingReceive->total_cost);
+            CuttingParty::find($cutting->cutting_party_id)->decrement('due_amount', $cuttingReceive->cutting_cost);
             CuttingPayment::where('challan_no', $cutting->challan_no)->delete();
             $cuttingReceive->delete();
             DB::commit();

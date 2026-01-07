@@ -83,8 +83,9 @@ class SewingController extends Controller
     {
 
         $validation = Validator::make($request->all(), [
-            'sewing_cost' => 'required',
+            'sewing_cost' => 'required|min:0',
             'unit' => 'required|numeric|min:1',
+            'extra_cost' => 'required|numeric|min:0',
         ], [
             'unit.required' => 'Pcs is required',
         ]);
