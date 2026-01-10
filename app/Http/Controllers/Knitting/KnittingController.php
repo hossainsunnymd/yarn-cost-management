@@ -125,7 +125,7 @@ class KnittingController extends Controller
             $knittingReceive=KnittingReceive::find($request->knitting_receive_id)->with('knitting');
             Knitting::increment('available_unit', $knittingReceive->unit + $knittingReceive->wastage??0);
             KnittingPayment::where('challan_no', $knittingReceive->knitting->challan_no)->delete();
-            KnittingParty::find($knittingReceive->knitting->knitting_party_id)->decrement('due_amount', $knittingReceive->total_cost);
+            KnittingParty::find($knittingReceive->knitting->knitting_party_id)->decrement('due_amount', $knittingReceive->knitting_cost);
             $knittingReceive->delete();
             DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);
