@@ -75,10 +75,10 @@ class KnittingController extends Controller
             KnittingYarn::where('knitting_id', $request->knitting_id)->delete();
             Knitting::find($request->knitting_id)->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Knitting deleted successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting deleted successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -113,7 +113,7 @@ class KnittingController extends Controller
             $knittingReceiveService->createKnittingReceive($request);
             return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive Created Successfully', 'error' => '']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -122,16 +122,16 @@ class KnittingController extends Controller
     {
         DB::beginTransaction();
          try {
-            $knittingReceive=KnittingReceive::find($request->knitting_receive_id)->with('knitting');
+            $knittingReceive=KnittingReceive::with('knitting')->find($request->knitting_receive_id);
             Knitting::increment('available_unit', $knittingReceive->unit + $knittingReceive->wastage??0);
             KnittingPayment::where('challan_no', $knittingReceive->knitting->challan_no)->delete();
             KnittingParty::find($knittingReceive->knitting->knitting_party_id)->decrement('due_amount', $knittingReceive->knitting_cost);
             $knittingReceive->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Receive deleted successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 }
