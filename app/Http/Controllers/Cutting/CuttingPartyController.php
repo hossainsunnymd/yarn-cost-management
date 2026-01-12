@@ -156,6 +156,11 @@ class CuttingPartyController extends Controller
         DB::beginTransaction();
         try {
             $cuttingPayment = CuttingPayment::findOrFail($id);
+
+            if($cuttingPayment->challan_no){
+                throw new Exception("Challan No exist can't delete");
+            }
+
             $cuttingParty = CuttingParty::findOrFail($cuttingPayment->cutting_party_id);
 
             if ($cuttingPayment->debit) {
@@ -167,10 +172,10 @@ class CuttingPartyController extends Controller
 
             $cuttingPayment->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Payment Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -179,9 +184,9 @@ class CuttingPartyController extends Controller
     {
         try {
             CuttingParty::findOrFail($request->cutting_party_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Party Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Cutting Party Deleted Successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
         }
     }
 }

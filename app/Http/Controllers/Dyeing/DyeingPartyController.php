@@ -150,11 +150,16 @@ class DyeingPartyController extends Controller
     }
 
     //dyeing payment delete
-    public function dyeingPaymentDelete(Request $request, $id)
+    public function dyeingPaymentDelete($id)
     {
         DB::beginTransaction();
         try {
             $dyeingPayment = DyeingPayment::findOrFail($id);
+
+            if($dyeingPayment->challan_no){
+                throw new Exception("Challan no exist can't delete");
+            }
+
             $dyeingParty = DyeingParty::find($dyeingPayment->dyeing_party_id);
 
             if ($dyeingPayment->debit) {
@@ -165,10 +170,10 @@ class DyeingPartyController extends Controller
 
             $dyeingPayment->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Payment Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -177,9 +182,9 @@ class DyeingPartyController extends Controller
     {
         try {
             DyeingParty::findOrFail($request->dyeing_party_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Party Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Dyeing Party Deleted Successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
         }
     }
 }

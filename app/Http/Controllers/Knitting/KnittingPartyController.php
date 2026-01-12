@@ -156,6 +156,11 @@ class KnittingPartyController extends Controller
         try {
             $knittingPayment = KnittingPayment::findOrFail($id);
 
+            if($knittingPayment->challan_no){
+                throw new Exception("Challan no exist can't delete");
+
+            }
+
             $knittingParty = KnittingParty::findOrFail($knittingPayment->knitting_party_id);
 
             if ($knittingPayment->debit) {
@@ -166,10 +171,10 @@ class KnittingPartyController extends Controller
 
             $knittingPayment->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Payment Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -178,9 +183,9 @@ class KnittingPartyController extends Controller
     {
         try {
             KnittingParty::find($request->id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Party Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Knitting Party Deleted Successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
         }
     }
 }

@@ -68,13 +68,11 @@ class SewingReceiveService{
 
 
             SewingReceive::create($data);
-            $receive = Sewing::findOrFail($request->sewing_id);
-            $receive->decrement('available_unit', $request->unit);
-            $sewingParty=SewingParty::find($sewingPartyId);
-            $sewingParty->increment('due_amount', $totalSewingCost);
+            $sewing->decrement('available_unit', $request->unit);
+            SewingParty::find($sewingPartyId)->increment('due_amount', $totalSewingCost);
 
             SewingPayment::create([
-                'challan_no' => $sewingParty->challan_no,
+                'challan_no' => $sewing->challan_no,
                 'particulars'=>'Sewing Receive',
                 'sewing_party_id' => $sewingPartyId,
                 'debit' => $totalSewingCost,

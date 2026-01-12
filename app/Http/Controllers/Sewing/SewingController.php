@@ -110,16 +110,16 @@ class SewingController extends Controller
         DB::beginTransaction();
         try {
             $sewingReceive = SewingReceive::findOrFail($request->sewing_receive_id);
-            $sewing = Sewing::where('id', $sewingReceive->sewing_id);
+            $sewing = Sewing::find($sewingReceive->sewing_id);
             $sewing->increment('available_unit', $sewingReceive->unit);
-            SewingParty::find($sewingReceive->sewing_party_id)->decrement('due_amount', $sewingReceive->sewing_cost);
-            SewingPayment::where('chalan_no', $sewingReceive->chalan_no)->delete();
+            SewingParty::find($sewing->sewing_party_id)->decrement('due_amount', $sewingReceive->sewing_cost);
+            SewingPayment::where('challan_no', $sewing->challan_no)->delete();
             $sewingReceive->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Receive Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Receive Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 }

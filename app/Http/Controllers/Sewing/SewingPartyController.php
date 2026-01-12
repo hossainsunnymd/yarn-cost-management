@@ -151,11 +151,15 @@ class SewingPartyController extends Controller
     }
 
     //sewing payment delete
-    public function sewingPaymentDelete(Request $request, $id)
+    public function sewingPaymentDelete($id)
     {
         DB::beginTransaction();
         try {
             $sewingPayment = SewingPayment::findOrFail($id);
+
+            if($sewingPayment->challan_no){
+                throw new Exception("Challan No exist can't delete");
+            }
 
             $sewingParty = SewingParty::findOrFail($sewingPayment->sewing_party_id);
 
@@ -167,10 +171,10 @@ class SewingPartyController extends Controller
 
             $sewingPayment->delete();
             DB::commit();
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Payment Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -179,9 +183,9 @@ class SewingPartyController extends Controller
     {
         try {
             SewingParty::findOrFail($request->sewing_party_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Sewing Party Deleted Successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
         }
     }
 }
