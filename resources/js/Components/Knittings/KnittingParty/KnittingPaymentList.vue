@@ -39,16 +39,15 @@ function openPaymentModal() {
 //delete knitting payment
 function deleteKnittingPayment(id) {
     if (confirm("Are you sure you want to delete this payment?")) {
-        router.get(`/knitting-payment-delete/${id}`, {
-            onSuccess: () => {
-                if (page.props.flash.status === false) {
-                    toaster.error(page.props.flash.message);
-                } else {
-                    toaster.success(page.props.flash.message);
-                }
-            },
-        });
+        router.get(`/knitting-payment-delete/${id}`);
     }
+}
+
+if(page.props.flash.status === true){
+    toaster.success(page.props.flash.message);
+}else if(page.props.flash.status === false){
+    toaster.error(page.props.flash.message);
+
 }
 </script>
 

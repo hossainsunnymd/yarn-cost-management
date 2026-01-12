@@ -92,14 +92,14 @@ class YarnPartyController extends Controller
     public function yarnPaymentList(Request $request)
     {
         $yarnPayments = YarnPayment::where('yarn_party_id', $request->yarn_party_id)
-        ->orderBy('id', 'asc')
-        ->paginate(100)->withQueryString();
+            ->orderBy('id', 'asc')
+            ->paginate(100)->withQueryString();
         $yarnParty = YarnParty::find($request->yarn_party_id);
 
-        $pagination=[
+        $pagination = [
             'next_page_url' => $yarnPayments->nextPageUrl(),
             'prev_page_url' => $yarnPayments->previousPageUrl(),
-            'last_page'=> $yarnPayments->lastPage(),
+            'last_page' => $yarnPayments->lastPage(),
         ];
 
         $lists = [];
@@ -154,11 +154,18 @@ class YarnPartyController extends Controller
     }
 
     //delete yarn payment
-    public function yarnPaymentDelete(Request $request, $id)
+    public function yarnPaymentDelete($id)
     {
         DB::beginTransaction();
         try {
+
             $yarnPayment = YarnPayment::findOrFail($id);
+
+            if ($yarnPayment->challan_no) {
+
+                throw new Exception("Challan no exist can't delete");
+            }
+
             $yarnParty = YarnParty::findOrFail($yarnPayment->yarn_party_id);
             if ($yarnPayment->debit) {
                 $yarnParty->decrement('due_amount', $yarnPayment->debit);
@@ -168,10 +175,10 @@ class YarnPartyController extends Controller
             $yarnPayment->delete();
             DB::commit();
 
-            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Payment Deleted Successfully']);
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => $e->getMessage()]);
         }
     }
 
@@ -180,9 +187,9 @@ class YarnPartyController extends Controller
     {
         try {
             YarnParty::findOrFail($request->yarn_party_id)->delete();
-            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Party Deleted Successfully', 'error' => '']);
+            return redirect()->back()->with(['status' => true, 'message' => 'Yarn Party Deleted Successfully']);
         } catch (Exception $e) {
-            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
+            return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong']);
         }
     }
 }

@@ -100,9 +100,10 @@ class KnittingController extends Controller
     public function createKnittingReceive(KnittingReceiveService $knittingReceiveService, Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'unit' => 'required',
-            'per_unit_knitting_cost' => 'required',
-            'roll' => 'required'
+            'unit' => 'required|numeric|min:1',
+            'per_unit_knitting_cost' => 'required|numeric|min:1',
+            'roll' => 'required|numeric|min:1',
+            'wastage' => 'required|numeric|min:0',
         ]);
 
         if ($validation->fails()) {

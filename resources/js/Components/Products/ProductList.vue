@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { usePage, Link } from "@inertiajs/vue3";
+import { usePage, Link, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 
 // Initialize toaster for notifications
@@ -12,6 +12,7 @@ const page = usePage();
 const headers = [
     { text: "ID", value: "id" },
     { text: "Image", value: "image" },
+    { text: "challan_no", value: "sewing.challan_no" },
     { text: "Category", value: "sewing.cutting_receive.cutting.category.name" },
     { text: "Per Pcs Cost", value: "per_unit_cost" },
     { text: "Available Pcs", value: "available_unit", sortable: true },

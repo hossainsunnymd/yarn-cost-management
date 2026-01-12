@@ -37,16 +37,14 @@ function openPaymentModal() {
 
 function deleteDyeingPayment(id) {
     if (confirm("Are you sure you want to delete this payment?")) {
-        router.get(`/dyeing-payment-delete/${id}`, {
-            onSuccess: () => {
-                if (page.props.flash.status === false) {
-                    toaster.error(page.props.flash.message);
-                } else {
-                    toaster.success(page.props.flash.message);
-                }
-            },
-        });
+        router.get(`/dyeing-payment-delete/${id}`);
     }
+}
+
+if(page.props.flash.status === true){
+    toaster.success(page.props.flash.message);
+}else if(page.props.flash.status === false){
+    toaster.error(page.props.flash.message);
 }
 </script>
 
