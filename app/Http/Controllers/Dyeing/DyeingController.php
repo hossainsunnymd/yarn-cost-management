@@ -93,6 +93,7 @@ class DyeingController extends Controller
             'unit' => 'required|numeric|min:1',
             'per_unit_dyeing_cost' => 'required|numeric|min:1',
             'roll' => 'required|numeric|min:1',
+            'wastage' => 'required|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
