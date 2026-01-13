@@ -60,7 +60,7 @@ class KnittingController extends Controller
     //delete knitting
     public function knittingDelete(Request $request)
     {
-
+   
         DB::beginTransaction();
         try {
             $knittingYarn = KnittingYarn::where('knitting_id', $request->knitting_id)->get();

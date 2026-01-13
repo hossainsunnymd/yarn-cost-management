@@ -61,12 +61,15 @@ class SewingController extends Controller
     //sewing delete
     public function sewingDelete(Request $request)
     {
+        DB::beginTransaction();
         try {
             $sewing = Sewing::findOrFail($request->sewing_id);
             CuttingReceive::where('id', $sewing->cutting_receive_id)->increment('available_unit', $sewing->available_unit);
             $sewing->delete();
+            DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Sewing Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => 'Something went wrong', 'error' => '']);
         }
     }

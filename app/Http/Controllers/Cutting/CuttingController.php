@@ -70,13 +70,16 @@ class CuttingController extends Controller
     //cutting delete
     public function deleteCutting(Request $request)
     {
+         DB::beginTransaction();
         try {
             $cutting = Cutting::find($request->cutting_id);
             DyeingReceive::find($cutting->dyeing_receive_id)->increment('available_unit', $cutting->unit);
             DyeingReceive::find($cutting->dyeing_receive_id)->increment('roll', $cutting->roll);
             $cutting->delete();
+            DB::commit();
             return redirect()->back()->with(['status' => true, 'message' => 'Cutting Deleted Successfully', 'error' => '']);
         } catch (Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with(['status' => false, 'message' => $e->getMessage(), 'error' => '']);
         }
     }
