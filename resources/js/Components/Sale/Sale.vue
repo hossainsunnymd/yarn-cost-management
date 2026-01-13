@@ -367,14 +367,12 @@ function addProduct() {
         per_unit_cost: selectedProduct.per_unit_cost,
     });
 
-    calculateTotal();
     closeModal();
 }
 
 // Remove product from list
 function removeProduct(index) {
     selectedProductList.value.splice(index, 1);
-    calculateTotal();
 }
 
 // Calculate total amount
