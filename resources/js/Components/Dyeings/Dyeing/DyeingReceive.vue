@@ -149,7 +149,9 @@ function submitForm() {
                     type="text"
                     class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
-                <!-- No error shown here -->
+                <p v-if="errors.wastage" class="text-red-500 text-md mt-1">
+                    {{ errors.wastage[0] }}
+                </p>
             </div>
 
             <!-- Roll Input -->

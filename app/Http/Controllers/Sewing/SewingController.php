@@ -89,6 +89,7 @@ class SewingController extends Controller
             'sewing_cost' => 'required|min:0',
             'unit' => 'required|numeric|min:1',
             'extra_cost' => 'required|numeric|min:0',
+            'wastage' => 'required|numeric|min:0',
         ], [
             'unit.required' => 'Pcs is required',
         ]);
@@ -114,7 +115,7 @@ class SewingController extends Controller
         try {
             $sewingReceive = SewingReceive::findOrFail($request->sewing_receive_id);
             $sewing = Sewing::find($sewingReceive->sewing_id);
-            $sewing->increment('available_unit', $sewingReceive->unit);
+            $sewing->increment('available_unit', $sewingReceive->unit + $sewingReceive->wastage);
             SewingParty::find($sewing->sewing_party_id)->decrement('due_amount', $sewingReceive->sewing_cost);
             SewingPayment::where('challan_no', $sewing->challan_no)->delete();
             $sewingReceive->delete();
