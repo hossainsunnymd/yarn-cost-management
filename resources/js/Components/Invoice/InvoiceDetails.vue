@@ -90,7 +90,9 @@ const printModal = () => {
                     তারিখ:
                     {{
                         props.products && props.products.sale_date
-                            ? new Date(props.products.sale_date).toLocaleDateString()
+                            ? new Date(
+                                  props.products.sale_date,
+                              ).toLocaleDateString()
                             : ""
                     }}
                 </h1>
@@ -155,6 +157,15 @@ const printModal = () => {
                         </tr>
                     </tfoot>
                 </table>
+            </div>
+
+            <div class="mt-6 text-center text-xs">
+                উপরুক্ত মাল ভাল অবস্থায় বুঝিয়া পাইলাম
+            </div>
+
+            <div class="mt-6 text-center text-xs flex justify-between px-20">
+                <h1>ক্রেতার স্বাক্ষর</h1>
+                <h1>বিক্রেতার স্বাক্ষর</h1>
             </div>
 
             <!-- Footer note shown only on screen -->

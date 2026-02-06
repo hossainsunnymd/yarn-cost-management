@@ -138,6 +138,14 @@ const printModal = () => {
                     </tfoot>
                 </table>
             </div>
+            <div class="mt-6 text-center text-xs">
+                উপরুক্ত মাল ভাল অবস্থায় বুঝিয়া পাইলাম
+            </div>
+
+            <div class="mt-6 text-center text-xs flex justify-between px-20">
+                <h1>ক্রেতার স্বাক্ষর</h1>
+                <h1>বিক্রেতার স্বাক্ষর</h1>
+            </div>
 
             <!-- Print Info Note (Hidden on print) -->
             <div class="mt-6 text-center text-xs text-gray-500 print:hidden">

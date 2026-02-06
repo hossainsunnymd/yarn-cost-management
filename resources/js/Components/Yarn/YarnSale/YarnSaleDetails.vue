@@ -56,8 +56,13 @@ const printModal = () => {
             <div>
                 <h1 class="font-bold">নং-: {{ props.yarns.challan_no }}</h1>
                 <h1 class="font-bold">নাম: {{ props.yarns.customer.name }}</h1>
-                <h1 class="font-bold">ঠিকানা: {{ props.yarns.customer.address }}</h1>
-                <h1 class="font-bold">তারিখ: {{ new Date(props.yarns.sale_date).toLocaleDateString() }}</h1>
+                <h1 class="font-bold">
+                    ঠিকানা: {{ props.yarns.customer.address }}
+                </h1>
+                <h1 class="font-bold">
+                    তারিখ:
+                    {{ new Date(props.yarns.sale_date).toLocaleDateString() }}
+                </h1>
             </div>
 
             <!-- Products Table -->
@@ -66,9 +71,7 @@ const printModal = () => {
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-2 border text-center">#</th>
-                            <th class="px-4 py-2 border text-center">
-                                Price
-                            </th>
+                            <th class="px-4 py-2 border text-center">Price</th>
                             <th class="px-4 py-2 border text-center">Unit</th>
                             <th class="px-4 py-2 border text-center">Total</th>
                         </tr>
@@ -94,7 +97,7 @@ const printModal = () => {
                             </td>
                         </tr>
                     </tbody>
-                        <tfoot>
+                    <tfoot>
                         <tr class="bg-gray-100 font-semibold">
                             <td
                                 class="px-4 py-2 border text-center"
@@ -104,8 +107,7 @@ const printModal = () => {
                             </td>
                             <td class="px-4 py-2 border text-center">
                                 {{
-                                    props.yarns &&
-                                    props.yarns.total_amount
+                                    props.yarns && props.yarns.total_amount
                                         ? props.yarns.total_amount
                                         : ""
                                 }}
@@ -115,15 +117,24 @@ const printModal = () => {
                 </table>
             </div>
 
+            <div class="mt-6 text-center text-xs">
+                উপরুক্ত মাল ভাল অবস্থায় বুঝিয়া পাইলাম
+            </div>
+
+            <div class="mt-6 text-center text-xs flex justify-between px-20">
+                <h1>ক্রেতার স্বাক্ষর</h1>
+                <h1>বিক্রেতার স্বাক্ষর</h1>
+            </div>
+
             <!-- Footer note shown only on screen -->
             <div class="mt-6 text-center text-xs text-gray-500 print:hidden">
                 Press the Print button or Ctrl+P to print this summary.
             </div>
 
-                  <!-- Print button -->
+            <!-- Print button -->
             <button
                 @click="printModal"
-                class=" text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
+                class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
                 aria-label="Print modal content"
             >
                 🖨️ Print
