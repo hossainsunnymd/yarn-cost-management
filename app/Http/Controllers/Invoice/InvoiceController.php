@@ -28,7 +28,7 @@ class InvoiceController extends Controller
 
     public function invoiceList()
     {
-        $invoices = Invoice::with('invoiceProducts.sewingReceive', 'customer')->get();
+        $invoices = Invoice::with('invoiceProducts.sewingReceive.sewing.cuttingReceive.cutting.category', 'customer')->get();
         return Inertia::render('Invoice/InvoiceListPage', ['invoices' => $invoices]);
     }
 

@@ -41,30 +41,41 @@ const printModal = () => {
             </button>
 
             <!-- headers -->
-            <div class="flex justify-center items-center">
-                <h1 class="text-2xl font-bold text-left pb-2">
-                    Fabric Sale Details
+            <div class="w-full text-center mt-2 print:mt-0">
+                <h1 class="text-2xl font-bold">
+                    মেসার্স শফি নিটিং এন্ড হোসিয়ারী
                 </h1>
+                <div class="text-sm text-gray-600">
+                    উন্নতমানের সুতী গেঞ্জী ও জাইঙ্গা প্রস্তুতকারক ও পাইকারী
+                    বিক্রেতা।
+                </div>
+                <div class="text-sm text-gray-600">
+                    ৫৫/১, নয়ামাটি, কলিমুল্লাহ মার্কেট ,নারায়ণগঞ্জ ।
+                </div>
             </div>
 
             <div>
-                <h1 class="text-2xl font-bold mb-10">
-                    Challan No: {{ props.fabricProducts.challan_no }}
+                <h1 class="font-bold">
+                    নং-: {{ props.fabricProducts.challan_no }}
                 </h1>
                 <h1 class="font-bold">
-                    Date:
-                    {{ new Date(props.fabricProducts.sale_date).toLocaleDateString() }}
+                    নাম: {{ props.fabricProducts.customer.name }}
                 </h1>
                 <h1 class="font-bold">
-                    Customer Name: {{ props.fabricProducts.customer.name }}
+                    ঠিকানা: {{ props.fabricProducts.customer.address }}
                 </h1>
                 <h1 class="font-bold">
-                    Customer Phone: {{ props.fabricProducts.customer.phone }}
+                    তারিখ:
+                    {{
+                        new Date(
+                            props.fabricProducts.sale_date,
+                        ).toLocaleDateString()
+                    }}
                 </h1>
             </div>
 
             <!-- Fabric Sale Product Table -->
-            <div class="overflow-x-auto mt-20">
+            <div class="overflow-x-auto mt-4">
                 <table
                     class="w-full border border-gray-300 text-sm border-collapse"
                 >
@@ -107,6 +118,24 @@ const printModal = () => {
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-100 font-semibold">
+                            <td
+                                class="px-4 py-2 border text-center"
+                                colspan="4"
+                            >
+                                মোট
+                            </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{
+                                    props.fabricProducts &&
+                                    props.fabricProducts.total_amount
+                                        ? props.fabricProducts.total_amount
+                                        : ""
+                                }}
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
 
