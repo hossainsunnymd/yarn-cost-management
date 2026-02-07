@@ -39,29 +39,43 @@ const printModal = () => {
                 &times;
             </button>
 
-             <!-- headers -->
-            <div class="flex justify-center items-center">
-                <h1 class="text-2xl font-bold text-left pb-2">
-                    Knitting Sale Details
+            <!-- headers -->
+            <div class="w-full text-center mt-2 print:mt-0">
+                <h1 class="text-2xl font-bold">
+                    মেসার্স শফি নিটিং এন্ড হোসিয়ারী
                 </h1>
+                <div class="text-sm text-gray-600">
+                    উন্নতমানের সুতী গেঞ্জী ও জাইঙ্গা প্রস্তুতকারক ও পাইকারী
+                    বিক্রেতা।
+                </div>
+                <div class="text-sm text-gray-600">
+                    ৫৫/১, নয়ামাটি, কলিমুল্লাহ মার্কেট ,নারায়ণগঞ্জ ।
+                </div>
             </div>
 
             <div>
-                <h1 class="text-2xl font-bold mb-10">Challan No: {{ props.knittings.challan_no }}</h1>
-                <h1 class="font-bold">Date: {{ new Date(props.knittings.sale_date).toLocaleDateString() }}</h1>
-                <h1 class="font-bold">Customer Name: {{ props.knittings.customer.name }}</h1>
-                <h1 class="font-bold">Customer Phone: {{ props.knittings.customer.phone }}</h1>
+                <h1 class="font-bold">নং-: {{ props.knittings.challan_no }}</h1>
+                <h1 class="font-bold">
+                    নাম: {{ props.knittings.customer.name }}
+                </h1>
+                <h1 class="font-bold">
+                    ঠিকানা: {{ props.knittings.customer.address }}
+                </h1>
+                <h1 class="font-bold">
+                    তারিখ:
+                    {{
+                        new Date(props.knittings.sale_date).toLocaleDateString()
+                    }}
+                </h1>
             </div>
 
             <!-- Products Table -->
-            <div class="overflow-x-auto overflow-y-auto mt-20">
+            <div class="overflow-x-auto overflow-y-auto mt-4">
                 <table class="w-full border border-gray-300 text-sm">
                     <thead class="bg-gray-100">
                         <tr>
                             <th class="px-4 py-2 border text-center">#</th>
-                            <th class="px-4 py-2 border text-center">
-                                Price
-                            </th>
+                            <th class="px-4 py-2 border text-center">Price</th>
                             <th class="px-4 py-2 border text-center">Unit</th>
                             <th class="px-4 py-2 border text-center">Total</th>
                         </tr>
@@ -87,7 +101,34 @@ const printModal = () => {
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-100 font-semibold">
+                            <td
+                                class="px-4 py-2 border text-center"
+                                colspan="3"
+                            >
+                                মোট
+                            </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{
+                                    props.knittings &&
+                                    props.knittings.total_amount
+                                        ? props.knittings.total_amount
+                                        : ""
+                                }}
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
+            </div>
+
+            <div class="mt-6 text-center text-xs">
+                উপরুক্ত মাল ভাল অবস্থায় বুঝিয়া পাইলাম
+            </div>
+
+            <div class="mt-6 text-center text-xs flex justify-between px-20">
+                <h1>ক্রেতার স্বাক্ষর</h1>
+                <h1>বিক্রেতার স্বাক্ষর</h1>
             </div>
 
             <!-- Footer note shown only on screen -->
@@ -95,10 +136,10 @@ const printModal = () => {
                 Press the Print button or Ctrl+P to print this summary.
             </div>
 
-             <!-- Print button -->
+            <!-- Print button -->
             <button
                 @click="printModal"
-                class=" text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
+                class="text-sm bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition print:hidden"
                 aria-label="Print modal content"
             >
                 🖨️ Print

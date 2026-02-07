@@ -48,16 +48,70 @@ const printModal = () => {
                 🖨️ Print
             </button>
 
+            <!-- Company header (centered) -->
+            <div class="w-full text-center mt-2 print:mt-0">
+                <h1 class="text-2xl font-bold">
+                    মেসার্স শফি নিটিং এন্ড হোসিয়ারী
+                </h1>
+                <div class="text-sm text-gray-600">
+                    উন্নতমানের সুতী গেঞ্জী ও জাইঙ্গা প্রস্তুতকারক ও পাইকারী
+                    বিক্রেতা।
+                </div>
+                <div class="text-sm text-gray-600">
+                    ৫৫/১, নয়ামাটি, কলিমুল্লাহ মার্কেট ,নারায়ণগঞ্জ ।
+                </div>
+            </div>
+
+            <div class="w-full mt-2 print:mt-0">
+                <h1 class="text-2xl font-bold">
+                    নং-{{
+                        props.products && props.products.challan_no
+                            ? props.products.challan_no
+                            : ""
+                    }}
+                </h1>
+                <h1 class="text-2xl font-bold">
+                    নাম:
+                    {{
+                        props.products && props.products.customer
+                            ? props.products.customer.name
+                            : ""
+                    }}
+                </h1>
+                <h1 class="text-2xl font-bold">
+                    ঠিকানা:
+                    {{
+                        props.products && props.products.customer
+                            ? props.products.customer.address
+                            : ""
+                    }}
+                </h1>
+                <h1 class="text-2xl font-bold">
+                    তারিখ:
+                    {{
+                        props.products && props.products.sale_date
+                            ? new Date(
+                                  props.products.sale_date,
+                              ).toLocaleDateString()
+                            : ""
+                    }}
+                </h1>
+            </div>
+
             <!-- Products Table -->
-            <div class="overflow-x-auto overflow-y-auto mt-20">
+            <div class="overflow-x-auto overflow-y-auto mt-6">
                 <table class="w-full border border-gray-300 text-sm">
                     <thead class="bg-gray-100">
                         <tr>
-                            <th class="px-4 py-2 border text-center">#</th>
-                            <th class="px-4 py-2 border text-center">
-                                Per Unit Cost
+                            <th
+                                class="px-4 py-2 border text-center"
+                                style="max-width: 200px"
+                            >
+                                বিবরন
                             </th>
-                            <th class="px-4 py-2 border text-center">Unit</th>
+                            <th class="px-4 py-2 border text-center">ডজন</th>
+                            <th class="px-4 py-2 border text-center">দর</th>
+                            <th class="px-4 py-2 border text-center">টাকা</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,17 +122,50 @@ const printModal = () => {
                             class="hover:bg-gray-50 border-1 print:border-2"
                         >
                             <td class="px-4 py-2 border text-center">
-                                {{ index + 1 }}
-                            </td>
-                            <td class="px-4 py-2 border text-center">
-                                {{ item.sewing_receive.per_unit_cost }}
+                                {{
+                                    item.sewing_receive.sewing.cutting_receive
+                                        .cutting.category.name
+                                }}
                             </td>
                             <td class="px-4 py-2 border text-center">
                                 {{ item.unit }}
                             </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{ item.price }}
+                            </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{ item.total_amount }}
+                            </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-100 font-semibold">
+                            <td
+                                class="px-4 py-2 border text-center"
+                                colspan="3"
+                            >
+                                মোট
+                            </td>
+                            <td class="px-4 py-2 border text-center">
+                                {{
+                                    props.products &&
+                                    props.products.total_amount
+                                        ? props.products.total_amount
+                                        : ""
+                                }}
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
+            </div>
+
+            <div class="mt-6 text-center text-xs">
+                উপরুক্ত মাল ভাল অবস্থায় বুঝিয়া পাইলাম
+            </div>
+
+            <div class="mt-6 text-center text-xs flex justify-between px-20">
+                <h1>ক্রেতার স্বাক্ষর</h1>
+                <h1>বিক্রেতার স্বাক্ষর</h1>
             </div>
 
             <!-- Footer note shown only on screen -->
