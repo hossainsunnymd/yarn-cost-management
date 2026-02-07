@@ -65,11 +65,15 @@ const printModal = () => {
                     ঠিকানা: {{ props.fabricProducts.customer.address }}
                 </h1>
                 <h1 class="font-bold">
+                    মোবাইল: {{ props.fabricProducts.customer.phone }}
+                </h1>
+
+                <h1 class="font-bold">
                     তারিখ:
                     {{
                         new Date(
                             props.fabricProducts.sale_date,
-                        ).toLocaleDateString()
+                        ).toLocaleDateString('en-GB')
                     }}
                 </h1>
             </div>

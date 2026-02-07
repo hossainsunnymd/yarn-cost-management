@@ -78,6 +78,9 @@ function showModal(id) {
             :search-field="searchField"
             :search-value="searchItem"
         >
+        <template #item-sale_date="{ sale_date }">
+            {{ formatDate(sale_date) }}
+        </template>
             <!-- Optional image column template -->
             <template #item-image="{ image }">
                 <div class="py-2">
