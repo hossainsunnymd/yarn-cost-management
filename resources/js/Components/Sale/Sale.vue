@@ -203,7 +203,7 @@
                                 {{ product.weight }}
                             </td>
                             <td class="border px-2 py-1 text-xs">
-                                {{ product.sale_price }}
+                                {{ product.price }}
                             </td>
                             <td class="border px-2 py-1 text-xs">
                                 <button

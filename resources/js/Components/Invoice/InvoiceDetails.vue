@@ -64,7 +64,7 @@ const printModal = () => {
 
             <div class="w-full mt-2 print:mt-0">
                 <h1 class="font-bold">
-                    নং-{{
+                    চালান নং-{{
                         props.products && props.products.challan_no
                             ? props.products.challan_no
                             : ""
