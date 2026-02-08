@@ -63,14 +63,14 @@ const printModal = () => {
             </div>
 
             <div class="w-full mt-2 print:mt-0">
-                <h1 class="text-2xl font-bold">
+                <h1 class="font-bold">
                     নং-{{
                         props.products && props.products.challan_no
                             ? props.products.challan_no
                             : ""
                     }}
                 </h1>
-                <h1 class="text-2xl font-bold">
+                <h1 class="font-bold">
                     নাম:
                     {{
                         props.products && props.products.customer
@@ -78,7 +78,7 @@ const printModal = () => {
                             : ""
                     }}
                 </h1>
-                <h1 class="text-2xl font-bold">
+                <h1 class="font-bold">
                     ঠিকানা:
                     {{
                         props.products && props.products.customer
@@ -86,13 +86,21 @@ const printModal = () => {
                             : ""
                     }}
                 </h1>
-                <h1 class="text-2xl font-bold">
+                <h1 class="font-bold">
+                    মোবাইল:
+                    {{
+                        props.products && props.products.customer
+                            ? props.products.customer.phone
+                            : ""
+                    }}
+                </h1>
+                <h1 class="font-bold">
                     তারিখ:
                     {{
-                        props.products && props.products.sale_date
+                        props.products && props.products.invoice_date
                             ? new Date(
-                                  props.products.sale_date,
-                              ).toLocaleDateString()
+                                  props.products.invoice_date,
+                              ).toLocaleDateString('en-GB')
                             : ""
                     }}
                 </h1>

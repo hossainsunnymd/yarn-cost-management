@@ -62,9 +62,12 @@ const printModal = () => {
                     ঠিকানা: {{ props.knittings.customer.address }}
                 </h1>
                 <h1 class="font-bold">
+                    মোবাইল: {{ props.knittings.customer.phone }}
+                </h1>
+                <h1 class="font-bold">
                     তারিখ:
                     {{
-                        new Date(props.knittings.sale_date).toLocaleDateString()
+                        new Date(props.knittings.sale_date).toLocaleDateString('en-GB')
                     }}
                 </h1>
             </div>

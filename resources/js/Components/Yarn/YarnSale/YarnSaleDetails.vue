@@ -60,8 +60,11 @@ const printModal = () => {
                     ঠিকানা: {{ props.yarns.customer.address }}
                 </h1>
                 <h1 class="font-bold">
+                    মোবাইল: {{ props.yarns.customer.phone }}
+                </h1>
+                <h1 class="font-bold">
                     তারিখ:
-                    {{ new Date(props.yarns.sale_date).toLocaleDateString() }}
+                    {{ new Date(props.yarns.sale_date).toLocaleDateString('en-GB') }}
                 </h1>
             </div>
 

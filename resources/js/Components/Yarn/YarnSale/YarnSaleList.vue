@@ -73,7 +73,10 @@ if(page.props.flash.status === true){
         :search-field="searchField"
         :search-value="searchItem"
     >
-        <!-- Date Format -->
+
+        <template #item-sale_date="{ sale_date }">
+            {{ new Date(sale_date).toLocaleDateString('en-GB') }}
+        </template>
         <template #item-action="{ id }">
             <div class="flex gap-2">
                 <button

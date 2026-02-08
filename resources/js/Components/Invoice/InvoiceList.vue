@@ -87,6 +87,9 @@ function showInvoiceDetailsModal(id) {
             :search-value="searchItem"
             class="shadow-md rounded-lg bg-white"
         >
+        <template #item-invoice_date="{ invoice_date }">
+            {{ formatDate(invoice_date) }}
+        </template>
             <!-- Action buttons for each row -->
             <template #item-action="{ id }">
                 <div class="flex space-x-2">
@@ -105,11 +108,6 @@ function showInvoiceDetailsModal(id) {
                         Delete
                     </button>
                 </div>
-            </template>
-
-            <!-- Date Format -->
-            <template #item-created_at="{ created_at }">
-                {{ formatDate(created_at) }}
             </template>
 
             <template #item-profit_loss="{ total_amount, total_cost }">
