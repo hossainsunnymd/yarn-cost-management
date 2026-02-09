@@ -12,4 +12,16 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vue: ['vue'],
+                    vendor: ['axios'],
+                }
+            }
+        },
+        chunkSizeWarningLimit: 1000
+    }
 });
